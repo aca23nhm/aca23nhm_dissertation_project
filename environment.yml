@@ -1,0 +1,16 @@
+name: aca23nhm_dissertation_project
+channels:
+  - defaults
+dependencies:
+  - python>=3.9
+  - pip
+  - pip:
+      - transformers
+      - openai
+      - torch
+      - sentence-transformers
+      - pandas
+      - errant
+      - spacy==3.*
+      - scipy
+      - tqdm
