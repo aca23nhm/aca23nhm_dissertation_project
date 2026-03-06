@@ -16,4 +16,4 @@ Output: He bought a car yesterday.
 
 Now correct this sentence:
 <SENTENCE>
-Return only the corrected sentence.
+Return only the corrected sentence. No explanation.

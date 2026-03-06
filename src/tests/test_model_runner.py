@@ -1,4 +1,4 @@
-from src.model_runner import ModelRunner, ModelConfig, RetryPolicy
+from src.step_3_call_llms.model_runner import ModelRunner, ModelConfig, RetryPolicy
 
 def main():
     """runner = ModelRunner(backend="openai")"""

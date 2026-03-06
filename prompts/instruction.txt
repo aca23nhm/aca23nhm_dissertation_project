@@ -1,4 +1,4 @@
 Correct only grammatical errors in the sentence below.
 Do not change word choice, tone, or sentence structure unless strictly required for grammar.
-Return only the corrected sentence.
+Return only the corrected sentence. No explanation.
 <SENTENCE>

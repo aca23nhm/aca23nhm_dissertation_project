@@ -1,0 +1,6 @@
+analysis_type,condition,f0_5,mean_oci,correlation_method,correlation_coefficient,p_value,x_normality_p,y_normality_p
+condition_values,baseline,356.0,0.11972982720695746,,,,,
+condition_values,fewshot,312.0,0.10662021060012918,,,,,
+condition_values,instruction,259.0,0.09802232064789239,,,,,
+condition_values,role,296.0,0.10357872277372554,,,,,
+overall_correlation,ALL,,,pearson,0.9819635572887399,0.018036442711260037,0.9675873562305424,0.6233270518624527

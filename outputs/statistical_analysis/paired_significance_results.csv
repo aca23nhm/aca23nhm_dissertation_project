@@ -1,0 +1,4 @@
+comparison,baseline_condition,other_condition,n_pairs,mean_oci_baseline,mean_oci_other,mean_difference_baseline_minus_other,normality_test,normality_p_value,selected_test,test_statistic,p_value,effect_size_name,effect_size
+baseline_vs_instruction,baseline,instruction,500,0.11972982720695746,0.09802232064789239,0.021707506559065077,shapiro_wilk,6.38361460281947e-29,wilcoxon_signed_rank,1593.5,2.5366228307227247e-34,r,0.7773196235374201
+baseline_vs_role,baseline,role,500,0.11972982720695746,0.10357872277372554,0.01615110443323192,shapiro_wilk,2.1972502359575226e-31,wilcoxon_signed_rank,2380.5,7.471189516203049e-24,r,0.6883949398092104
+baseline_vs_fewshot,baseline,fewshot,500,0.11972982720695746,0.10662021060012918,0.013109616606828295,shapiro_wilk,1.0257602959141626e-31,wilcoxon_signed_rank,2078.5,4.8466039341919617e-23,r,0.6937753266994559
