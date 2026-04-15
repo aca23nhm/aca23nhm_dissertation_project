@@ -28,10 +28,7 @@ def safe_float(x: str) -> float:
 
 
 def min_max_normalise(value: float, min_val: float, max_val: float) -> float:
-    """
-    Min-max normalisation to [0, 1].
-    If max == min, return 0.0 to avoid division by zero.
-    """
+    """Min-max normalisation to [0, 1]."""
     if max_val == min_val:
         return 0.0
     return (value - min_val) / (max_val - min_val)
@@ -81,17 +78,21 @@ def main() -> None:
         delta_ttr = safe_float(r["delta_ttr"])
         delta_r = safe_float(r["delta_readability"])
 
+        # Normalise each component
         norm_edit = min_max_normalise(edit_distance, edit_min, edit_max)
         norm_ttr = min_max_normalise(delta_ttr, ttr_min, ttr_max)
         norm_r = min_max_normalise(delta_r, read_min, read_max)
 
+        # Compute OCI
         oci = (ALPHA * norm_edit) + (BETA * norm_ttr) + (GAMMA * norm_r)
+        oci_percent = oci * 100  # Convert to percentage
 
         out_row = dict(r)
         out_row["norm_edit_distance"] = norm_edit
         out_row["norm_delta_ttr"] = norm_ttr
         out_row["norm_delta_readability"] = norm_r
         out_row["oci"] = oci
+        out_row["oci_percent"] = oci_percent
 
         per_sentence_rows.append(out_row)
 
@@ -108,11 +109,15 @@ def main() -> None:
     # Save aggregate OCI per condition
     agg_rows = []
     for condition, ocis in sorted(grouped_oci.items()):
+        mean_oci_val = mean(ocis)
+        median_oci_val = median(ocis)
         agg_rows.append({
             "condition": condition,
             "n_sentences": len(ocis),
-            "mean_oci": mean(ocis),
-            "median_oci": median(ocis),
+            "mean_oci": mean_oci_val,
+            "mean_oci_percent": mean_oci_val * 100,
+            "median_oci": median_oci_val,
+            "median_oci_percent": median_oci_val * 100,
             "min_oci": min(ocis) if ocis else 0.0,
             "max_oci": max(ocis) if ocis else 0.0,
         })
@@ -120,7 +125,12 @@ def main() -> None:
     with AGG_OUT.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=["condition", "n_sentences", "mean_oci", "median_oci", "min_oci", "max_oci"],
+            fieldnames=[
+                "condition", "n_sentences",
+                "mean_oci", "mean_oci_percent",
+                "median_oci", "median_oci_percent",
+                "min_oci", "max_oci"
+            ],
         )
         writer.writeheader()
         writer.writerows(agg_rows)

@@ -1,4 +1,3 @@
-# src/run_batch.py
 from __future__ import annotations
 
 import json
@@ -11,16 +10,17 @@ from src.step_3_call_llms.model_runner import load_model_config, ModelRunner
 from src.step_3_call_llms.save_results import append_jsonl
 
 DATASET_CSV = Path("data/processed/wi_locness_sentences.csv")
-FIXED_IDS_JSON = Path("data/processed/fixed_subset_ids.json")
+L2_IDS_JSON = Path("data/processed/l2_5000_subset_ids.json")
 OUT_JSONL = Path("outputs/model_outputs.jsonl")
 
 
 def load_done_pairs(path: Path) -> Set[tuple[str, str]]:
     """
-    Read existing outputs JSONL (if any) and return completed (sentence_id, prompt_id) pairs.
-    This allows resume after crash.
+    Read existing outputs JSONL (if any) and return completed
+    (sentence_id, prompt_id) pairs for resume support.
     """
     done: Set[tuple[str, str]] = set()
+
     if not path.exists():
         return done
 
@@ -36,33 +36,46 @@ def load_done_pairs(path: Path) -> Set[tuple[str, str]]:
                 if sid and pid:
                     done.add((sid, pid))
             except json.JSONDecodeError:
-                # Skip broken lines (rare, but possible if crash mid-write)
                 continue
 
     return done
 
 
-def iter_fixed_items() -> Iterable[Item]:
+def iter_l2_items() -> Iterable[Item]:
     """
-    SAFETY: Only run the fixed subset to protect API credits.
-    If fixed subset file is missing, refuse to run.
+    Only run the L2-only subset listed in l2_subset_ids.json
+    to avoid accidentally calling the full dataset.
     """
-    if not FIXED_IDS_JSON.exists():
+    if not L2_IDS_JSON.exists():
         raise FileNotFoundError(
-            f"Fixed subset id file not found: {FIXED_IDS_JSON}\n"
+            f"L2 subset id file not found: {L2_IDS_JSON}\n"
             "Refusing to run full dataset to protect API credits.\n"
-            "Generate it first (e.g., run your fixed subset script)."
+            "Generate it first by running your create_subset script."
         )
 
     if not DATASET_CSV.exists():
         raise FileNotFoundError(
             f"Dataset CSV not found: {DATASET_CSV}\n"
-            "Make sure you generated wi_locness_sentences.csv first."
+            "Make sure wi_locness_sentences.csv exists."
         )
 
     items = load_dataset(DATASET_CSV)
-    ids = json.loads(FIXED_IDS_JSON.read_text(encoding="utf-8"))
-    return get_by_ids(items, ids)
+    ids = json.loads(L2_IDS_JSON.read_text(encoding="utf-8"))
+
+    if not isinstance(ids, list):
+        raise ValueError(
+            f"Expected a JSON list of sentence IDs in {L2_IDS_JSON}, "
+            f"but got {type(ids).__name__}."
+        )
+
+    selected_items = get_by_ids(items, ids)
+
+    if not selected_items:
+        raise ValueError(
+            f"No matching dataset items found for IDs in {L2_IDS_JSON}."
+        )
+
+    return selected_items
 
 
 def main() -> None:
@@ -70,23 +83,24 @@ def main() -> None:
     cfg = load_model_config("configs/model.yaml")
     runner = ModelRunner(cfg)
 
-    # Only fixed subset (safe)
-    items = list(iter_fixed_items())
-
+    items = list(iter_l2_items())
     done = load_done_pairs(OUT_JSONL)
 
-    print(f"Loaded FIXED subset: {len(items)} sentences.")
+    print(f"Loaded L2 subset from: {L2_IDS_JSON}")
+    print(f"Loaded {len(items)} sentences.")
     print(f"Already completed pairs (resume): {len(done)}")
     print(f"Prompts loaded: {list(templates.keys())}")
 
     total = len(items) * len(templates)
     completed = len(done)
 
+    OUT_JSONL.parent.mkdir(parents=True, exist_ok=True)
+
     for it in items:
         for prompt_id, template in templates.items():
             key = (it.sentence_id, prompt_id)
             if key in done:
-                continue  # resume support
+                continue
 
             rendered = render_prompt(template, it.source)
 
@@ -96,14 +110,13 @@ def main() -> None:
                 rendered_prompt=rendered,
             )
 
-            # Include source/reference too (useful later for ERRANT + style metrics)
             rec["source"] = it.source
             rec["reference"] = it.reference
 
             append_jsonl(str(OUT_JSONL), rec)
 
             completed += 1
-            if completed % 20 == 0:
+            if completed % 20 == 0 or completed == total:
                 print(f"Progress: {completed}/{total}")
 
     print("Done.")

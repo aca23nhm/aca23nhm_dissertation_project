@@ -1,13 +1,11 @@
-# src/prompt_manager.py
 from __future__ import annotations
 
 from pathlib import Path
 from typing import Dict, Union
 
-# Keep your placeholder exactly as you already used in prompt templates
+# Prompt Templates Placeholder
 PLACEHOLDER = "<SENTENCE>"
 
-# (Optional) If you ever use this format in templates too
 ALT_PLACEHOLDER = "{{SENTENCE}}"
 
 # Enforce strict output format (helps parsing + cleaning)

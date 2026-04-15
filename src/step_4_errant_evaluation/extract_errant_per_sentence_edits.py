@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 ERRANT_OUT = ROOT / "outputs" / "errant_outputs"
 CSV_OUT = ERRANT_OUT / "per_sentence_edits.csv"
 

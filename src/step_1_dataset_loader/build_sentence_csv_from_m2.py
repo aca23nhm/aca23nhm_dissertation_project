@@ -134,7 +134,7 @@ def build_csv_from_m2_folder(
     print(f"Saved {len(rows)} rows to {output_csv}")
 
 if __name__ == "__main__":
-    # Adjust these paths if your repo layout differs
+    # Paths for output
     build_csv_from_m2_folder(
         m2_folder="data/raw/m2",
         output_csv="data/processed/wi_locness_sentences.csv",

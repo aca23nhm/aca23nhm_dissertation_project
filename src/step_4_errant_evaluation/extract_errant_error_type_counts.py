@@ -4,7 +4,7 @@ import csv
 from collections import Counter
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 ERRANT_OUT = ROOT / "outputs" / "errant_outputs"
 CSV_OUT = ERRANT_OUT / "error_type_counts.csv"
 

@@ -19,7 +19,7 @@ def load_dataset(path: str | Path) -> List[Item]:
     """
     Load a sentence-level dataset from CSV.
 
-    Expected columns:
+    Columns:
       - sentence_id
       - source
       - reference
