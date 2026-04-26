@@ -1,3 +1,0 @@
-Correct the grammatical errors in the following sentence:
-<SENTENCE>
-Return only the corrected sentence. No explanation.

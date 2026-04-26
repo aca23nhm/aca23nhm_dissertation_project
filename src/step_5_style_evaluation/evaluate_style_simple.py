@@ -5,37 +5,23 @@ import json
 import math
 import re
 import string
-from collections import Counter, defaultdict
+from collections import defaultdict
 from pathlib import Path
 
-import spacy
-
 ROOT = Path(__file__).resolve().parents[2]
-IN_PATH = ROOT / "outputs" / "experiment1_500_outputs.jsonl"
+
+IN_JSONL = ROOT / "outputs" / "experiment1_500_outputs.jsonl"
 OUT_DIR = ROOT / "outputs" / "style_eval"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-PER_SENTENCE_CSV = OUT_DIR / "per_sentence_style_metrics.csv"
-AGG_CSV = OUT_DIR / "aggregate_style_metrics.csv"
-
-# Load spaCy model
-# This is likely already available because ERRANT uses spaCy.
-try:
-    NLP = spacy.load("en_core_web_sm", disable=["ner"])
-except OSError:
-    raise OSError(
-        "spaCy model 'en_core_web_sm' is not installed. "
-        "Install it with:\n"
-        "python -m spacy download en_core_web_sm"
-    )
+PER_SENTENCE_CSV = OUT_DIR / "per_sentence_style_metrics_simple.csv"
+AGG_CSV = OUT_DIR / "aggregate_style_metrics_simple.csv"
 
 WORD_RE = re.compile(r"\S+")
 VOWEL_RE = re.compile(r"[aeiouy]+", re.I)
 
 
-# ----------------------------
-# Basic tokenisation utilities
-# ----------------------------
+# ---------------------------- Basic tokenisation utilities ----------------------------
 def whitespace_tokens(text: str) -> list[str]:
     return WORD_RE.findall(text.strip())
 
@@ -48,14 +34,8 @@ def safe_div(num: float, den: float) -> float:
     return num / den if den != 0 else 0.0
 
 
-# ----------------------------
-# Word-level Levenshtein
-# ----------------------------
+# ---------------------------- Word-level Levenshtein ----------------------------
 def levenshtein_words(a_tokens: list[str], b_tokens: list[str]) -> int:
-    """
-    Standard Levenshtein distance at word level.
-    Counts insertions, deletions, substitutions.
-    """
     n = len(a_tokens)
     m = len(b_tokens)
 
@@ -81,9 +61,7 @@ def levenshtein_words(a_tokens: list[str], b_tokens: list[str]) -> int:
     return prev[m]
 
 
-# ----------------------------
-# TTR
-# ----------------------------
+# ---------------------------- TTR ----------------------------
 def ttr(text: str) -> float:
     tokens = [normalise_word_for_ttr(t) for t in whitespace_tokens(text)]
     tokens = [t for t in tokens if t]
@@ -92,14 +70,8 @@ def ttr(text: str) -> float:
     return len(set(tokens)) / len(tokens)
 
 
-# ----------------------------
-# Readability: Flesch-Kincaid Grade
-# ----------------------------
+# ---------------------------- Readability: Flesch-Kincaid Grade ----------------------------
 def count_syllables_in_word(word: str) -> int:
-    """
-    Simple heuristic syllable counter.
-    Good enough for comparative sentence-level evaluation.
-    """
     word = re.sub(r"[^a-z]", "", word.lower())
     if not word:
         return 0
@@ -115,9 +87,6 @@ def count_syllables_in_word(word: str) -> int:
 
 
 def split_sentences_simple(text: str) -> list[str]:
-    """
-    Lightweight sentence split for FK.
-    """
     parts = re.split(r"[.!?]+", text.strip())
     return [p.strip() for p in parts if p.strip()]
 
@@ -138,48 +107,36 @@ def flesch_kincaid_grade(text: str) -> float:
     return 0.39 * (num_words / num_sentences) + 11.8 * (syllables / num_words) - 15.59
 
 
-# ----------------------------
-# Stylometric features
-# ----------------------------
-POS_GROUPS = {
-    "noun_prop": {"NOUN", "PROPN"},
-    "verb_prop": {"VERB", "AUX"},
-    "adj_prop": {"ADJ"},
-    "adv_prop": {"ADV"},
-    "pron_prop": {"PRON"},
-    "det_prop": {"DET"},
-    "adp_prop": {"ADP"},
-    "punct_prop": {"PUNCT"},
-}
-
-
-def punctuation_count(text: str) -> int:
-    return sum(1 for ch in text if ch in string.punctuation)
-
-
-def stylometric_features(text: str) -> dict[str, float]:
-    doc = NLP(text)
-
-    words = [t.text for t in doc if not t.is_space and not t.is_punct]
-    all_tokens = [t for t in doc if not t.is_space]
+# ---------------------------- Simplified stylometric features (no spaCy) ----------------------------
+def simple_stylometric_features(text: str) -> dict[str, float]:
+    """Simplified stylometric features without spaCy."""
+    words = [normalise_word_for_ttr(t) for t in whitespace_tokens(text)]
+    words = [w for w in words if w]
 
     sent_len_words = len(words)
     avg_word_len = safe_div(sum(len(w) for w in words), sent_len_words)
-    punct_count = punctuation_count(text)
+    punct_count = sum(1 for ch in text if ch in string.punctuation)
 
-    pos_total = len(all_tokens)
-    pos_counts = Counter(t.pos_ for t in all_tokens)
+    # Simple POS approximations (very basic heuristics)
+    noun_like = sum(1 for w in words if w.endswith(('tion', 'ment', 'ness', 'ity', 'er', 'or')))
+    verb_like = sum(1 for w in words if w.endswith(('ing', 'ed', 's')) and not w.endswith(('tion', 'ment')))
+    adj_like = sum(1 for w in words if w.endswith(('able', 'ible', 'ous', 'ful', 'less', 'ic', 'al')))
+    adv_like = sum(1 for w in words if w.endswith('ly'))
+    pron_like = sum(1 for w in words if w.lower() in {'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them', 'this', 'that', 'these', 'those'})
+    det_like = sum(1 for w in words if w.lower() in {'the', 'a', 'an', 'this', 'that', 'these', 'those', 'my', 'your', 'his', 'her', 'its', 'our', 'their'})
 
-    feats = {
+    total_words = len(words)
+    return {
         "sent_len_words": float(sent_len_words),
         "avg_word_len": float(avg_word_len),
         "punct_count": float(punct_count),
+        "noun_prop": safe_div(noun_like, total_words),
+        "verb_prop": safe_div(verb_like, total_words),
+        "adj_prop": safe_div(adj_like, total_words),
+        "adv_prop": safe_div(adv_like, total_words),
+        "pron_prop": safe_div(pron_like, total_words),
+        "det_prop": safe_div(det_like, total_words),
     }
-
-    for feat_name, pos_set in POS_GROUPS.items():
-        feats[feat_name] = safe_div(sum(pos_counts[p] for p in pos_set), pos_total)
-
-    return feats
 
 
 def cosine_similarity_dict(a: dict[str, float], b: dict[str, float]) -> float:
@@ -193,10 +150,8 @@ def cosine_similarity_dict(a: dict[str, float], b: dict[str, float]) -> float:
     return dot / (norm_a * norm_b)
 
 
-# ----------------------------
-# Main per-row computation
-# ----------------------------
-def compute_metrics(source: str, output: str) -> dict[str, float]:
+# ---------------------------- Main per-row computation ----------------------------
+def compute_style_metrics(source: str, output: str) -> dict[str, float]:
     src_tokens = whitespace_tokens(source)
     out_tokens = whitespace_tokens(output)
 
@@ -211,8 +166,8 @@ def compute_metrics(source: str, output: str) -> dict[str, float]:
     out_fk = flesch_kincaid_grade(output)
     delta_r = abs(out_fk - src_fk)
 
-    src_style = stylometric_features(source)
-    out_style = stylometric_features(output)
+    src_style = simple_stylometric_features(source)
+    out_style = simple_stylometric_features(output)
     cos_sim = cosine_similarity_dict(src_style, out_style)
 
     result = {
@@ -229,6 +184,7 @@ def compute_metrics(source: str, output: str) -> dict[str, float]:
         "stylometric_cosine": cos_sim,
     }
 
+    # Add stylometric features
     for k, v in src_style.items():
         result[f"source_{k}"] = v
     for k, v in out_style.items():
@@ -242,36 +198,40 @@ def mean(values: list[float]) -> float:
 
 
 def main() -> None:
-    if not IN_PATH.exists():
-        raise FileNotFoundError(f"Missing input file: {IN_PATH}")
+    if not IN_JSONL.exists():
+        raise FileNotFoundError(f"Missing input file: {IN_JSONL}")
 
     per_sentence_rows = []
     grouped = defaultdict(list)
 
-    with IN_PATH.open("r", encoding="utf-8") as f:
-        for idx, line in enumerate(f):
-            if not line.strip():
-                continue
+    print(f"Loading data from {IN_JSONL}...")
+    with IN_JSONL.open("r", encoding="utf-8") as f:
+        records = [json.loads(line) for line in f if line.strip()]
 
-            row = json.loads(line)
+    print(f"Processing {len(records)} records...")
 
-            source = row.get("source", "").strip()
-            output = row.get("clean_output_text", "").strip()
-            condition = row.get("prompt_id", "unknown")
-            sentence_id = row.get("sentence_id", idx)
+    for idx, record in enumerate(records):
+        if idx % 500 == 0:
+            print(f"Processed {idx}/{len(records)} records...")
 
-            metrics = compute_metrics(source, output)
+        source = record.get("source", "").strip()
+        output = record.get("clean_output_text", "").strip()
+        condition = record.get("prompt_id", "unknown")
+        sentence_id = record.get("sentence_id", idx)
 
-            out_row = {
-                "sentence_id": sentence_id,
-                "condition": condition,
-                "source": source,
-                "output": output,
-                **metrics,
-            }
-            per_sentence_rows.append(out_row)
-            grouped[condition].append(out_row)
+        metrics = compute_style_metrics(source, output)
 
+        out_row = {
+            "sentence_id": sentence_id,
+            "condition": condition,
+            "source": source,
+            "output": output,
+            **metrics,
+        }
+        per_sentence_rows.append(out_row)
+        grouped[condition].append(out_row)
+
+    print("Saving per-sentence results...")
     # Write per-sentence CSV
     if per_sentence_rows:
         fieldnames = list(per_sentence_rows[0].keys())
@@ -280,50 +240,27 @@ def main() -> None:
             writer.writeheader()
             writer.writerows(per_sentence_rows)
 
+    print("Computing aggregates...")
     # Aggregate per condition
     agg_rows = []
     metric_names = [
-        "source_word_count",
-        "output_word_count",
-        "word_levenshtein",
-        "edit_density",
-        "source_ttr",
-        "output_ttr",
-        "delta_ttr",
-        "source_fk",
-        "output_fk",
-        "delta_readability",
-        "source_sent_len_words",
-        "output_sent_len_words",
-        "source_avg_word_len",
-        "output_avg_word_len",
-        "source_punct_count",
-        "output_punct_count",
-        "source_noun_prop",
-        "output_noun_prop",
-        "source_verb_prop",
-        "output_verb_prop",
-        "source_adj_prop",
-        "output_adj_prop",
-        "source_adv_prop",
-        "output_adv_prop",
-        "source_pron_prop",
-        "output_pron_prop",
-        "source_det_prop",
-        "output_det_prop",
-        "source_adp_prop",
-        "output_adp_prop",
-        "source_punct_prop",
-        "output_punct_prop",
-        "stylometric_cosine",
+        "source_word_count", "output_word_count", "word_levenshtein", "edit_density",
+        "source_ttr", "output_ttr", "delta_ttr", "source_fk", "output_fk", "delta_readability",
+        "source_sent_len_words", "output_sent_len_words", "source_avg_word_len", "output_avg_word_len",
+        "source_punct_count", "output_punct_count", "source_noun_prop", "output_noun_prop",
+        "source_verb_prop", "output_verb_prop", "source_adj_prop", "output_adj_prop",
+        "source_adv_prop", "output_adv_prop", "source_pron_prop", "output_pron_prop",
+        "source_det_prop", "output_det_prop", "stylometric_cosine",
     ]
 
     for condition, rows in grouped.items():
         agg = {"condition": condition, "n_sentences": len(rows)}
         for m in metric_names:
-            agg[f"mean_{m}"] = mean([float(r[m]) for r in rows])
+            if m in rows[0]:  # Check if metric exists
+                agg[f"mean_{m}"] = mean([float(r[m]) for r in rows])
         agg_rows.append(agg)
 
+    print("Saving aggregate results...")
     if agg_rows:
         fieldnames = list(agg_rows[0].keys())
         with AGG_CSV.open("w", encoding="utf-8", newline="") as f:
@@ -331,8 +268,9 @@ def main() -> None:
             writer.writeheader()
             writer.writerows(agg_rows)
 
-    print(f"Saved per-sentence metrics: {PER_SENTENCE_CSV}")
-    print(f"Saved aggregate metrics:    {AGG_CSV}")
+    print(f"✅ Saved per-sentence metrics: {PER_SENTENCE_CSV}")
+    print(f"✅ Saved aggregate metrics:    {AGG_CSV}")
+    print("\nStyle evaluation complete!")
 
 
 if __name__ == "__main__":

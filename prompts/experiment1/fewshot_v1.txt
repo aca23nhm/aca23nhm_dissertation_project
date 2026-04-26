@@ -1,0 +1,9 @@
+Correct the grammatical errors in the following sentence.
+
+Example:
+Input: She go to university every day.
+Output: She goes to university every day.
+
+Now correct this sentence:
+<SENTENCE>
+Return only the corrected sentence. No explanation.

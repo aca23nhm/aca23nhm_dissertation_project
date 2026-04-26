@@ -1,0 +1,13 @@
+Correct the grammatical errors in the following sentence.
+
+Example 1:
+Input: She go to university every day.
+Output: She goes to university every day.
+
+Example 2:
+Input: I look forward to meet you.
+Output: I look forward to meeting you.
+
+Now correct this sentence:
+<SENTENCE>
+Return only the corrected sentence. No explanation.
