@@ -9,10 +9,10 @@ from src.step_2_prompt_manager.prompt_manager import load_prompts, render_prompt
 from src.step_3_call_llms.model_runner import load_model_config, ModelRunner
 from src.step_3_call_llms.save_results import append_jsonl
 
-# Experiment 1 configuration
+# Experiment 2 configuration
 DATASET_CSV = Path("data/processed/experiment_1/experiment1_500_sentences.csv")
-PROMPTS_DIR = Path("prompts/experiment1")
-OUT_JSONL = Path("outputs/experiment_1/experiment1_500_outputs.jsonl")
+PROMPTS_DIR = Path("prompts/experiment2")
+OUT_JSONL = Path("outputs/experiment_2/experiment2_outputs.jsonl")
 
 
 def load_done_pairs(path: Path) -> Set[tuple[str, str]]:
@@ -42,14 +42,14 @@ def load_done_pairs(path: Path) -> Set[tuple[str, str]]:
     return done
 
 
-def iter_experiment1_items() -> Iterable[Item]:
+def iter_experiment2_items() -> Iterable[Item]:
     """
-    Load the 300-sentence experiment 1 dataset.
+    Load the 500-sentence experiment 2 dataset (same as experiment 1).
     """
     if not DATASET_CSV.exists():
         raise FileNotFoundError(
-            f"Experiment 1 dataset CSV not found: {DATASET_CSV}\n"
-            "Make sure experiment1_300_sentences.csv exists."
+            f"Experiment 2 dataset CSV not found: {DATASET_CSV}\n"
+            "Make sure experiment1_500_sentences.csv exists."
         )
 
     items = load_dataset(DATASET_CSV)
@@ -67,10 +67,10 @@ def main() -> None:
     cfg = load_model_config("configs/model.yaml")
     runner = ModelRunner(cfg)
 
-    items = list(iter_experiment1_items())
+    items = list(iter_experiment2_items())
     done = load_done_pairs(OUT_JSONL)
 
-    print(f"Loaded Experiment 1 dataset from: {DATASET_CSV}")
+    print(f"Loaded Experiment 2 dataset from: {DATASET_CSV}")
     print(f"Loaded {len(items)} sentences.")
     print(f"Already completed pairs (resume): {len(done)}")
     print(f"Prompts loaded: {list(templates.keys())}")
@@ -109,7 +109,7 @@ def main() -> None:
                 print(f"ERROR on {it.sentence_id} + {prompt_id}: {e}")
                 continue
 
-    print(f"Experiment 1 completed. Results saved to: {OUT_JSONL}")
+    print(f"Experiment 2 completed. Results saved to: {OUT_JSONL}")
 
 
 if __name__ == "__main__":

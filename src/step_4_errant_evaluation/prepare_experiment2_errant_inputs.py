@@ -6,48 +6,29 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
-INPUT_JSONL = Path("outputs/experiment_1/experiment1_500_outputs.jsonl")
-OUTPUT_DIR = Path("outputs/experiment_1/experiment1_errant_inputs")
+INPUT_JSONL = Path("outputs/experiment_2/experiment2_outputs.jsonl")
+OUTPUT_DIR = Path("outputs/experiment_2/errant_inputs")
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 _CTRL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]")
 
 
 def detokenize_punctuation(s: str) -> str:
-    """
-    Convert tokenised punctuation like:
-    'Hi my friend !' -> 'Hi my friend!'
-    'For example , this is good .' -> 'For example, this is good.'
-    """
-    # remove spaces before punctuation
     s = re.sub(r"\s+([,.;:!?])", r"\1", s)
-
-    # fix brackets
     s = re.sub(r"\(\s+", "(", s)
     s = re.sub(r"\s+\)", ")", s)
     s = re.sub(r"\[\s+", "[", s)
     s = re.sub(r"\s+\]", "]", s)
-
-    # fix quotes a bit
     s = re.sub(r'"\s+', '"', s)
     s = re.sub(r"\s+\"", '"', s)
     s = re.sub(r"'\s+", "'", s)
     s = re.sub(r"\s+'", "'", s)
-
     return s
 
 
 def sanitize(s: str) -> str:
-    """
-    Normalise text for ERRANT input:
-    - Unicode normalisation
-    - remove control chars
-    - flatten newlines
-    - collapse whitespace
-    - detokenise punctuation for consistency
-    """
     if s is None:
         return ""
-
     s = unicodedata.normalize("NFKC", s)
     s = _CTRL.sub("", s)
     s = s.replace("\r", " ").replace("\n", " ")
@@ -57,6 +38,11 @@ def sanitize(s: str) -> str:
 
 
 def main() -> None:
+    if not INPUT_JSONL.exists():
+        raise FileNotFoundError(
+            f"Missing input file: {INPUT_JSONL}. Run Experiment 2 generation first."
+        )
+
     by_prompt = defaultdict(list)
     skipped = 0
 
@@ -64,7 +50,6 @@ def main() -> None:
         for line_num, line in enumerate(f, start=1):
             if not line.strip():
                 continue
-
             try:
                 r = json.loads(line)
             except json.JSONDecodeError as e:
@@ -96,8 +81,7 @@ def main() -> None:
 
         if not (len(src_lines) == len(hyp_lines) == len(ref_lines)):
             raise ValueError(
-                f"Line count mismatch for {prompt_id}: "
-                f"src={len(src_lines)}, hyp={len(hyp_lines)}, ref={len(ref_lines)}"
+                f"Line count mismatch for {prompt_id}: src={len(src_lines)}, hyp={len(hyp_lines)}, ref={len(ref_lines)}"
             )
 
         src_path = OUTPUT_DIR / f"{prompt_id}.src"
@@ -109,15 +93,6 @@ def main() -> None:
         ref_path.write_text("\n".join(ref_lines) + "\n", encoding="utf-8", newline="\n")
 
         print(f"{prompt_id} => {len(triples)} examples")
-
-        # print first 3 samples for sanity check
-        print(f"\n[Sample check: {prompt_id}]")
-        for i, (s, h, t) in enumerate(triples[:3], start=1):
-            print(f"Example {i}")
-            print("SRC:", s)
-            print("HYP:", h)
-            print("REF:", t)
-            print("-" * 60)
 
     print(f"\nSaved ERRANT input files to: {OUTPUT_DIR}")
     print(f"Skipped rows: {skipped}")

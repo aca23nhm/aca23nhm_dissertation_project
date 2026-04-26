@@ -1,0 +1,22 @@
+You are correcting sentences written by an L2 learner.
+Correct only grammatical errors. Keep the original wording and structure whenever possible.
+
+Example 1:
+Input: She go to university every day.
+Output: She goes to university every day.
+
+Example 2:
+Input: I look forward to meet you.
+Output: I look forward to meeting you.
+
+Example 3:
+Input: He bought car yesterday.
+Output: He bought a car yesterday.
+
+Example 4:
+Input: The book is on table.
+Output: The book is on the table.
+
+Now correct this sentence:
+<SENTENCE>
+Return only the corrected sentence. No explanation.

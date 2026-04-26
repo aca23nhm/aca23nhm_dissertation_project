@@ -8,8 +8,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-IN_JSONL = ROOT / "outputs" / "experiment1_500_outputs.jsonl"
-OUT_DIR = ROOT / "outputs" / "oci_eval"
+IN_JSONL = ROOT / "outputs" / "experiment_1" / "experiment1_500_outputs.jsonl"
+OUT_DIR = ROOT / "outputs" / "experiment_1" / "oci_eval"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 PER_SENTENCE_OUT = OUT_DIR / "per_sentence_oci_simple.csv"

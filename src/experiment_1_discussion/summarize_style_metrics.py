@@ -2,7 +2,7 @@ import csv
 from pathlib import Path
 
 def main():
-    csv_file = Path("outputs/style_eval/aggregate_style_metrics_simple.csv")
+    csv_file = Path("outputs/experiment_1/style_eval/aggregate_style_metrics_simple.csv")
 
     print("STYLE EVALUATION METRICS PER PROMPT VERSION")
     print("=" * 60)
