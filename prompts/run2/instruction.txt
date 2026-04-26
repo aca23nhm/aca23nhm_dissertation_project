@@ -1,0 +1,10 @@
+Correct only grammatical errors in the sentence below.
+Make the minimum number of changes necessary.
+Do not change word choice, tone, or sentence structure unless required for grammatical correctness.
+
+Return only the corrected sentence. No explanation.
+
+<SENTENCE>
+
+# adds “minimal edits” concept
+# clarifies allowed changes

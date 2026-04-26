@@ -10,7 +10,7 @@ from src.step_3_call_llms.model_runner import load_model_config, ModelRunner
 from src.step_3_call_llms.save_results import append_jsonl
 
 DATASET_CSV = Path("data/processed/wi_locness_sentences.csv")
-L2_IDS_JSON = Path("data/processed/l2_5000_subset_ids.json")
+L2_IDS_JSON = Path("data/processed/all_5000_subset_ids.json")
 OUT_JSONL = Path("outputs/model_outputs.jsonl")
 
 

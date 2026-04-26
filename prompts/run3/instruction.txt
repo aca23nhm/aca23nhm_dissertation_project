@@ -1,0 +1,13 @@
+Correct only grammatical errors in the sentence below.
+
+Make the smallest possible edits.
+Do not rewrite, paraphrase, or improve style.
+Do not change meaning.
+Only modify words when necessary for grammatical correctness.
+
+Return only the corrected sentence. No explanation.
+
+<SENTENCE>
+
+# prevents over-correction
+# removes interpretation ambiguity
