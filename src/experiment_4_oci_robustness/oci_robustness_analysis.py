@@ -1,5 +1,5 @@
 """
-Experiment 5.4: OCI Robustness and Sensitivity Analysis
+Experiment 4: OCI Robustness and Sensitivity Analysis
 
 This script performs a robustness analysis of the Over-Correction Index (OCI) using existing Experiment 2 outputs.
 It does NOT generate new LLM outputs - it only analyzes the existing style metrics from Experiment 2.
@@ -100,12 +100,13 @@ def min_max_normalize(values):
         return pd.Series([0.0] * len(values), index=values.index)
     return (values - min_val) / (max_val - min_val)
 
-def compute_weighted_oci(components, weights):
-    """Compute OCI using given weights."""
-    oci = np.zeros(len(components['edit_distance']))
+def compute_weighted_oci(norm_components, weights):
+    """Compute OCI using given weights on normalized components."""
+    oci = np.zeros(len(norm_components['norm_edit_distance']))
     for component, weight in weights.items():
-        if component in components:
-            oci += weight * components[component]
+        norm_key = f'norm_{component}'
+        if norm_key in norm_components:
+            oci += weight * norm_components[norm_key]
     return oci
 
 def main():
@@ -135,7 +136,7 @@ def main():
         results_df[f'oci_{scheme_name}'] = oci_values
 
     # Save per-sentence results
-    output_dir = Path('outputs/experiment_5_4_oci_robustness')
+    output_dir = Path('outputs/experiment_4_oci_robustness')
     results_path = output_dir / 'oci_weight_sensitivity_results.csv'
     results_df.to_csv(results_path, index=False)
     print(f"Saved per-sentence OCI results to {results_path}")
