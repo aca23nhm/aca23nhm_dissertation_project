@@ -6,7 +6,7 @@ It does NOT generate new LLM outputs - it only analyzes the existing style metri
 
 Purpose: Test whether OCI prompt rankings remain stable under alternative weighting schemes.
 
-Data Source: Experiment 2 style metrics (outputs/experiment_2/style_eval/per_sentence_style_metrics.csv)
+Data Source: Experiment 2 style metrics (outputs/experiment_2_compare_prompts/style_eval/per_sentence_style_metrics.csv)
 - Uses only the final selected prompts from Experiment 2: baseline, fewshot, instruction, role
 - 500 sentences per condition
 
@@ -76,7 +76,7 @@ WEIGHTING_SCHEMES = {
 
 def load_experiment2_style_metrics():
     """Load the per-sentence style metrics from Experiment 2."""
-    input_path = Path('outputs/experiment_2/style_eval/per_sentence_style_metrics.csv')
+    input_path = Path('outputs/experiment_2_compare_prompts/style_eval/per_sentence_style_metrics.csv')
     df = pd.read_csv(input_path)
     return df
 

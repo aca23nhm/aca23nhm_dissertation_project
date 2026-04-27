@@ -12,7 +12,7 @@ from src.step_3_call_llms.save_results import append_jsonl
 # Experiment 1 configuration
 DATASET_CSV = Path("data/processed/experiment_1/experiment1_500_sentences.csv")
 PROMPTS_DIR = Path("prompts/experiment1")
-OUT_JSONL = Path("outputs/experiment_1/experiment1_500_outputs.jsonl")
+OUT_JSONL = Path("outputs/experiment_1_prompt_engineering/experiment1_500_outputs.jsonl")
 
 
 def load_done_pairs(path: Path) -> Set[tuple[str, str]]:

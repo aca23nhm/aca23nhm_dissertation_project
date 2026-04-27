@@ -16,7 +16,7 @@ def extract_f05_from_report(report_path: Path) -> float:
 
 
 def main():
-    reports_dir = Path("outputs/experiment_1/experiment1_errant_outputs")
+    reports_dir = Path("outputs/experiment_1_prompt_engineering/experiment1_errant_outputs")
 
     results = []
 

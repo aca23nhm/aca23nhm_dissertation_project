@@ -23,7 +23,7 @@ LENGTH_BUCKETS = {
 }
 
 DEFAULT_EXISTING_JSONL_PATHS = [
-    Path("outputs/experiment_2/experiment2_outputs.jsonl"),
+    Path("outputs/experiment_2_compare_prompts/experiment2_outputs.jsonl"),
 ]
 DEFAULT_DATASET_CSV = Path("data/processed/experiment_1/experiment1_500_sentences.csv")
 DEFAULT_PROMPTS_DIR = Path("prompts/experiment2")

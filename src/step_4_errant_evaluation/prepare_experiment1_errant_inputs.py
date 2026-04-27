@@ -6,8 +6,8 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
-INPUT_JSONL = Path("outputs/experiment_1/experiment1_500_outputs.jsonl")
-OUTPUT_DIR = Path("outputs/experiment_1/experiment1_errant_inputs")
+INPUT_JSONL = Path("outputs/experiment_1_prompt_engineering/experiment1_500_outputs.jsonl")
+OUTPUT_DIR = Path("outputs/experiment_1_prompt_engineering/experiment1_errant_inputs")
 
 _CTRL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]")
 

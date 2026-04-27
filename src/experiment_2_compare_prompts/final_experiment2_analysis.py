@@ -5,8 +5,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-ERRANT_DIR = ROOT / "outputs" / "experiment_2" / "errant_outputs"
-OCI_PATH = ROOT / "outputs" / "experiment_2" / "oci_eval" / "aggregate_oci.csv"
+ERRANT_DIR = ROOT / "outputs" / "experiment_2_compare_prompts" / "errant_outputs"
+OCI_PATH = ROOT / "outputs" / "experiment_2_compare_prompts" / "oci_eval" / "aggregate_oci.csv"
 
 
 def extract_f05_from_report(report_path: Path) -> float:

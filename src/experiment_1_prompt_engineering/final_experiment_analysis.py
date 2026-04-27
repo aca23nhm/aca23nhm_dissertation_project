@@ -5,7 +5,7 @@ import re
 
 def load_oci_results():
     """Load OCI results from the aggregate CSV."""
-    oci_file = Path("outputs/experiment_1/oci_eval/aggregate_oci_simple.csv")
+    oci_file = Path("outputs/experiment_1_prompt_engineering/oci_eval/aggregate_oci_simple.csv")
     oci_data = {}
 
     with open(oci_file, "r", encoding="utf-8") as f:
@@ -33,7 +33,7 @@ def extract_f05_from_report(report_path: Path) -> float:
 
 def load_errant_results():
     """Load ERRANT F0.5 results from report files."""
-    reports_dir = Path("outputs/experiment_1/experiment1_errant_outputs")
+    reports_dir = Path("outputs/experiment_1_prompt_engineering/experiment1_errant_outputs")
     errant_data = {}
 
     for report_file in sorted(reports_dir.glob("*.report.txt")):

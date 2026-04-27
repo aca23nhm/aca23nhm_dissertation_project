@@ -7,8 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-IN_CSV = ROOT / "outputs" / "experiment_2" / "style_eval" / "per_sentence_style_metrics.csv"
-OUT_DIR = ROOT / "outputs" / "experiment_2" / "oci_eval"
+IN_CSV = ROOT / "outputs" / "experiment_2_compare_prompts" / "style_eval" / "per_sentence_style_metrics.csv"
+OUT_DIR = ROOT / "outputs" / "experiment_2_compare_prompts" / "oci_eval"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 PER_SENTENCE_OUT = OUT_DIR / "per_sentence_oci.csv"

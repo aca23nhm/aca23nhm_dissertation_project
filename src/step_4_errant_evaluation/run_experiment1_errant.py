@@ -9,8 +9,8 @@ from pathlib import Path
 # Repo root (go up 2 levels from this file)
 ROOT = Path(__file__).resolve().parents[2]
 
-IN_DIR = ROOT / "outputs" / "experiment_1" / "experiment1_errant_inputs"
-OUT_DIR = ROOT / "outputs" / "experiment_1" / "experiment1_errant_outputs"
+IN_DIR = ROOT / "outputs" / "experiment_1_prompt_engineering" / "experiment1_errant_inputs"
+OUT_DIR = ROOT / "outputs" / "experiment_1_prompt_engineering" / "experiment1_errant_outputs"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Use currently active virtual environment python

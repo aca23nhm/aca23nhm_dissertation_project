@@ -7,8 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
-IN_DIR = ROOT / "outputs" / "experiment_2" / "errant_inputs"
-OUT_DIR = ROOT / "outputs" / "experiment_2" / "errant_outputs"
+IN_DIR = ROOT / "outputs" / "experiment_2_compare_prompts" / "errant_inputs"
+OUT_DIR = ROOT / "outputs" / "experiment_2_compare_prompts" / "errant_outputs"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 VENV_PY = Path(sys.executable)

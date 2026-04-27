@@ -9,7 +9,7 @@ The goal of Experiment 5 is to analyse the relationship between grammatical corr
 ### 5.5.2 Implementation
 
 - Existing Experiment 2 results are reused for this analysis.
-- ERRANT reports from `outputs/experiment_2/errant_outputs` provide precision, recall, and F0.5 for each prompt condition.
+- ERRANT reports from `outputs/experiment_2_compare_prompts/errant_outputs` provide precision, recall, and F0.5 for each prompt condition.
 - Aggregate OCI values are loaded from `outputs/experiment_2/oci_eval/aggregate_oci.csv`.
 - The two sources are merged by prompt condition.
 - A scatter plot is created with:

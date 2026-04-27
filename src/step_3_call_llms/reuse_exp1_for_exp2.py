@@ -2,8 +2,8 @@ import json
 from pathlib import Path
 
 # Paths
-EXP1_JSONL = Path("outputs/experiment_1/experiment1_500_outputs.jsonl")
-EXP2_JSONL = Path("outputs/experiment_2/experiment2_outputs.jsonl")
+EXP1_JSONL = Path("outputs/experiment_1_prompt_engineering/experiment1_500_outputs.jsonl")
+EXP2_JSONL = Path("outputs/experiment_2_compare_prompts/experiment2_outputs.jsonl")
 
 # Prompts to reuse from Experiment 1
 REUSE_PROMPTS = {"instruction_v4", "role_v4", "fewshot_v4"}

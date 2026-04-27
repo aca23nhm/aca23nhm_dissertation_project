@@ -17,8 +17,8 @@ Evaluate each strategy with:
 - OCI for over-correction / unnecessary edits
 
 Data sources:
-- `outputs/experiment_2/errant_outputs/*.report.txt`
-- `outputs/experiment_2/oci_eval/aggregate_oci.csv`
+- `outputs/experiment_2_compare_prompts/errant_outputs/*.report.txt`
+- `outputs/experiment_2_compare_prompts/oci_eval/aggregate_oci.csv`
 
 ### 5.2.3 Results and Discussion
 

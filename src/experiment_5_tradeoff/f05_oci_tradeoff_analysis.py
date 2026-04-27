@@ -20,12 +20,12 @@ COLUMN_MAPPINGS = {
 }
 
 # Input paths
-ERRANT_REPORT_DIR = Path('outputs/experiment_2/errant_outputs')
-OCI_AGGREGATE_PATH = Path('outputs/experiment_2/oci_eval/aggregate_oci.csv')
+ERRANT_REPORT_DIR = Path('outputs/experiment_2_compare_prompts/errant_outputs')
+OCI_AGGREGATE_PATH = Path('outputs/experiment_2_compare_prompts/oci_eval/aggregate_oci.csv')
 
 # Output paths
 TRADEOFF_DIR = Path('outputs/experiment_5_tradeoff')
-INTERPRETATION_DIR = Path('outputs/experiment_5_5_tradeoff')
+INTERPRETATION_DIR = Path('outputs/experiment_5_tradeoff')
 TRADEOFF_TABLE_PATH = TRADEOFF_DIR / 'f05_oci_tradeoff_table.csv'
 SCATTER_PLOT_PATH = TRADEOFF_DIR / 'f05_vs_oci_scatter.png'
 INTERPRETATION_PATH = INTERPRETATION_DIR / 'f05_oci_tradeoff_interpretation.csv'
