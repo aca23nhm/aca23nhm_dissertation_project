@@ -1,0 +1,234 @@
+\chapter{Design, Implementation \& Testing}
+
+\section{Overview}
+
+Chapter 3 defined the experimental requirements and analysis plan. This chapter explains how that plan was implemented as a modular evaluation pipeline. The system was designed to process original learner sentences, apply prompt variants, store model outputs, and evaluate them using both grammatical accuracy and over-correction measures.
+
+Unlike a trainable GEC model, the system developed in this project is an evaluation framework. Its purpose is not to improve model parameters, but to measure how prompt formulation changes correction behaviour. This distinction is important because prompt engineering is the main experimental variable.
+
+The implementation follows a modular design. Each stage of the pipeline was implemented as a separate component so that it could be tested independently before being integrated into the full workflow. This helped reduce debugging difficulty and ensured that issues in one stage, such as dataset formatting or metric calculation, did not affect the entire experiment.
+
+Hardware, software, library versions, and full prompt templates are provided in Appendix~A.
+
+\section{System Design}
+
+\subsection{Design Rationale}
+
+The system was designed to support controlled comparison between prompt conditions. The same original learner sentences, reference corrections, model settings, and sentence order were used across all prompt variants. This ensured that observed differences in output could be attributed mainly to prompt design rather than to differences in data or configuration.
+
+A within-sentence design was adopted. Each original learner sentence was processed under every prompt condition, producing parallel outputs for the same input. This allowed sentence-level comparison between prompts and supported paired analysis.
+
+The evaluation was separated into two branches. The first branch measured grammatical correction quality using ERRANT. The second branch measured textual divergence from the original learner sentence. This separation was necessary because a correction can be grammatically valid while still involving unnecessary rewriting.
+
+\subsection{Pipeline Architecture}
+
+The implemented workflow is summarised in Table~\ref{tab:chapter4_pipeline_stages}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Summary of implemented pipeline stages}
+    \label{tab:chapter4_pipeline_stages}
+    \begin{tabular}{|p{2cm}|p{4cm}|p{7cm}|}
+        \hline
+        \textbf{Stage} & \textbf{Component} & \textbf{Purpose} \\
+        \hline
+        1 & Dataset preparation & Extract learner sentences and reference corrections \\
+        \hline
+        2 & Prompt rendering & Apply each prompt variant to the same input sentence \\
+        \hline
+        3 & Output generation & Generate corrected outputs for each sentence--prompt pair \\
+        \hline
+        4 & Structured storage & Save outputs with sentence IDs, references, and prompt metadata \\
+        \hline
+        5 & ERRANT evaluation & Compute precision, recall, and $F_{0.5}$ \\
+        \hline
+        6 & Change-based evaluation & Measure textual divergence from the original sentence \\
+        \hline
+        7 & OCI computation & Combine change-based metrics into an over-correction score \\
+        \hline
+        8 & Analysis & Run prompt comparison, sentence-length analysis, robustness checks, trade-off analysis, and qualitative inspection \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Data Flow and Storage}
+
+Each output record contains the original learner sentence, gold reference correction, generated correction, sentence identifier, prompt type, and prompt version. This structure supports both reference-based evaluation and source-based comparison.
+
+JSONL format was used for intermediate storage because it allows each sentence--prompt pair to be stored as a separate record. This made it easier to inspect individual examples, regenerate evaluation files, and trace errors back to the original sentence.
+
+The main intermediate files included:
+
+\begin{itemize}
+    \item source files containing original learner sentences;
+    \item hypothesis files containing model-generated corrections;
+    \item reference files containing gold corrections;
+    \item JSONL files containing sentence-level metadata;
+    \item CSV files containing metric outputs and aggregated results.
+\end{itemize}
+
+\section{Implementation Details}
+
+\subsection{Dataset Preparation}
+
+Original learner sentences and gold reference corrections were extracted from W\&I + LOCNESS \cite{bryant-etal-2019-bea}. Each sentence was assigned a stable identifier to preserve alignment across prompt conditions and evaluation files.
+
+Minimal preprocessing was applied because the project measures how much a corrected sentence changes from the original. No lemmatisation, paraphrasing, or grammatical normalisation was applied before prompting.
+
+For sentence-length analysis, token counts were calculated for each source sentence. Sentences were then assigned to short, medium, or long categories, as defined in Chapter 3.
+
+\subsection{Prompt Rendering}
+
+Prompt templates were implemented as reusable text structures. Each template contained a placeholder for the learner sentence. During execution, the placeholder was replaced with the target sentence to produce a complete prompt for the model.
+
+Four prompt families were implemented:
+
+\begin{itemize}
+    \item baseline prompt;
+    \item instruction-constrained prompts;
+    \item role-based prompts;
+    \item few-shot minimal-edit prompts.
+\end{itemize}
+
+The structured prompt families included multiple versions to support prompt refinement. Each variant was assigned a unique label, such as \texttt{instruction\_v2} or \texttt{role\_v4}. This allowed outputs to be grouped and compared automatically during evaluation.
+
+The prompt rendering stage was kept separate from output generation so that prompt templates could be checked independently. This also made it possible to reproduce the exact prompt used for any generated output.
+
+\subsection{Output Generation}
+
+Each learner sentence was processed under every prompt condition. The model output was stored together with the original sentence, reference correction, prompt type, and prompt version.
+
+Fixed model settings were used across all conditions. This was necessary because changes in decoding parameters could affect correction behaviour and introduce a confounding variable. The purpose of the experiment was to compare prompts, not sampling strategies.
+
+Basic output cleaning was applied only to remove formatting artefacts, such as unnecessary quotation marks or repeated prompt text. The corrected sentence itself was not manually edited.
+
+\subsection{ERRANT-Based Evaluation}
+
+Grammatical correction quality was evaluated using ERRANT \cite{bryant-etal-2017-automatic}. For each prompt condition, aligned \texttt{.src}, \texttt{.hyp}, and \texttt{.ref} files were created. These files represented the original learner sentence, the model output, and the gold reference correction.
+
+ERRANT was then used to compute precision, recall, and $F_{0.5}$. The $F_{0.5}$ score was treated as the main grammatical accuracy metric because it gives greater weight to precision, which is important in GEC where unnecessary edits can reduce correction quality.
+
+\subsection{Change-Based Evaluation}
+
+A separate evaluation branch measured how much each model output diverged from the original learner sentence. This branch compared the source sentence with the model output, rather than comparing the model output with the gold reference.
+
+The following metrics were computed:
+
+\begin{table}[htbp]
+    \centering
+    \caption{Change-based metrics used for over-correction evaluation}
+    \label{tab:style_metrics}
+    \begin{tabular}{|p{5cm}|p{8cm}|}
+        \hline
+        \textbf{Metric} & \textbf{Purpose} \\
+        \hline
+        Word-level Levenshtein distance & Measures the amount of surface rewriting \\
+        \hline
+        Edit density & Normalises edit distance by sentence length \\
+        \hline
+        $\Delta TTR$ & Measures change in lexical diversity \\
+        \hline
+        $\Delta R$ & Measures change in readability \\
+        \hline
+        Cosine similarity & Measures similarity between the source and corrected sentence \\
+        \hline
+    \end{tabular}
+\end{table}
+
+These metrics do not directly prove that an edit is unnecessary. Instead, they provide operational signals of textual change. When interpreted alongside ERRANT results and qualitative examples, they help identify whether a prompt tends to preserve or rewrite learner wording.
+
+\subsection{Composite Over-Correction Index}
+
+The Composite Over-Correction Index (OCI) was implemented to combine multiple change-based signals into one interpretable score. Each component was first normalised using min--max scaling:
+
+\begin{equation}
+\text{norm}(x) = \frac{x - \min(x)}{\max(x) - \min(x)}
+\end{equation}
+
+OCI was then calculated as:
+
+\begin{equation}
+OCI = w_1 \cdot \text{norm}(D_{\text{edit}}) 
++ w_2 \cdot \text{norm}(E_{\text{density}}) 
++ w_3 \cdot \text{norm}(\Delta TTR) 
++ w_4 \cdot \text{norm}(\Delta R) 
++ w_5 \cdot (1 - \text{CosSim})
+\end{equation}
+
+The weights were fixed before analysis:
+
+\[
+w_1 = 0.35,\quad
+w_2 = 0.15,\quad
+w_3 = 0.20,\quad
+w_4 = 0.15,\quad
+w_5 = 0.15
+\]
+
+Greater weight was assigned to edit distance because direct textual change is the clearest signal of rewriting. Edit density controlled for sentence length, while lexical diversity, readability, and cosine similarity captured broader changes in vocabulary, structure, and overall similarity.
+
+OCI values were computed at sentence level and then aggregated by prompt variant, prompt strategy, and sentence-length group.
+
+\section{Analysis Implementation}
+
+\subsection{Prompt Refinement}
+
+Prompt refinement compared variants within each structured prompt family. For each variant, ERRANT scores and OCI values were calculated. The selected prompt was not chosen using $F_{0.5}$ alone; instead, selection considered both correction accuracy and over-correction behaviour.
+
+This was important because a prompt with high grammatical accuracy may also introduce more unnecessary rewriting. The selected prompt therefore needed to show a favourable balance between accuracy and edit restraint.
+
+\subsection{Prompt Strategy Comparison}
+
+After refinement, the best instruction-constrained, role-based, and few-shot prompts were compared with the baseline prompt. This produced the main strategy-level comparison.
+
+This analysis directly addressed whether structured prompting improved correction behaviour compared with a simple grammar-correction instruction. Results from this stage were used to identify whether prompts behaved as aggressive, controlled, or balanced correction strategies.
+
+\subsection{Sentence-Length Analysis}
+
+For sentence-length analysis, outputs were grouped according to the length of the original learner sentence. The same evaluation metrics were then computed separately for short, medium, and long sentences.
+
+This tested whether longer sentences were more likely to produce lower $F_{0.5}$ scores or higher OCI values. It also helped determine whether some prompt strategies were more stable across sentence lengths.
+
+\subsection{OCI Robustness Analysis}
+
+To test whether OCI-based conclusions depended heavily on the chosen default weights, the OCI calculation was repeated using alternative weighting schemes. Prompt rankings were then compared across schemes.
+
+This robustness check was included because OCI is a composite metric. If prompt rankings changed completely under small weighting changes, the metric would be less reliable. Stable rankings would suggest that the main conclusions are not caused by one arbitrary weighting choice.
+
+\subsection{Trade-Off and Qualitative Analysis}
+
+The trade-off analysis compared $F_{0.5}$ and OCI for each prompt condition. This allowed prompt behaviours to be interpreted in relation to both grammatical performance and unnecessary rewriting.
+
+Qualitative analysis was then used to inspect selected sentence-level examples. These examples compared the original sentence, baseline output, and best prompt output. The purpose was to make numerical OCI differences more interpretable by showing practical cases of lexical substitution, structural rewriting, and minimal correction.
+
+\section{Testing and Validation}
+
+\subsection{Data Validation}
+
+Dataset alignment was checked before evaluation. The number of lines in source, hypothesis, and reference files was verified to ensure that each model output corresponded to the correct source and reference sentence.
+
+Sentence identifiers were also checked for uniqueness and consistency across prompt outputs. This was necessary because incorrect alignment would make both ERRANT scoring and sentence-level OCI comparison invalid.
+
+\subsection{Pipeline Testing}
+
+Each stage of the pipeline was first tested on a small subset of sentences before being executed on the full dataset. This included prompt rendering, output storage, ERRANT file generation, change-based metric calculation, and OCI aggregation.
+
+Testing on a small subset made it easier to identify formatting errors, path issues, and unexpected model outputs before running the full experiment.
+
+\subsection{Metric Verification}
+
+Metric outputs were manually inspected using selected examples. Minimal corrections were expected to produce low edit distance and low OCI, while heavily rewritten outputs were expected to produce higher values.
+
+Cosine similarity was also checked to ensure that its direction aligned with the OCI formula. Since high cosine similarity indicates greater similarity to the original sentence, it was inverted using $(1 - \text{CosSim})$ so that higher values represented greater divergence.
+
+\subsection{Prompt Ranking Validation}
+
+Prompt ranking was validated to ensure that prompt selection was not based only on grammatical accuracy. Both $F_{0.5}$ and OCI were considered when identifying the strongest prompt variants.
+
+This validation step was important because the project investigates over-correction, not only correction accuracy. A prompt that achieved the highest $F_{0.5}$ but produced substantially higher OCI was therefore not automatically treated as the best overall prompt.
+
+\subsection{Reproducibility and Error Handling}
+
+Reproducibility was supported by fixed prompts, fixed model settings, saved intermediate files, and script-based evaluation. File naming conventions were kept consistent across experiments to allow outputs to be traced back to their prompt condition.
+
+Basic safeguards were included to reduce silent failures. These included checking file paths, enforcing text encoding, validating output counts, and inspecting empty or malformed model outputs before evaluation.

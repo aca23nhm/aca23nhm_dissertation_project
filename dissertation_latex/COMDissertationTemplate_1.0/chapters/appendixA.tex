@@ -1,0 +1,257 @@
+\appendix
+
+\chapter{Implementation Details and Reproducibility}
+
+\section{Overview}
+
+This appendix provides the technical information required to reproduce the experimental pipeline described in Chapter 4 and the results reported in Chapter 5. It summarises the computing environment, dataset files, prompt files, main scripts, evaluation outputs, and reproducibility notes. Full source code is included in the submitted project directory; this appendix therefore lists the relevant scripts and outputs rather than reproducing entire Python files.
+
+\section{Hardware Configuration}
+
+The experiments were conducted on a standard personal computing environment. No local model training or GPU-based fine-tuning was performed, since the project evaluates prompt-based behaviour of an existing large language model.
+
+\begin{itemize}
+    \item Processor: AMD Ryzen 5
+    \item RAM: 8 GB
+    \item Storage: 512 GB SSD
+    \item Operating system: Windows 11
+\end{itemize}
+
+\section{Software Environment}
+
+The experimental pipeline was implemented in Python and executed from the project workspace.
+
+\begin{itemize}
+    \item Python version: Python 3.10-compatible environment
+    \item Environment management: \texttt{venv} / \texttt{conda}
+    \item Editor: Visual Studio Code
+    \item Main project directory: \texttt{aca23nhm\_dissertation\_project}
+\end{itemize}
+
+\section{Libraries and Dependencies}
+
+The main libraries used by the project are listed below.
+
+\begin{itemize}
+    \item \textbf{ERRANT}: grammatical error correction evaluation
+    \item \textbf{spaCy}: linguistic processing and tokenisation
+    \item \textbf{scikit-learn}: vector similarity computation
+    \item \textbf{NumPy}: numerical operations
+    \item \textbf{pandas}: data manipulation and analysis
+    \item \textbf{textstat}: readability metrics
+    \item \textbf{python-Levenshtein} / \textbf{difflib}: edit-distance computation
+    \item \textbf{SciPy}: statistical testing
+    \item \textbf{matplotlib} / \textbf{seaborn}: result visualisation
+\end{itemize}
+
+Example installation commands are:
+
+\begin{verbatim}
+pip install errant spacy scikit-learn numpy pandas scipy textstat
+pip install python-Levenshtein matplotlib seaborn
+python -m spacy download en_core_web_sm
+\end{verbatim}
+
+\section{Dataset and Input Files}
+
+The study uses the W\&I + LOCNESS learner corpus from the BEA-2019 grammatical error correction shared task. Sentence-level records contain a learner sentence, a gold reference correction, and a stable sentence identifier. Stable identifiers are important because the same sentence is compared across multiple prompt conditions.
+
+Key input files include:
+
+\begin{itemize}
+    \item \texttt{data/raw/m2/*.m2}: original M2-format learner correction files
+    \item \texttt{data/processed/wi\_locness\_sentences.csv}: processed sentence-level data
+    \item \texttt{data/processed/experiment\_1/experiment1\_500\_sentences.csv}: 500-sentence subset used for prompt refinement
+    \item \texttt{outputs/experiment\_3\_sentence\_length/outputs\_with\_length\_groups.csv}: sentence-length grouping used in Experiment 3
+\end{itemize}
+
+Experiment 3 used a separate balanced subset of 450 sentences, with 150 short, 150 medium, and 150 long sentences.
+
+\section{Model Configuration}
+
+All prompt conditions were evaluated under fixed model settings to support controlled comparison.
+
+\begin{itemize}
+    \item Model family: GPT-based large language model
+    \item Decoding temperature: 0
+    \item Top-p: 1.0
+    \item Output format: corrected sentence only
+    \item Fine-tuning: none
+\end{itemize}
+
+The same model settings were used across prompt conditions within each experiment. The project therefore evaluates prompt design rather than model retraining.
+
+\section{Prompt Files}
+
+Prompt templates were stored as plain-text files so that experiments could be rerun with fixed prompt conditions.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Prompt template files used in the experiments}
+    \label{tab:appendix_prompt_files}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{p{5.5cm}p{7.5cm}}
+        \toprule
+        \textbf{Prompt files} & \textbf{Purpose} \\
+        \midrule
+        \texttt{prompts/experiment1/baseline.txt} & Baseline prompt used during prompt refinement \\
+        \texttt{prompts/experiment1/instruction\_v1.txt}--\texttt{instruction\_v4.txt} & Instruction prompt variants for Experiment 1 \\
+        \texttt{prompts/experiment1/role\_v1.txt}--\texttt{role\_v4.txt} & Role-based prompt variants for Experiment 1 \\
+        \texttt{prompts/experiment1/fewshot\_v1.txt}--\texttt{fewshot\_v4.txt} & Few-shot prompt variants for Experiment 1 \\
+        \texttt{prompts/experiment2/baseline.txt} & Final baseline prompt \\
+        \texttt{prompts/experiment2/instruction.txt} & Final instruction-constrained prompt \\
+        \texttt{prompts/experiment2/role.txt} & Final role-based prompt \\
+        \texttt{prompts/experiment2/fewshot.txt} & Final few-shot prompt \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+\section{Main Reproducibility Scripts}
+
+Table~\ref{tab:appendix_scripts} lists the main scripts used to generate outputs and evaluation files. Full script contents are available in the submitted project repository.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Main scripts used to run and evaluate the experiments}
+    \label{tab:appendix_scripts}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{p{6cm}p{7cm}}
+        \toprule
+        \textbf{Script} & \textbf{Purpose} \\
+        \midrule
+        \texttt{src/step\_1\_dataset\_loader/build\_sentence\_csv\_from\_m2.py} & Builds sentence-level data from M2 files \\
+        \texttt{src/step\_3\_call\_llms/run\_experiment1.py} & Generates outputs for Experiment 1 prompt refinement \\
+        \texttt{src/step\_3\_call\_llms/run\_experiment2.py} & Generates outputs for Experiment 2 prompt comparison \\
+        \texttt{src/step\_3\_call\_llms/run\_experiment3\_sentence\_length.py} & Generates outputs for sentence-length analysis \\
+        \texttt{src/step\_4\_errant\_evaluation/run\_experiment1\_errant.py} & Runs ERRANT evaluation for Experiment 1 \\
+        \texttt{src/step\_4\_errant\_evaluation/run\_experiment2\_errant.py} & Runs ERRANT evaluation for Experiment 2 \\
+        \texttt{src/step\_4\_errant\_evaluation/run\_experiment3\_errant.py} & Runs ERRANT evaluation for Experiment 3 \\
+        \texttt{src/step\_5\_style\_evaluation/evaluate\_style\_experiment2.py} & Computes style metrics for Experiment 2 \\
+        \texttt{src/step\_5\_style\_evaluation/evaluate\_style\_experiment3.py} & Computes style metrics for Experiment 3 \\
+        \texttt{src/step\_6\_oci/compute\_oci\_experiment2.py} & Computes final composite OCI for Experiment 2 \\
+        \texttt{src/step\_6\_oci/compute\_oci\_experiment3.py} & Computes final composite OCI for Experiment 3 \\
+        \texttt{src/experiment\_1\_prompt\_engineering/compute\_oci\_composite\_experiment1.py} & Recomputes Experiment 1 using the final composite OCI scale \\
+        \texttt{src/experiment\_2\_compare\_prompts/paired\_oci\_significance.py} & Computes paired Wilcoxon tests and effect sizes \\
+        \texttt{src/experiment\_4\_oci\_robustness/oci\_robustness\_analysis.py} & Tests OCI ranking robustness under alternative weighting schemes \\
+        \texttt{src/experiment\_5\_tradeoff/f05\_oci\_tradeoff\_analysis.py} & Produces the $F_{0.5}$--OCI trade-off table and plot \\
+        \texttt{src/experiment\_6\_qualitative/qualitative\_analysis.py} & Extracts qualitative examples for discussion \\
+        \bottomrule
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+\section{Evaluation Procedure}
+
+The evaluation pipeline contains two complementary branches.
+
+\subsection{ERRANT Evaluation}
+
+ERRANT was used to compare each system output against the gold correction. For each prompt condition, the pipeline prepares aligned source, hypothesis, and reference files.
+
+\begin{itemize}
+    \item \texttt{*.src}: original learner sentences
+    \item \texttt{*.hyp}: model outputs
+    \item \texttt{*.ref}: gold reference corrections
+\end{itemize}
+
+Example ERRANT commands are:
+
+\begin{verbatim}
+errant_parallel -orig source.txt -cor reference.txt -out reference.m2
+errant_parallel -orig source.txt -cor hypothesis.txt -out hypothesis.m2
+errant_compare -hyp hypothesis.m2 -ref reference.m2
+\end{verbatim}
+
+The main reported ERRANT metrics are precision, recall, and $F_{0.5}$.
+
+\subsection{Style and OCI Evaluation}
+
+Style-sensitive metrics were computed by comparing each model output directly with the learner source sentence. The metrics include word-level edit distance, edit density, lexical diversity shift, readability change, and stylometric similarity.
+
+The final Composite Over-Correction Index was computed using:
+
+\[
+\text{OCI} =
+0.35D_{\text{edit}} +
+0.15D_{\text{density}} +
+0.20\Delta_{\text{TTR}} +
+0.15\Delta_{\text{readability}} +
+0.15D_{\text{cosine}}
+\]
+
+where each component is normalised before aggregation. Lower OCI indicates lower source-output divergence.
+
+\subsection{Experiment 1 OCI Note}
+
+During development, Experiment 1 also produced an earlier simple OCI output based on excess edit distance. This file was retained for traceability, but it is not used for final cross-experiment comparison. The final Chapter 5 Experiment 1 results use:
+
+\begin{verbatim}
+outputs/experiment_1_prompt_engineering/oci_eval/aggregate_oci_composite.csv
+\end{verbatim}
+
+This recomputes Experiment 1 using the same composite OCI definition used in Experiments 2--4.
+
+\section{Statistical Testing}
+
+Paired statistical testing was applied to the Experiment 2 sentence-level OCI scores. Since the same 500 sentences were corrected under each prompt condition, each structured prompt could be compared directly against the baseline using paired differences.
+
+The script:
+
+\begin{verbatim}
+src/experiment_2_compare_prompts/paired_oci_significance.py
+\end{verbatim}
+
+produces:
+
+\begin{verbatim}
+outputs/experiment_2_compare_prompts/statistical_tests/
+paired_oci_significance.csv
+\end{verbatim}
+
+This file reports Wilcoxon signed-rank tests, paired $t$-test p-values, mean OCI reductions, and paired Cohen's $d_z$ effect sizes.
+
+\section{Result Files Used in Chapter 5}
+
+The main result files used to construct Chapter 5 are listed below.
+
+\begin{itemize}
+    \item \texttt{outputs/experiment\_1\_prompt\_engineering/oci\_eval/aggregate\_oci\_composite.csv}
+    \item \texttt{outputs/experiment\_1\_prompt\_engineering/experiment1\_errant\_outputs/*.report.txt}
+    \item \texttt{outputs/experiment\_2\_compare\_prompts/errant\_outputs/*.report.txt}
+    \item \texttt{outputs/experiment\_2\_compare\_prompts/oci\_eval/aggregate\_oci.csv}
+    \item \texttt{outputs/experiment\_2\_compare\_prompts/statistical\_tests/paired\_oci\_significance.csv}
+    \item \texttt{outputs/experiment\_3\_sentence\_length/errant\_outputs/*.report.txt}
+    \item \texttt{outputs/experiment\_3\_sentence\_length/oci\_eval/aggregate\_oci.csv}
+    \item \texttt{outputs/experiment\_4\_oci\_robustness/oci\_prompt\_rankings.csv}
+    \item \texttt{outputs/experiment\_5\_tradeoff/f05\_oci\_tradeoff\_table.csv}
+    \item \texttt{outputs/experiment\_6\_qualitative/qualitative\_examples.csv}
+\end{itemize}
+
+\section{Figures Used in Chapter 5}
+
+The figures used in Chapter 5 are stored in the dissertation figures directory:
+
+\begin{itemize}
+    \item \texttt{figures/figure\_5\_1\_f05\_vs\_oci.png}
+    \item \texttt{figures/figure\_5\_2\_prompt\_strategy\_comparison.png}
+    \item \texttt{figures/figure\_5\_3\_sentence\_length\_effects.png}
+    \item \texttt{figures/figure\_5\_4\_oci\_robustness.png}
+\end{itemize}
+
+\section{Reproducibility Notes}
+
+Several design choices were used to improve reproducibility:
+
+\begin{itemize}
+    \item Prompt templates were stored as fixed text files.
+    \item Sentence identifiers were retained across prompt conditions.
+    \item Model settings were held constant within each experiment.
+    \item Raw and cleaned model outputs were stored for inspection.
+    \item ERRANT inputs and reports were retained.
+    \item Style metrics, OCI outputs, robustness checks, statistical tests, and qualitative examples were saved as CSV files.
+\end{itemize}
+
+The main remaining reproducibility risk is external model behaviour. If the same prompts are rerun against a hosted model at a later date, outputs may vary due to model updates or API-side changes. To reduce this risk, the submitted project stores the generated outputs used for the final analysis.

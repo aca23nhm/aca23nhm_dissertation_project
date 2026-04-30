@@ -1,0 +1,122 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COM Dissertation Project Template 
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Based on template originally developed by 
+% Prof. Roger K. Moore
+% University of Sheffield
+% 22 March 2017
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Updated 22 October 2025 (Mark Stevenson)
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Citation style
+% A bit more detail on every part of the literature review, different errors make by different people based on their first language, include NUClE type of errors they mentioned
+% more about pre deep learning approaches, standard machine learning classification
+% Background about LLMs stuff maybe include diagram
+% Examples of over correction and prompting
+% More explaination about the ERRANT method
+% the datasets include the researcher based structure
+% Gantt Chart, communication
+% 8-18 pages 
+
+\documentclass[11pt,oneside]{book}
+\usepackage[margin=1.2in]{geometry}
+\usepackage{setspace}
+\usepackage[toc,page]{appendix}
+\usepackage[none]{hyphenat} % turn hyphenation off by default
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{pgfgantt}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{array}
+
+\begin{document}
+
+\onehalfspacing
+\frontmatter
+
+%TC:ignore
+\begin{titlepage}
+
+% You need to edit the details here
+
+\begin{center}
+\includegraphics[width=5cm]{images/UOSLogo_Portrait_Violet_RGB.png}\\[2cm]
+
+\linespread{1.2}\huge {\bfseries Investigating Over-Correction in LLM-Based Grammatical Error Correction via Prompt Engineering}\\[2cm]
+
+\linespread{1}
+{\Large Nurul Husna Mohmad Hakim}\\[1cm]
+{\large \emph{Supervisor:} Mark Hepple}\\[1cm]
+\large \emph{A report submitted in fulfilment of the requirements}\\ 
+\emph{for the degree of} BSc in Computer Science\\[0.3cm] 
+\textit{in the}\\[0.3cm]
+Department of Computer Science\\[1cm]
+\today
+\end{center}
+
+\end{titlepage}
+
+% -------------------------------------------------------------------
+% Declaration
+% -------------------------------------------------------------------
+
+\newpage
+\chapter*{\Large Declaration}
+
+\setstretch{1.1} % set the line spacing differently if you wish, but this looks good to me. 
+
+All sentences or passages quoted in this report from other people's work have been specifically acknowledged by clear cross-referencing to author, work and page(s). Any illustrations that are not the work of the author of this report have been used with the explicit permission of the originator and are specifically acknowledged. I understand that failure to do this amounts to plagiarism and will be considered grounds for failure in this project and the degree examination as a whole.\\[1cm]
+
+\noindent Name: Nurul Husna Mohmad Hakim\\[1mm]
+\rule[1em]{25em}{0.5pt}
+
+\noindent Signature: NH\\[1mm]
+\rule[1em]{25em}{0.5pt}
+
+\noindent Date: 17.02.2026\\[1mm]
+\rule[1em]{25em}{0.5pt}
+
+% -------------------------------------------------------------------
+% Abstract
+% -------------------------------------------------------------------
+
+\input{chapters/abstract}
+\input{chapters/acknowledge}
+
+% -------------------------------------------------------------------
+% TOC etc
+% -------------------------------------------------------------------
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+%TC:endignore
+\setstretch{1.1} 
+
+\mainmatter
+
+\input{chapters/chapter1}
+\input{chapters/chapter2}
+\input{chapters/chapter3}
+\input{chapters/chapter4}
+\input{chapters/chapter5}
+\input{chapters/chapter6}
+
+\bibliographystyle{acm} 
+\bibliography{mybibliography} 
+
+%TC:ignore
+
+\begin{appendices}
+\input{chapters/appendixA.tex}
+\end{appendices}
+
+%TC:endignore
+
+\end{document}

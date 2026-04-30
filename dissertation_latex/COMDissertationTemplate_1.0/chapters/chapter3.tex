@@ -1,0 +1,121 @@
+\chapter{Requirements and Analysis}
+
+Chapter 2 established the motivation for this study by reviewing grammatical error correction (GEC), the limitations of accuracy-only evaluation, and the problem of over-correction in large language model (LLM)-based systems. This chapter translates those issues into the requirements and experimental design of the project.
+
+The chapter defines the project aim, research questions, dataset, prompt conditions, system requirements, evaluation strategy, and analysis plan. The central focus is to examine whether prompt engineering can influence the balance between grammatical correction performance and unnecessary rewriting in second-language (L2) learner writing.
+
+In this project, over-correction refers to changes made beyond what is required to correct grammatical errors. A correction may therefore be grammatically acceptable but still undesirable if it unnecessarily changes the learner's wording, structure, or style.
+
+\section{Aims and Objectives}
+
+The aim of this project is to examine how different prompt designs affect correction performance and over-correction in LLM-based grammatical error correction.
+
+The objectives are:
+
+\begin{itemize}
+    \item to evaluate multiple prompting strategies for grammatical error correction;
+    \item to compare prompt variants using both grammatical accuracy and rewriting-based measures;
+    \item to identify which prompting strategy provides the best balance between correction quality and minimal editing;
+    \item to examine whether sentence length affects correction behaviour;
+    \item to test whether the Composite Over-Correction Index (OCI) remains stable under alternative weighting schemes.
+\end{itemize}
+
+These objectives lead to the following research questions:
+
+\begin{itemize}
+    \item \textbf{RQ1:} How do prompt variants influence grammatical correction performance and over-correction?
+    \item \textbf{RQ2:} Which prompting strategy provides the best balance between accuracy and reduced unnecessary rewriting?
+    \item \textbf{RQ3:} How does sentence length affect correction performance and over-correction behaviour?
+    \item \textbf{RQ4:} Is there a measurable trade-off between grammatical accuracy and unnecessary rewriting?
+    \item \textbf{RQ5:} Is the Composite Over-Correction Index stable under alternative weighting schemes?
+\end{itemize}
+
+\section{Dataset}
+
+This project uses the W\&I + LOCNESS dataset from the BEA-2019 shared task \cite{bryant-etal-2019-bea}. The dataset is suitable because it contains learner-written English sentences with manually annotated corrections, making it compatible with standard GEC evaluation methods such as ERRANT.
+
+The dataset is used only for evaluation. No model training or fine-tuning is performed. Each learner sentence is processed independently, allowing outputs from different prompt conditions to be compared on the same input. This controlled setup helps ensure that differences in correction behaviour can be attributed mainly to prompt design rather than to changes in data.
+
+For sentence-length analysis, the input sentences are divided into three groups:
+
+\begin{itemize}
+    \item \textbf{Short:} 1--10 tokens;
+    \item \textbf{Medium:} 11--20 tokens;
+    \item \textbf{Long:} 21 or more tokens.
+\end{itemize}
+
+Minimal preprocessing is applied so that the original surface form of each learner sentence is preserved. This is important because the study measures how far the corrected output diverges from the original sentence.
+
+\section{Prompting Strategies}
+
+Prompt design is treated as the main experimental variable. Four prompting strategies are evaluated:
+
+\begin{enumerate}
+    \item \textbf{Baseline prompt:} a simple instruction asking the model to correct grammar.
+    \item \textbf{Instruction-constrained prompt:} a prompt that explicitly asks the model to correct grammatical errors only and avoid unnecessary rewriting.
+    \item \textbf{Role-based prompt:} a prompt that frames the model as an English teacher helping an L2 learner.
+    \item \textbf{Few-shot minimal-edit prompt:} a prompt that includes example input--output pairs demonstrating minimal grammatical correction.
+\end{enumerate}
+
+The baseline prompt provides a comparison point, while the structured prompt strategies are designed to encourage more controlled correction behaviour. Multiple variants are tested for the structured strategies so that prompt wording can be refined before the final strategy comparison.
+
+All prompt conditions use the same dataset, model settings, and input order. This allows the experiment to isolate the effect of prompt formulation on grammatical accuracy and over-correction.
+
+\section{System Requirements}
+
+The system must support a controlled comparison of prompt outputs. The main functional requirements are:
+
+\begin{itemize}
+    \item load sentence-level learner data and reference corrections;
+    \item apply each prompt condition to the same input sentences;
+    \item store generated outputs with sentence IDs and prompt metadata;
+    \item evaluate grammatical correction performance using ERRANT;
+    \item compute rewriting-based metrics by comparing outputs with the original learner sentences;
+    \item support sentence-length analysis, prompt ranking, robustness checks, trade-off analysis, and qualitative inspection.
+\end{itemize}
+
+The main non-functional requirements are:
+
+\begin{itemize}
+    \item \textbf{Reproducibility:} prompts, settings, and outputs must be stored clearly;
+    \item \textbf{Consistency:} the same dataset and model parameters must be used across prompt conditions;
+    \item \textbf{Traceability:} sentence-level outputs must be retained for later inspection;
+    \item \textbf{Ethics:} learner text must be anonymised and used only for linguistic analysis.
+\end{itemize}
+
+\section{Methodology}
+
+The methodology follows a controlled experimental design. Learner sentences and reference corrections are first extracted from the dataset. Each sentence is then passed through every prompt condition, producing parallel corrected outputs for comparison.
+
+The outputs are evaluated from two perspectives. The first perspective is grammatical accuracy, where model outputs are compared against reference corrections. The second perspective is textual modification, where each corrected output is compared with the original learner sentence to estimate the degree of rewriting.
+
+The project is organised into six analyses:
+
+\begin{enumerate}
+    \item \textbf{Prompt refinement:} variants within each prompt family are compared to identify the strongest version.
+    \item \textbf{Prompt strategy comparison:} the best instruction, role-based, and few-shot prompts are compared against the baseline.
+    \item \textbf{Sentence-length analysis:} results are compared across short, medium, and long sentences.
+    \item \textbf{OCI robustness analysis:} alternative OCI weighting schemes are tested to examine whether prompt rankings remain stable.
+    \item \textbf{Trade-off analysis:} correction performance and over-correction are compared to identify aggressive, conservative, and balanced prompt behaviours.
+    \item \textbf{Qualitative analysis:} selected sentence-level examples are examined to show how unnecessary rewriting appears in practice.
+\end{enumerate}
+
+This structure allows the study to examine not only which prompt performs best, but also how different prompts influence correction behaviour.
+
+\section{Evaluation Metrics}
+
+Grammatical correction performance is evaluated using ERRANT \cite{bryant-etal-2017-automatic}. The main reported metrics are precision, recall, and $F_{0.5}$. The $F_{0.5}$ score is used because it gives greater weight to precision, which is important in GEC where unnecessary corrections can reduce output quality \cite{ng-etal-2014-conll}.
+
+Over-correction is evaluated using change-based metrics that compare the corrected sentence with the original learner sentence. These include word-level edit distance, edit density, lexical diversity change, readability change, and cosine similarity. These measures do not directly prove that an edit is unnecessary, but they provide useful signals of how much the model has altered the learner's original writing.
+
+To summarise rewriting behaviour, these metrics are combined into a Composite Over-Correction Index (OCI). A higher OCI indicates greater divergence from the original learner sentence. The full calculation and implementation details are provided in Chapter 4.
+
+\section{Ethical and Practical Constraints}
+
+The project uses an existing learner corpus and does not involve collecting new participant data. Learner text is handled in anonymised form and analysed only for linguistic purposes. Since the project focuses on evaluation rather than model training, no learner data is used to fine-tune a model.
+
+A practical limitation is that the study evaluates prompt engineering within a controlled setting rather than across multiple models or datasets. Therefore, the findings should be interpreted as evidence of how prompt design affects behaviour in the evaluated setup, rather than as a universal conclusion about all LLM-based GEC systems.
+
+%\section{Summary}
+
+%This chapter has outlined the requirements and analysis plan for the project. It defined the research questions, dataset, prompt strategies, system requirements, evaluation approach, and planned experiments. The next chapter explains how this design is implemented as a working experimental pipeline.
