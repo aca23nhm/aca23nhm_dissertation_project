@@ -1,5 +1,5 @@
 condition,precision,recall,f05,mean_oci,interpretation
-baseline,40.98,52.73,42.89,0.0435004523371166,weak/inefficient
-fewshot,54.47,43.34,51.81,0.0304288176329823,aggressive
-instruction,52.82,39.63,49.52,0.0281754706883021,conservative
-role,55.03,38.39,50.64,0.0281729466038712,balanced/desirable
+baseline,40.98,52.73,42.89,0.0167841194279489,weak/inefficient
+fewshot,54.47,43.34,51.81,0.0111891344994196,aggressive
+instruction,52.82,39.63,49.52,0.0105260111359011,conservative
+role,55.03,38.39,50.64,0.010495708243964,balanced/desirable

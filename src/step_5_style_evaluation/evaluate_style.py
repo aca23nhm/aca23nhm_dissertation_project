@@ -48,6 +48,10 @@ def safe_div(num: float, den: float) -> float:
     return num / den if den != 0 else 0.0
 
 
+def clip01(value: float) -> float:
+    return max(0.0, min(1.0, value))
+
+
 # ----------------------------
 # Word-level Levenshtein
 # ----------------------------
@@ -138,6 +142,30 @@ def flesch_kincaid_grade(text: str) -> float:
     return 0.39 * (num_words / num_sentences) + 11.8 * (syllables / num_words) - 15.59
 
 
+def fluency_score(text: str) -> float:
+    stripped = text.strip()
+    words = [normalise_word_for_ttr(t) for t in whitespace_tokens(stripped)]
+    words = [w for w in words if w]
+    if not words:
+        return 0.0
+    repeated_adjacent = sum(1 for a, b in zip(words, words[1:]) if a == b)
+    repeated_penalty = safe_div(repeated_adjacent, max(1, len(words) - 1))
+    punctuation_density = safe_div(sum(1 for ch in stripped if ch in string.punctuation), max(1, len(words)))
+    punctuation_penalty = max(0.0, punctuation_density - 0.35)
+    avg_word_len = safe_div(sum(len(w) for w in words), len(words))
+    word_length_penalty = max(0.0, abs(avg_word_len - 5.0) / 20.0)
+    sentence_len_penalty = min(0.25, max(0, len(words) - 40) / 120.0)
+    terminal_penalty = 0.0 if stripped[-1:] in {".", "!", "?", '"', "'"} else 0.05
+    return clip01(
+        1.0
+        - 0.35 * repeated_penalty
+        - 0.20 * punctuation_penalty
+        - 0.10 * word_length_penalty
+        - 0.10 * sentence_len_penalty
+        - terminal_penalty
+    )
+
+
 # ----------------------------
 # Stylometric features
 # ----------------------------
@@ -210,6 +238,9 @@ def compute_metrics(source: str, output: str) -> dict[str, float]:
     src_fk = flesch_kincaid_grade(source)
     out_fk = flesch_kincaid_grade(output)
     delta_r = abs(out_fk - src_fk)
+    source_fluency = fluency_score(source)
+    output_fluency = fluency_score(output)
+    delta_fluency = output_fluency - source_fluency
 
     src_style = stylometric_features(source)
     out_style = stylometric_features(output)
@@ -226,6 +257,9 @@ def compute_metrics(source: str, output: str) -> dict[str, float]:
         "source_fk": src_fk,
         "output_fk": out_fk,
         "delta_readability": delta_r,
+        "source_fluency": source_fluency,
+        "output_fluency": output_fluency,
+        "delta_fluency": delta_fluency,
         "stylometric_cosine": cos_sim,
     }
 
@@ -293,6 +327,9 @@ def main() -> None:
         "source_fk",
         "output_fk",
         "delta_readability",
+        "source_fluency",
+        "output_fluency",
+        "delta_fluency",
         "source_sent_len_words",
         "output_sent_len_words",
         "source_avg_word_len",

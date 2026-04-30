@@ -5,7 +5,7 @@ import re
 
 def load_oci_results():
     """Load OCI results from the aggregate CSV."""
-    oci_file = Path("outputs/experiment_1_prompt_engineering/oci_eval/aggregate_oci_simple.csv")
+    oci_file = Path("outputs/experiment_1_prompt_engineering/oci_eval/aggregate_oci_composite.csv")
     oci_data = {}
 
     with open(oci_file, "r", encoding="utf-8") as f:

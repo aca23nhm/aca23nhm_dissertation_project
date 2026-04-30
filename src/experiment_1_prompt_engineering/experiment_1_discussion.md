@@ -19,16 +19,16 @@ Evaluation used two metrics:
 #### Comparison table: F0.5 vs OCI
 | Condition       | F0.5  | OCI (%) |
 |-----------------|:-----:|:-------:|
-| baseline        | 44.34 | 17.28   |
-| instruction_v2  | 49.83 | 16.11   |
-| instruction_v4  | 49.52 | 16.25   |
-| role_v4         | 50.64 | 16.09   |
-| fewshot_v4      | 51.81 | 16.28   |
+| baseline        | 44.34 | 1.40    |
+| instruction_v2  | 49.83 | 0.98    |
+| instruction_v4  | 49.52 | 1.05    |
+| role_v4         | 50.64 | 1.05    |
+| fewshot_v4      | 51.81 | 1.12    |
 
 > Best optimization per strategy:
-> - **Best Instruction**: `instruction_v2` (F0.5 49.83, OCI 16.11)
-> - **Best Role-based**: `role_v4` (F0.5 50.64, OCI 16.09)
-> - **Best Few-shot**: `fewshot_v4` (F0.5 51.81, OCI 16.28)
+> - **Best Instruction**: `instruction_v2` (F0.5 49.83, OCI 0.98)
+> - **Best Role-based**: `role_v4` (F0.5 50.64, OCI 1.05)
+> - **Best Few-shot**: `fewshot_v4` (F0.5 51.81, OCI 1.12)
 
 #### Behavioural differences
 - **Aggressive**: `fewshot_v4`

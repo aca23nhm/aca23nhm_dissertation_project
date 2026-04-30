@@ -35,6 +35,39 @@ COLUMN_MAPPINGS = {
     'cosine_similarity': 'stylometric_cosine'
 }
 
+UTILITY_WEIGHTS = {
+    'delta_fluency': 0.50,
+    'cosine_similarity': 0.50,
+}
+
+
+def fluency_score(text):
+    stripped = str(text).strip()
+    words = [token.strip(".,!?;:\"'()[]{}").lower() for token in stripped.split()]
+    words = [word for word in words if word]
+    if not words:
+        return 0.0
+    repeated = sum(1 for left, right in zip(words, words[1:]) if left == right)
+    repeated_penalty = repeated / max(1, len(words) - 1)
+    punctuation_density = sum(1 for ch in stripped if ch in ".,!?;:\"'()[]{}") / max(1, len(words))
+    punctuation_penalty = max(0.0, punctuation_density - 0.35)
+    avg_word_len = sum(len(word) for word in words) / len(words)
+    word_length_penalty = max(0.0, abs(avg_word_len - 5.0) / 20.0)
+    sentence_len_penalty = min(0.25, max(0, len(words) - 40) / 120.0)
+    terminal_penalty = 0.0 if stripped[-1:] in {".", "!", "?", '"', "'"} else 0.05
+    return max(
+        0.0,
+        min(
+            1.0,
+            1.0
+            - 0.35 * repeated_penalty
+            - 0.20 * punctuation_penalty
+            - 0.10 * word_length_penalty
+            - 0.10 * sentence_len_penalty
+            - terminal_penalty,
+        ),
+    )
+
 # Weighting schemes
 WEIGHTING_SCHEMES = {
     'A_Default': {
@@ -82,13 +115,21 @@ def load_experiment2_style_metrics():
 
 def prepare_oci_components(df):
     """Extract and prepare OCI component metrics."""
+    if 'source_fluency' not in df.columns:
+        df['source_fluency'] = df['source'].map(fluency_score)
+    if 'output_fluency' not in df.columns:
+        df['output_fluency'] = df['output'].map(fluency_score)
+    if 'delta_fluency' not in df.columns:
+        df['delta_fluency'] = df['output_fluency'] - df['source_fluency']
+
     # Map column names
     components = {}
     for component, col in COLUMN_MAPPINGS.items():
         components[component] = df[col].copy()
 
     # Create inverted cosine similarity
-    components['inverted_cosine'] = 1 - components['cosine_similarity']
+    components['inverted_cosine'] = (1 - components['cosine_similarity']).clip(0.0, 1.0)
+    components['delta_fluency'] = df['delta_fluency'].copy()
 
     return components
 
@@ -101,13 +142,18 @@ def min_max_normalize(values):
     return (values - min_val) / (max_val - min_val)
 
 def compute_weighted_oci(norm_components, weights):
-    """Compute OCI using given weights on normalized components."""
-    oci = np.zeros(len(norm_components['norm_edit_distance']))
+    """Compute utility-aware OCI using given divergence weights."""
+    divergence = np.zeros(len(norm_components['norm_edit_distance']))
     for component, weight in weights.items():
         norm_key = f'norm_{component}'
         if norm_key in norm_components:
-            oci += weight * norm_components[norm_key]
-    return oci
+            divergence += weight * norm_components[norm_key]
+    divergence = np.clip(divergence, 0.0, 1.0)
+    utility = (
+        UTILITY_WEIGHTS['delta_fluency'] * norm_components['norm_delta_fluency']
+        + UTILITY_WEIGHTS['cosine_similarity'] * norm_components['cosine_similarity'].clip(0.0, 1.0)
+    ).clip(0.0, 1.0)
+    return divergence, np.clip(divergence * (1.0 - utility), 0.0, 1.0), utility
 
 def main():
     # Load data
@@ -123,6 +169,8 @@ def main():
     norm_components = {}
     for component, values in components.items():
         norm_components[f'norm_{component}'] = min_max_normalize(values)
+    norm_components['norm_inverted_cosine'] = components['inverted_cosine']
+    norm_components['cosine_similarity'] = components['cosine_similarity']
 
     # Compute OCI under each weighting scheme
     oci_results = {}
@@ -132,8 +180,11 @@ def main():
 
     # Create results dataframe
     results_df = df[['sentence_id', 'condition']].copy()
-    for scheme_name, oci_values in oci_results.items():
-        results_df[f'oci_{scheme_name}'] = oci_values
+    for scheme_name, (divergence_values, utility_oci_values, utility_values) in oci_results.items():
+        results_df[f'oci_divergence_{scheme_name}'] = divergence_values
+        results_df[f'utility_{scheme_name}'] = utility_values
+        results_df[f'oci_utility_{scheme_name}'] = utility_oci_values
+        results_df[f'oci_{scheme_name}'] = utility_oci_values
 
     # Save per-sentence results
     output_dir = Path('outputs/experiment_4_oci_robustness')
@@ -147,6 +198,10 @@ def main():
         oci_col = f'oci_{scheme_name}'
         mean_oci_per_condition = results_df.groupby('condition')[oci_col].mean().reset_index()
         mean_oci_per_condition.columns = ['condition', 'mean_oci']
+        divergence_col = f'oci_divergence_{scheme_name}'
+        mean_divergence = results_df.groupby('condition')[divergence_col].mean().reset_index()
+        mean_divergence.columns = ['condition', 'mean_oci_divergence']
+        mean_oci_per_condition = mean_oci_per_condition.merge(mean_divergence, on='condition')
         mean_oci_per_condition['scheme'] = scheme_name
         rankings_data.append(mean_oci_per_condition)
 
@@ -169,7 +224,7 @@ def main():
         print(f"\nScheme: {scheme_name}")
         scheme_data = rankings_df[rankings_df['scheme'] == scheme_name].sort_values('rank')
         for _, row in scheme_data.iterrows():
-            print(".4f")
+            print(f"  {row['rank']}. {row['condition']}: OCI={row['mean_oci']:.4f}")
 
     # Check if best prompt changes
     best_prompts = {}
@@ -184,9 +239,9 @@ def main():
 
     unique_best = set(best_prompts.values())
     if len(unique_best) == 1:
-        print("✓ Ranking is stable - same best prompt across all weighting schemes")
+        print("Ranking is stable - same best prompt across all weighting schemes")
     else:
-        print("⚠ Ranking varies - best prompt changes with weighting scheme")
+        print("Ranking varies - best prompt changes with weighting scheme")
         print(f"  Unique best prompts: {', '.join(unique_best)}")
 
     print("\nAnalysis complete. This robustness check confirms whether OCI rankings are sensitive to weighting choices.")

@@ -19,6 +19,8 @@ W_DENSITY = 0.15
 W_TTR = 0.20
 W_READABILITY = 0.15
 W_COSINE = 0.15
+W_FLUENCY_UTILITY = 0.50
+W_MEANING_UTILITY = 0.50
 
 
 def safe_float(x: str) -> float:
@@ -32,6 +34,10 @@ def min_max_normalise(value: float, min_val: float, max_val: float) -> float:
     if max_val == min_val:
         return 0.0
     return (value - min_val) / (max_val - min_val)
+
+
+def clip01(value: float) -> float:
+    return max(0.0, min(1.0, value))
 
 
 def mean(xs: list[float]) -> float:
@@ -59,12 +65,14 @@ def main() -> None:
     density_vals = [safe_float(r["edit_density"]) for r in rows]
     ttr_vals = [safe_float(r["delta_ttr"]) for r in rows]
     read_vals = [safe_float(r["delta_readability"]) for r in rows]
-    cosine_distance_vals = [max(0.0, min(1.0, 1.0 - safe_float(r["stylometric_cosine"]))) for r in rows]
+    fluency_vals = [safe_float(r["delta_fluency"]) for r in rows]
+    cosine_distance_vals = [clip01(1.0 - safe_float(r["stylometric_cosine"])) for r in rows]
 
     edit_min, edit_max = min(edit_vals), max(edit_vals)
     density_min, density_max = min(density_vals), max(density_vals)
     ttr_min, ttr_max = min(ttr_vals), max(ttr_vals)
     read_min, read_max = min(read_vals), max(read_vals)
+    fluency_min, fluency_max = min(fluency_vals), max(fluency_vals)
     cosine_min, cosine_max = min(cosine_distance_vals), max(cosine_distance_vals)
 
     print("Global min-max values used for normalisation:")
@@ -72,45 +80,58 @@ def main() -> None:
     print(f"  edit_density:     min={density_min}, max={density_max}")
     print(f"  delta_ttr:        min={ttr_min}, max={ttr_max}")
     print(f"  delta_readability:min={read_min}, max={read_max}")
+    print(f"  delta_fluency:    min={fluency_min}, max={fluency_max}")
     print(f"  1-cosine:         min={cosine_min}, max={cosine_max}")
 
     per_sentence_rows = []
-    grouped_oci = defaultdict(list)
+    grouped_oci_divergence = defaultdict(list)
+    grouped_oci_utility = defaultdict(list)
 
     for r in rows:
         edit_distance = safe_float(r["word_levenshtein"])
         edit_density = safe_float(r["edit_density"])
         delta_ttr = safe_float(r["delta_ttr"])
         delta_r = safe_float(r["delta_readability"])
-        cos_sim = safe_float(r["stylometric_cosine"])
-        cosine_distance = max(0.0, min(1.0, 1.0 - cos_sim))
+        delta_fluency = safe_float(r["delta_fluency"])
+        cos_sim = clip01(safe_float(r["stylometric_cosine"]))
+        cosine_distance = clip01(1.0 - cos_sim)
 
         norm_edit = min_max_normalise(edit_distance, edit_min, edit_max)
         norm_density = min_max_normalise(edit_density, density_min, density_max)
         norm_ttr = min_max_normalise(delta_ttr, ttr_min, ttr_max)
         norm_r = min_max_normalise(delta_r, read_min, read_max)
+        norm_fluency = min_max_normalise(delta_fluency, fluency_min, fluency_max)
         norm_cosine_distance = cosine_distance
 
-        oci = (
+        oci_divergence = clip01(
             W_EDIT * norm_edit
             + W_DENSITY * norm_density
             + W_TTR * norm_ttr
             + W_READABILITY * norm_r
             + W_COSINE * norm_cosine_distance
         )
-        oci_percent = oci * 100
+        utility = clip01(W_FLUENCY_UTILITY * norm_fluency + W_MEANING_UTILITY * cos_sim)
+        oci_utility = clip01(oci_divergence * (1.0 - utility))
 
         out_row = dict(r)
         out_row["norm_edit_distance"] = norm_edit
         out_row["norm_edit_density"] = norm_density
         out_row["norm_delta_ttr"] = norm_ttr
         out_row["norm_delta_readability"] = norm_r
+        out_row["norm_delta_fluency"] = norm_fluency
         out_row["norm_1_minus_cosine"] = norm_cosine_distance
-        out_row["oci"] = oci
-        out_row["oci_percent"] = oci_percent
+        out_row["utility"] = utility
+        out_row["oci_divergence"] = oci_divergence
+        out_row["oci_divergence_percent"] = oci_divergence * 100
+        out_row["oci_utility"] = oci_utility
+        out_row["oci_utility_percent"] = oci_utility * 100
+        out_row["oci"] = oci_utility
+        out_row["oci_percent"] = oci_utility * 100
 
         per_sentence_rows.append(out_row)
-        grouped_oci[r.get("condition", "unknown")].append(oci)
+        condition = r.get("condition", "unknown")
+        grouped_oci_divergence[condition].append(oci_divergence)
+        grouped_oci_utility[condition].append(oci_utility)
 
     with PER_SENTENCE_OUT.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(per_sentence_rows[0].keys()))
@@ -118,23 +139,44 @@ def main() -> None:
         writer.writerows(per_sentence_rows)
 
     agg_rows = []
-    for condition, ocis in sorted(grouped_oci.items()):
-        mean_oci_val = mean(ocis)
-        median_oci_val = median(ocis)
+    for condition, divergence_scores in sorted(grouped_oci_divergence.items()):
+        utility_scores = grouped_oci_utility[condition]
+        mean_divergence = mean(divergence_scores)
+        median_divergence = median(divergence_scores)
+        mean_utility = mean(utility_scores)
+        median_utility = median(utility_scores)
         agg_rows.append({
             "condition": condition,
-            "n_sentences": len(ocis),
-            "mean_oci": mean_oci_val,
-            "mean_oci_percent": mean_oci_val * 100,
-            "median_oci": median_oci_val,
-            "median_oci_percent": median_oci_val * 100,
-            "min_oci": min(ocis) if ocis else 0.0,
-            "max_oci": max(ocis) if ocis else 0.0,
+            "n_sentences": len(divergence_scores),
+            "mean_oci_divergence": mean_divergence,
+            "mean_oci_divergence_percent": mean_divergence * 100,
+            "median_oci_divergence": median_divergence,
+            "median_oci_divergence_percent": median_divergence * 100,
+            "min_oci_divergence": min(divergence_scores) if divergence_scores else 0.0,
+            "max_oci_divergence": max(divergence_scores) if divergence_scores else 0.0,
+            "mean_oci_utility": mean_utility,
+            "mean_oci_utility_percent": mean_utility * 100,
+            "median_oci_utility": median_utility,
+            "median_oci_utility_percent": median_utility * 100,
+            "min_oci_utility": min(utility_scores) if utility_scores else 0.0,
+            "max_oci_utility": max(utility_scores) if utility_scores else 0.0,
+            "mean_oci": mean_utility,
+            "mean_oci_percent": mean_utility * 100,
+            "median_oci": median_utility,
+            "median_oci_percent": median_utility * 100,
+            "min_oci": min(utility_scores) if utility_scores else 0.0,
+            "max_oci": max(utility_scores) if utility_scores else 0.0,
         })
 
     with AGG_OUT.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "condition", "n_sentences",
+            "mean_oci_divergence", "mean_oci_divergence_percent",
+            "median_oci_divergence", "median_oci_divergence_percent",
+            "min_oci_divergence", "max_oci_divergence",
+            "mean_oci_utility", "mean_oci_utility_percent",
+            "median_oci_utility", "median_oci_utility_percent",
+            "min_oci_utility", "max_oci_utility",
             "mean_oci", "mean_oci_percent",
             "median_oci", "median_oci_percent",
             "min_oci", "max_oci",

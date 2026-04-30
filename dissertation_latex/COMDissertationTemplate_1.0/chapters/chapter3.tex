@@ -17,7 +17,7 @@ The objectives are:
     \item to compare prompt variants using both grammatical accuracy and rewriting-based measures;
     \item to identify which prompting strategy provides the best balance between correction quality and minimal editing;
     \item to examine whether sentence length affects correction behaviour;
-    \item to test whether the Composite Over-Correction Index (OCI) remains stable under alternative weighting schemes.
+    \item to test whether the utility-aware Composite Over-Correction Index (OCI) remains stable under alternative weighting schemes.
 \end{itemize}
 
 These objectives lead to the following research questions:
@@ -27,7 +27,7 @@ These objectives lead to the following research questions:
     \item \textbf{RQ2:} Which prompting strategy provides the best balance between accuracy and reduced unnecessary rewriting?
     \item \textbf{RQ3:} How does sentence length affect correction performance and over-correction behaviour?
     \item \textbf{RQ4:} Is there a measurable trade-off between grammatical accuracy and unnecessary rewriting?
-    \item \textbf{RQ5:} Is the Composite Over-Correction Index stable under alternative weighting schemes?
+    \item \textbf{RQ5:} Is the utility-aware Composite Over-Correction Index stable under alternative weighting schemes?
 \end{itemize}
 
 \section{Dataset}
@@ -106,9 +106,9 @@ This structure allows the study to examine not only which prompt performs best, 
 
 Grammatical correction performance is evaluated using ERRANT \cite{bryant-etal-2017-automatic}. The main reported metrics are precision, recall, and $F_{0.5}$. The $F_{0.5}$ score is used because it gives greater weight to precision, which is important in GEC where unnecessary corrections can reduce output quality \cite{ng-etal-2014-conll}.
 
-Over-correction is evaluated using change-based metrics that compare the corrected sentence with the original learner sentence. These include word-level edit distance, edit density, lexical diversity change, readability change, and cosine similarity. These measures do not directly prove that an edit is unnecessary, but they provide useful signals of how much the model has altered the learner's original writing.
+Over-correction is evaluated using change-based metrics that compare the corrected sentence with the original learner sentence. These include word-level edit distance, edit density, lexical diversity change, readability change, cosine similarity, and sentence-level fluency change. These measures do not directly prove that an edit is unnecessary, but they provide useful signals of how much the model has altered the learner's original writing and whether the alteration preserves meaning while improving fluency.
 
-To summarise rewriting behaviour, these metrics are combined into a Composite Over-Correction Index (OCI). A higher OCI indicates greater divergence from the original learner sentence. The full calculation and implementation details are provided in Chapter 4.
+To summarise rewriting behaviour, these metrics are combined into a utility-aware Composite Over-Correction Index (OCI). A higher OCI indicates greater divergence from the original learner sentence after accounting for fluency improvement and meaning preservation. The full calculation and implementation details are provided in Chapter 4.
 
 \section{Ethical and Practical Constraints}
 

@@ -29,18 +29,18 @@ This experiment investigates how sentence length influences the performance of d
 
 | Prompt | Length | F0.5 | OCI (%) |
 |--------|--------|------|---------|
-| baseline | short | 42.11 | 6.27 |
-| baseline | medium | 46.18 | 7.96 |
-| baseline | long | 37.11 | 15.46 |
-| fewshot | short | 49.81 | 4.14 |
-| fewshot | medium | 58.24 | 6.43 |
-| fewshot | long | 44.85 | 12.47 |
-| instruction | short | 48.55 | 4.42 |
-| instruction | medium | 52.50 | 6.13 |
-| instruction | long | 43.13 | 11.65 |
-| role | short | 47.57 | 4.86 |
-| role | medium | 57.19 | 6.04 |
-| role | long | 43.37 | 11.32 |
+| baseline | short | 42.11 | 2.76 |
+| baseline | medium | 46.18 | 2.90 |
+| baseline | long | 37.11 | 5.61 |
+| fewshot | short | 49.81 | 1.58 |
+| fewshot | medium | 58.24 | 2.34 |
+| fewshot | long | 44.85 | 4.52 |
+| instruction | short | 48.55 | 1.77 |
+| instruction | medium | 52.50 | 2.23 |
+| instruction | long | 43.13 | 4.23 |
+| role | short | 47.57 | 1.95 |
+| role | medium | 57.19 | 2.20 |
+| role | long | 43.37 | 4.10 |
 
 ### Key Findings
 
@@ -56,34 +56,34 @@ This experiment investigates how sentence length influences the performance of d
 - **Short sentences show moderate performance**: While not the best, short sentences maintain reasonable correction quality across all prompts.
 
 #### 2. Over-Correction Patterns by Length
-- **Long sentences exhibit highest OCI**: 11.32-15.46% across prompts, indicating more aggressive editing behavior on complex sentences.
-- **Short sentences show lowest OCI**: 4.14-6.27%, suggesting more conservative corrections.
-- **Medium sentences balance both metrics**: Moderate OCI (6.04-7.96%) with highest F0.5 scores.
+- **Long sentences exhibit highest OCI**: 4.10-5.61% across prompts, indicating more aggressive editing behavior on complex sentences.
+- **Short sentences show lowest OCI**: 1.58-2.76%, suggesting more conservative corrections.
+- **Medium sentences balance both metrics**: Moderate OCI (2.20-2.90%) with highest F0.5 scores.
 
 #### 3. Prompt Effectiveness Across Length Categories
 
 **Few-shot Prompting:**
-- Best performer on medium sentences (F0.5: 58.24, OCI: 6.43%)
-- Strong on short sentences (F0.5: 49.81, OCI: 4.14%)
-- Moderate decline on long sentences (F0.5: 44.85, OCI: 12.47%)
+- Best performer on medium sentences (F0.5: 58.24, OCI: 2.34%)
+- Strong on short sentences (F0.5: 49.81, OCI: 1.58%)
+- Moderate decline on long sentences (F0.5: 44.85, OCI: 4.52%)
 - Most aggressive overall, with highest F0.5 but variable OCI
 
 **Role-based Prompting:**
-- Excellent on medium sentences (F0.5: 57.19, OCI: 6.04%)
-- Good balance on short sentences (F0.5: 47.57, OCI: 4.86%)
-- Consistent performance degradation on long sentences (F0.5: 43.37, OCI: 11.32%)
+- Excellent on medium sentences (F0.5: 57.19, OCI: 2.20%)
+- Good balance on short sentences (F0.5: 47.57, OCI: 1.95%)
+- Consistent performance degradation on long sentences (F0.5: 43.37, OCI: 4.10%)
 - Most stable OCI across categories
 
 **Instruction Prompting:**
-- Solid medium performance (F0.5: 52.50, OCI: 6.13%)
-- Strong short sentence results (F0.5: 48.55, OCI: 4.42%)
-- Significant long sentence challenges (F0.5: 43.13, OCI: 11.65%)
+- Solid medium performance (F0.5: 52.50, OCI: 2.23%)
+- Strong short sentence results (F0.5: 48.55, OCI: 1.77%)
+- Significant long sentence challenges (F0.5: 43.13, OCI: 4.23%)
 - Balanced approach with controlled over-correction
 
 **Baseline Prompting:**
-- Moderate medium performance (F0.5: 46.18, OCI: 7.96%)
-- Lowest short sentence F0.5 (42.11) but reasonable OCI (6.27%)
-- Worst long sentence performance (F0.5: 37.11, OCI: 15.46%)
+- Moderate medium performance (F0.5: 46.18, OCI: 2.90%)
+- Lowest short sentence F0.5 (42.11) but reasonable OCI (2.76%)
+- Worst long sentence performance (F0.5: 37.11, OCI: 5.61%)
 - Most inconsistent, with highest OCI variance
 
 ### Insights and Implications

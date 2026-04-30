@@ -24,27 +24,27 @@ The goal of Experiment 5 is to analyse the relationship between grammatical corr
 
 | Condition | Precision | Recall | F0.5 | Mean OCI | Category |
 |-----------|-----------|--------|------|----------|----------|
-| baseline | 40.98 | 52.73 | 42.89 | 0.04350 | weak/inefficient |
-| fewshot | 54.47 | 43.34 | 51.81 | 0.03043 | aggressive |
-| instruction | 52.82 | 39.63 | 49.52 | 0.02818 | balanced/desirable |
-| role | 55.03 | 38.39 | 50.64 | 0.02817 | balanced/desirable |
+| baseline | 40.98 | 52.73 | 42.89 | 0.01678 | weak/inefficient |
+| fewshot | 54.47 | 43.34 | 51.81 | 0.01119 | aggressive |
+| instruction | 52.82 | 39.63 | 49.52 | 0.01053 | conservative |
+| role | 55.03 | 38.39 | 50.64 | 0.01050 | balanced/desirable |
 
 #### Median Thresholds
 
 - Median F0.5: **50.08**
-- Median OCI: **0.02930**
+- Median OCI: **0.01086**
 
 #### Cluster Interpretation
 
 - **Aggressive**: `fewshot` achieves the highest F0.5, but also has above-median OCI. This suggests strong correction performance at the cost of more unnecessary edits.
-- **Balanced / Desirable**: `instruction` and `role` both achieve high F0.5 while keeping OCI below the median. These prompts are the best trade-off candidates.
+- **Balanced / Desirable**: `role` achieves high F0.5 while keeping OCI below the median, making it the strongest trade-off candidate.
 - **Weak / Inefficient**: `baseline` has low F0.5 and above-median OCI, indicating poor correction quality combined with unnecessary editing.
-- **Conservative**: No prompt falls clearly into low F0.5 and low OCI for this experiment.
+- **Conservative**: `instruction` keeps OCI below the median, with slightly lower F0.5 than `role`.
 
 #### Discussion
 
 - The scatter plot clearly demonstrates the trade-off between correction performance and unnecessary edits.
-- `instruction` and `role` prompts are the strongest balanced options: they deliver high F0.5 while maintaining lower OCI.
+- `role` is the strongest balanced option: it delivers high F0.5 while maintaining lower OCI.
 - `fewshot` is most aggressive, delivering the highest F0.5 but with more unnecessary edits.
 - `baseline` is the weakest prompt: it offers the lowest F0.5 and the highest OCI, making it the least desirable choice.
 

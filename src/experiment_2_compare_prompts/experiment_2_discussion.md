@@ -25,10 +25,10 @@ Data sources:
 #### Comparison table: F0.5 vs OCI
 | Condition   | F0.5  | OCI (%) |
 |-------------|:-----:|:-------:|
-| baseline    | 42.89 | 4.35    |
-| instruction | 49.52 | 2.82    |
-| role        | 50.64 | 2.82    |
-| fewshot     | 51.81 | 3.04    |
+| baseline    | 42.89 | 1.68    |
+| instruction | 49.52 | 1.05    |
+| role        | 50.64 | 1.05    |
+| fewshot     | 51.81 | 1.12    |
 
 #### Behavioural differences
 - **Aggressive**: `fewshot`

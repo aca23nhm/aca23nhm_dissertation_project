@@ -130,7 +130,9 @@ The following metrics were computed:
         \hline
         $\Delta R$ & Measures change in readability \\
         \hline
-        Cosine similarity & Measures similarity between the source and corrected sentence \\
+        Cosine similarity & Measures meaning preservation and overall source-output similarity \\
+        \hline
+        $\Delta$ fluency & Measures whether the corrected output improves surface fluency relative to the source \\
         \hline
     \end{tabular}
 \end{table}
@@ -139,16 +141,16 @@ These metrics do not directly prove that an edit is unnecessary. Instead, they p
 
 \subsection{Composite Over-Correction Index}
 
-The Composite Over-Correction Index (OCI) was implemented to combine multiple change-based signals into one interpretable score. Each component was first normalised using min--max scaling:
+The Composite Over-Correction Index (OCI) was implemented as a utility-aware score. First, a divergence score was computed from multiple change-based signals. Each component was normalised using min--max scaling:
 
 \begin{equation}
 \text{norm}(x) = \frac{x - \min(x)}{\max(x) - \min(x)}
 \end{equation}
 
-OCI was then calculated as:
+\noindent The divergence component was calculated as:
 
 \begin{equation}
-OCI = w_1 \cdot \text{norm}(D_{\text{edit}}) 
+OCI_{\text{divergence}} = w_1 \cdot \text{norm}(D_{\text{edit}}) 
 + w_2 \cdot \text{norm}(E_{\text{density}}) 
 + w_3 \cdot \text{norm}(\Delta TTR) 
 + w_4 \cdot \text{norm}(\Delta R) 
@@ -166,6 +168,18 @@ w_5 = 0.15
 \]
 
 Greater weight was assigned to edit distance because direct textual change is the clearest signal of rewriting. Edit density controlled for sentence length, while lexical diversity, readability, and cosine similarity captured broader changes in vocabulary, structure, and overall similarity.
+
+The final reported OCI then adjusted this divergence score by a utility term:
+
+\begin{equation}
+Utility = 0.5 \cdot \text{norm}(\Delta_{\text{fluency}}) + 0.5 \cdot \text{CosSim}
+\end{equation}
+
+\begin{equation}
+OCI = OCI_{\text{divergence}} \cdot (1 - Utility)
+\end{equation}
+
+Both the utility term and final OCI were clipped to the range $[0,1]$. This means that edits are penalised most strongly when they create divergence without improving fluency or preserving meaning. Conversely, a correction that changes the surface form but preserves meaning and improves fluency receives a lower final OCI than the raw divergence score alone would assign.
 
 OCI values were computed at sentence level and then aggregated by prompt variant, prompt strategy, and sentence-length group.
 
@@ -191,7 +205,7 @@ This tested whether longer sentences were more likely to produce lower $F_{0.5}$
 
 \subsection{OCI Robustness Analysis}
 
-To test whether OCI-based conclusions depended heavily on the chosen default weights, the OCI calculation was repeated using alternative weighting schemes. Prompt rankings were then compared across schemes.
+To test whether OCI-based conclusions depended heavily on the chosen default weights, the divergence component of the OCI calculation was repeated using alternative weighting schemes, with the same utility adjustment applied afterwards. Prompt rankings were then compared across schemes.
 
 This robustness check was included because OCI is a composite metric. If prompt rankings changed completely under small weighting changes, the metric would be less reliable. Stable rankings would suggest that the main conclusions are not caused by one arbitrary weighting choice.
 
@@ -219,7 +233,7 @@ Testing on a small subset made it easier to identify formatting errors, path iss
 
 Metric outputs were manually inspected using selected examples. Minimal corrections were expected to produce low edit distance and low OCI, while heavily rewritten outputs were expected to produce higher values.
 
-Cosine similarity was also checked to ensure that its direction aligned with the OCI formula. Since high cosine similarity indicates greater similarity to the original sentence, it was inverted using $(1 - \text{CosSim})$ so that higher values represented greater divergence.
+Cosine similarity was also checked to ensure that its direction aligned with both parts of the OCI formula. It was inverted as $(1 - \text{CosSim})$ in the divergence component, where higher values represent greater difference, and used directly in the utility component, where higher values represent stronger meaning preservation.
 
 \subsection{Prompt Ranking Validation}
 

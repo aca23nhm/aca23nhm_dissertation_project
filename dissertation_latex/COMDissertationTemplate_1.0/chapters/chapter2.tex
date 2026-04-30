@@ -106,9 +106,9 @@ SARI \cite{xu2016optimizing}, originally developed for text simplification, eval
 
 \subsubsection{Structural and Lexical Change Indicators}
 
-Beyond edit counts and n-gram overlap, additional measures can capture broader changes in sentence structure and vocabulary. Lexical diversity metrics, such as Type--Token Ratio (TTR), measure vocabulary variation, while readability indices such as the Flesch--Kincaid Grade Level \cite{kincaid1975derivation} estimate structural complexity. Syntactic features, including sentence length and part-of-speech distribution, further reflect structural modification. Cosine similarity over lexical and syntactic feature vectors provides a quantitative estimate of similarity between the original and corrected sentences \cite{koppel2009computational}.
+Beyond edit counts and n-gram overlap, additional measures can capture broader changes in sentence structure and vocabulary. Lexical diversity metrics, such as Type--Token Ratio (TTR), measure vocabulary variation, while readability indices such as the Flesch--Kincaid Grade Level \cite{kincaid1975derivation} estimate structural complexity. Syntactic features, including sentence length and part-of-speech distribution, further reflect structural modification. Cosine similarity over lexical and syntactic feature vectors provides a quantitative estimate of similarity between the original and corrected sentences \cite{koppel2009computational}. Fluency-oriented indicators are also relevant because not every surface change is equally undesirable: a correction that preserves meaning and improves fluency may have greater pedagogical utility than a rewrite that changes wording without clear benefit.
 
-These measures do not directly evaluate correctness; instead, they provide indirect signals of how much the corrected sentence departs from the original. As such, they are useful for identifying potential over-correction, rather than for evaluating stylistic quality in itself.
+These measures do not directly evaluate correctness; instead, they provide indirect signals of how much the corrected sentence departs from the original and whether that departure appears useful. As such, they are useful for identifying potential over-correction, rather than for evaluating stylistic quality in itself.
 
 \subsubsection{Worked Example}
 
@@ -153,7 +153,7 @@ Similarity Metrics & Structural/lexical overlap & Requires feature engineering \
 \end{tabular}
 \end{table}
 
-Overall, while traditional edit-based metrics remain essential for benchmarking grammatical accuracy, they are insufficient for evaluating the extent of unnecessary modification. Combining accuracy-based and change-based measures provides a more suitable framework for analysing over-correction in LLM-based GEC.
+Overall, while traditional edit-based metrics remain essential for benchmarking grammatical accuracy, they are insufficient for evaluating the extent of unnecessary modification. Combining accuracy-based, change-based, and utility-aware measures provides a more suitable framework for analysing over-correction in LLM-based GEC.
 
 \section{Large Language Models in GEC}
 

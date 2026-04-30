@@ -6,9 +6,9 @@ This chapter presents the results of the experimental framework defined in Chapt
 
 The chapter is organised around six experiments. Experiment 1 refines prompt variants within each prompt family. Experiment 2 compares the final prompting strategies. Experiment 3 analyses sentence-length effects. Experiment 4 tests the robustness of the Composite Over-Correction Index (OCI). Experiment 5 examines the trade-off between ERRANT $F_{0.5}$ and OCI. Experiment 6 provides qualitative examples of over-correction behaviour.
 
-Across the chapter, ERRANT $F_{0.5}$ is used as the main grammatical correction measure. A higher $F_{0.5}$ indicates stronger agreement with the reference correction, with precision weighted more heavily than recall. OCI is used as the main over-correction measure. A lower OCI indicates that the system output remains closer to the learner's original sentence. The most desirable prompt is therefore not necessarily the prompt with the highest $F_{0.5}$, but the prompt that achieves strong correction performance while minimising unnecessary rewriting.
+Across the chapter, ERRANT $F_{0.5}$ is used as the main grammatical correction measure. A higher $F_{0.5}$ indicates stronger agreement with the reference correction, with precision weighted more heavily than recall. OCI is used as the main over-correction measure. A lower OCI indicates that the system output has lower utility-adjusted over-correction risk: it remains closer to the learner's original sentence, or any divergence is offset by fluency improvement and meaning preservation. The most desirable prompt is therefore not necessarily the prompt with the highest $F_{0.5}$, but the prompt that achieves strong correction performance while minimising unnecessary rewriting.
 
-A critical point in interpreting these results is that $F_{0.5}$ and OCI measure different aspects of behaviour. ERRANT evaluates agreement with a reference correction, while OCI measures divergence from the learner sentence. OCI is therefore treated as an indicator of over-correction risk rather than a perfect direct measure of over-correction. Some high-divergence outputs may be justified when the source sentence contains several serious errors. For this reason, the analysis considers OCI alongside $F_{0.5}$, qualitative examples, and sentence-level behaviour rather than using OCI alone.
+A critical point in interpreting these results is that $F_{0.5}$ and OCI measure different aspects of behaviour. ERRANT evaluates agreement with a reference correction, while OCI measures source-output divergence after adjusting for fluency gain and meaning preservation. OCI is therefore treated as an indicator of over-correction risk rather than a perfect direct measure of over-correction. Some high-divergence outputs may be justified when the source sentence contains several serious errors. For this reason, the analysis considers OCI alongside $F_{0.5}$, qualitative examples, and sentence-level behaviour rather than using OCI alone.
 
 \section{Experiment 1: Prompt Refinement}
 
@@ -34,28 +34,28 @@ The purpose of this implementation stage was selection rather than final compari
         \toprule
         \textbf{Condition} & \textbf{Precision} & \textbf{Recall} & \textbf{$F_{0.5}$} & \textbf{OCI (\%)} \\
         \midrule
-        Baseline       & 42.71 & 52.32 & 44.34 & 3.69 \\
+        Baseline       & 42.71 & 52.32 & 44.34 & 1.40 \\
         \addlinespace
-        Instruction v1 & 42.15 & 52.63 & 43.90 & 3.88 \\
-        Instruction v2 & 53.54 & 39.01 & 49.83 & 2.60 \\
-        Instruction v3 & 50.60 & 43.24 & 48.94 & 2.80 \\
-        Instruction v4 & 52.82 & 39.63 & 49.52 & 2.72 \\
+        Instruction v1 & 42.15 & 52.63 & 43.90 & 1.50 \\
+        Instruction v2 & 53.54 & 39.01 & 49.83 & 0.98 \\
+        Instruction v3 & 50.60 & 43.24 & 48.94 & 1.06 \\
+        Instruction v4 & 52.82 & 39.63 & 49.52 & 1.05 \\
         \addlinespace
-        Role v1        & 42.18 & 52.32 & 43.88 & 3.63 \\
-        Role v2        & 44.77 & 50.77 & 45.85 & 3.57 \\
-        Role v3        & 54.15 & 36.33 & 49.31 & 2.76 \\
-        Role v4        & 55.03 & 38.39 & 50.64 & 2.72 \\
+        Role v1        & 42.18 & 52.32 & 43.88 & 1.37 \\
+        Role v2        & 44.77 & 50.77 & 45.85 & 1.36 \\
+        Role v3        & 54.15 & 36.33 & 49.31 & 1.06 \\
+        Role v4        & 55.03 & 38.39 & 50.64 & 1.05 \\
         \addlinespace
-        Few-shot v1    & 44.37 & 51.29 & 45.60 & 3.80 \\
-        Few-shot v2    & 45.27 & 51.39 & 46.38 & 3.77 \\
-        Few-shot v3    & 45.49 & 52.01 & 46.66 & 3.90 \\
-        Few-shot v4    & 54.47 & 43.34 & 51.81 & 2.93 \\
+        Few-shot v1    & 44.37 & 51.29 & 45.60 & 1.51 \\
+        Few-shot v2    & 45.27 & 51.39 & 46.38 & 1.49 \\
+        Few-shot v3    & 45.49 & 52.01 & 46.66 & 1.54 \\
+        Few-shot v4    & 54.47 & 43.34 & 51.81 & 1.12 \\
         \bottomrule
     \end{tabular}
     \end{adjustbox}
 \end{table}
 
-The baseline prompt achieved the lowest $F_{0.5}$ score, 44.34, and the highest OCI among the selected candidates, 3.69\%. The strongest instruction-based candidate was Instruction v2, with $F_{0.5}$ of 49.83 and OCI of 2.60\%. Instruction v4 produced a very similar $F_{0.5}$ score, 49.52, with slightly higher OCI at 2.72\%. Role v4 achieved $F_{0.5}$ of 50.64 and OCI of 2.72\%. Few-shot v4 achieved the highest $F_{0.5}$ score in this experiment, 51.81, with OCI of 2.93\%.
+The baseline prompt achieved the lowest $F_{0.5}$ score, 44.34, and the highest OCI among the selected candidates, 1.40\%. The strongest instruction-based candidate was Instruction v2, with $F_{0.5}$ of 49.83 and OCI of 0.98\%. Instruction v4 produced a very similar $F_{0.5}$ score, 49.52, with slightly higher OCI at 1.05\%. Role v4 achieved $F_{0.5}$ of 50.64 and OCI of 1.05\%. Few-shot v4 achieved the highest $F_{0.5}$ score in this experiment, 51.81, with OCI of 1.12\%.
 
 \subsection{Discussion}
 
@@ -71,11 +71,17 @@ The key limitation of Experiment 1 is that it is a refinement stage. It identifi
 
 \subsection{Purpose}
 
-Experiment 2 compared the final prompting strategies after refinement. The purpose was to determine which prompt family achieved the best balance between grammatical correction accuracy and reduced unnecessary rewriting.
+Experiment 2 compares the final prompting strategies selected in Experiment 1 in order to evaluate how different prompt designs influence the balance between grammatical correction performance and unnecessary rewriting.
+
+The aim is not only to identify which prompt achieves the highest correction score, but also to analyse how each strategy affects editing behaviour. In particular, the experiment examines whether improvements in ERRANT $F_{0.5}$ are associated with more extensive changes to the source sentence, as measured by OCI and edit distance. This allows the analysis to distinguish between accuracy-oriented and conservative correction strategies.
 
 \subsection{Implementation}
 
-The same 500 learner sentences were processed under four prompt conditions: baseline, instruction, role, and few-shot. The instruction, role, and few-shot conditions correspond to the refined prompts selected from Experiment 1. The outputs were evaluated using the same two-branch evaluation framework: ERRANT for grammatical correction performance and OCI for over-correction behaviour. This ensured that the final prompt comparison was controlled, with prompt design as the main changing factor.
+The same 500 learner sentences were processed under four prompt conditions: baseline, instruction, role, and few-shot. The instruction, role, and few-shot prompts correspond to the refined variants selected in Experiment 1.
+
+Outputs were evaluated using a two-branch framework. ERRANT precision, recall, and $F_{0.5}$ were used to measure agreement with reference corrections. OCI and edit distance were used to measure utility-adjusted divergence from the original learner sentence. This design enabled comparison between how many reference edits were attempted, how reliable those edits were, overall correction performance, and how much the sentence was altered.
+
+Since each sentence was evaluated under all prompt conditions, paired comparisons were also used to assess whether OCI differences were consistent across inputs.
 
 \subsection{Results}
 
@@ -89,10 +95,10 @@ The same 500 learner sentences were processed under four prompt conditions: base
         \toprule
         \textbf{Condition} & \textbf{Precision} & \textbf{Recall} & \textbf{$F_{0.5}$} & \textbf{Mean OCI} & \textbf{OCI (\%)} & \textbf{Edit Dist.} \\
         \midrule
-        Baseline    & 40.98 & 52.73 & 42.89 & 0.04350 & 4.35 & 6.70 \\
-        Instruction & 52.82 & 39.63 & 49.52 & 0.02818 & 2.82 & 5.64 \\
-        Role        & 55.03 & 38.39 & 50.64 & 0.02817 & 2.82 & 5.52 \\
-        Few-shot    & 54.47 & 43.34 & 51.81 & 0.03043 & 3.04 & 5.67 \\
+        Baseline    & 40.98 & 52.73 & 42.89 & 0.01678 & 1.68 & 6.70 \\
+        Instruction & 52.82 & 39.63 & 49.52 & 0.01053 & 1.05 & 5.64 \\
+        Role        & 55.03 & 38.39 & 50.64 & 0.01050 & 1.05 & 5.52 \\
+        Few-shot    & 54.47 & 43.34 & 51.81 & 0.01119 & 1.12 & 5.67 \\
         \bottomrule
     \end{tabular}
     \end{adjustbox}
@@ -101,20 +107,20 @@ The same 500 learner sentences were processed under four prompt conditions: base
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.82\textwidth]{figures/figure_5_1_f05_vs_oci.png}
-    \caption{Relationship between ERRANT $F_{0.5}$ and mean OCI across prompt conditions, with precision and recall annotated}
+    \caption{Relationship between ERRANT $F_{0.5}$ and mean OCI across prompt conditions}
     \label{fig:f05_oci_tradeoff}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.82\textwidth]{figures/figure_5_2_prompt_strategy_comparison.png}
-    \caption{Prompt strategy comparison using ERRANT precision, recall, $F_{0.5}$, and mean OCI}
+    \caption{Prompt strategy comparison using ERRANT $F_{0.5}$ and mean OCI}
     \label{fig:prompt_strategy_comparison}
 \end{figure}
 
-The baseline prompt performed worst overall. It achieved the lowest $F_{0.5}$ score, 42.89, and the highest mean OCI, 0.04350. Although it had the highest recall, 52.73, its low precision indicates that many edits did not match reference corrections.
+The baseline prompt performed worst overall, achieving the lowest $F_{0.5}$ score, 42.89, and the highest mean OCI, 0.01678. Although it obtained the highest recall, 52.73, its low precision, 40.98, indicates that many of its edits did not correspond to reference corrections.
 
-All structured prompts improved $F_{0.5}$ while reducing OCI. The instruction prompt increased $F_{0.5}$ to 49.52 and reduced mean OCI to 0.02818. The role prompt achieved the highest precision, 55.03, an $F_{0.5}$ score of 50.64, and the lowest mean OCI, 0.02817. Few-shot prompting achieved the highest $F_{0.5}$ score, 51.81, but its OCI was higher than instruction and role prompting.
+All structured prompts improved $F_{0.5}$ while reducing OCI. Instruction prompting increased $F_{0.5}$ to 49.52 and reduced mean OCI to 0.01053. Role prompting achieved the highest precision, 55.03, an $F_{0.5}$ score of 50.64, and the lowest mean OCI, 0.01050, along with the lowest average edit distance, 5.52. Few-shot prompting achieved the highest $F_{0.5}$ score, 51.81, and the highest recall among the structured prompts, 43.34, but also produced a higher mean OCI, 0.01119, than instruction and role prompting.
 
 To examine whether the OCI reductions were consistent across sentences, paired sentence-level comparisons were performed between the baseline and each structured prompt. Since each sentence was corrected under every prompt condition, a paired design was appropriate. Table~\ref{tab:exp2_paired_oci_tests} reports the mean OCI reduction, Wilcoxon signed-rank test result, and paired Cohen's $d_z$ effect size. Positive mean differences indicate lower OCI for the structured prompt than for the baseline.
 
@@ -128,31 +134,35 @@ To examine whether the OCI reductions were consistent across sentences, paired s
         \toprule
         \textbf{Comparison} & \textbf{$n$} & \textbf{Baseline OCI} & \textbf{Prompt OCI} & \textbf{Mean reduction} & \textbf{$p$} & \textbf{$d_z$} \\
         \midrule
-        Baseline vs Instruction & 500 & 0.04350 & 0.02818 & 0.01532 & $< .001$ & 0.32 \\
-        Baseline vs Role        & 500 & 0.04350 & 0.02817 & 0.01533 & $< .001$ & 0.39 \\
-        Baseline vs Few-shot    & 500 & 0.04350 & 0.03043 & 0.01307 & $< .001$ & 0.25 \\
+        Baseline vs Instruction & 500 & 0.01678 & 0.01053 & 0.00626 & $< .001$ & 0.25 \\
+        Baseline vs Role        & 500 & 0.01678 & 0.01050 & 0.00629 & $< .001$ & 0.32 \\
+        Baseline vs Few-shot    & 500 & 0.01678 & 0.01119 & 0.00559 & $< .001$ & 0.20 \\
         \bottomrule
     \end{tabular}
     \end{adjustbox}
 \end{table}
 
-All three reductions were statistically significant under a one-sided Wilcoxon signed-rank test ($p < .001$). The effect sizes are small to moderate, which is plausible for sentence-level text-generation behaviour: many sentences require similar corrections across prompts, while the largest differences occur on sentences where the baseline rewrites or reformats more aggressively.
+All three reductions were statistically significant under a one-sided Wilcoxon signed-rank test ($p < .001$). The effect sizes are small to moderate, indicating that structured prompting shifts model behaviour consistently, but does not completely eliminate source divergence.
 
 \subsection{Discussion}
 
-Experiment 2 provides the central quantitative evidence for the dissertation: the structured prompts shift the system towards a better balance of grammatical accuracy and learner-text preservation, rather than merely making fewer edits.
+Experiment 2 provides the central quantitative evidence for the dissertation. The results show that prompt design influences not only grammatical correction performance, but also the type and extent of edits applied to learner sentences.
 
-The baseline prompt is inefficient. It edits actively, as shown by its high recall and high OCI, but it has the lowest precision and weakest $F_{0.5}$. This suggests that a generic correction instruction encourages many changes without sufficient control over whether those changes are necessary.
+The baseline prompt demonstrates an inefficient correction strategy. Its high recall, 52.73, indicates that it attempts many edits, but its low precision, 40.98, shows that a substantial proportion of these edits do not match reference corrections. This combination results in both the lowest $F_{0.5}$ score, 42.89, and the highest mean OCI, 0.01678. In other words, the baseline is not merely active; it is active without sufficient control over whether its edits are appropriate under the evaluation framework. This suggests that a generic request to correct grammar encourages frequent but poorly targeted modifications.
 
-The instruction prompt is the most conservative structured strategy, showing the value of explicit constraints against unnecessary rewriting. Few-shot prompting is the most accuracy-oriented strategy, since it produces the highest $F_{0.5}$ but accepts a slightly higher OCI.
+The structured prompts behave differently from the baseline and from each other. Instruction prompting produces a clear reduction in OCI, from 0.01678 to 0.01053, while improving $F_{0.5}$ from 42.89 to 49.52. Its recall, 39.63, is lower than both the baseline and few-shot prompts, suggesting a more conservative correction style. This indicates that explicit constraints against unnecessary rewriting reduce the number of corrections attempted, while still improving the reliability of the output compared with the baseline.
 
-Few-shot prompting warrants particular attention because it achieves the highest $F_{0.5}$ score (51.81) among all conditions, surpassing even the role prompt (50.64). However, this accuracy comes at the cost of a higher OCI (3.04\% compared to 2.82\% for both instruction and role prompting). This raises critical questions about whether the additional changes made by few-shot prompting are necessary or beneficial. The examples provided in few-shot prompts may encourage the model to adopt a more comprehensive correction approach, including not just grammatical fixes but also stylistic improvements that enhance fluency and idiomaticity. While these changes can improve the overall quality of the output, they may go beyond what is strictly required for grammatical error correction, potentially altering the learner's original intent or expression.
+Few-shot prompting achieves the highest $F_{0.5}$ score, 51.81, and the highest recall among the structured prompts, 43.34. This indicates that it identifies and attempts to correct a larger proportion of reference edits than the instruction and role prompts. However, it also produces a higher mean OCI, 0.01119, and higher edit distance, 5.67, than role prompting. This suggests that few-shot prompting adopts a more interventionist correction strategy, making more extensive changes to the input sentence.
 
-In contrast, the role prompt demonstrates that high accuracy can be achieved with greater selectivity. Despite having slightly lower $F_{0.5}$ than few-shot, role prompting achieves the highest precision (55.03) and the lowest OCI (2.82), along with the lowest average edit distance (5.52). This suggests that framing the model as a "careful English teacher" encourages more targeted corrections that preserve learner wording while still achieving strong grammatical accuracy. The role prompt's ability to maintain high precision without the elevated OCI of few-shot prompting indicates that it makes fewer unnecessary changes, potentially making it more suitable for learner-facing applications where preserving the student's voice is important.
+Importantly, the higher OCI for few-shot prompting should not be interpreted as direct proof that its additional edits are unnecessary. OCI measures divergence from the learner sentence, not whether every edit is pedagogically or grammatically justified. Some additional edits may be appropriate, especially where the original sentence contains multiple or interacting errors. The safer interpretation is therefore that few-shot prompting has a broader correction scope: it increases reference-edit coverage, as reflected in recall and $F_{0.5}$, while also increasing source-output divergence.
 
-The trade-off between few-shot and role prompting highlights a key tension in GEC system design. Few-shot prompting's higher $F_{0.5}$ suggests it better matches reference corrections, which may include stylistic improvements alongside grammatical fixes. However, its higher OCI indicates a greater risk of over-correction, where changes extend beyond grammar to include paraphrasing or rephrasing that, while fluent, may not be pedagogically appropriate. Role prompting, by contrast, appears to strike a better balance, achieving nearly comparable accuracy (within 1.17 $F_{0.5}$ points) while significantly reducing unnecessary rewriting. This makes role prompting particularly valuable in educational contexts where the goal is not just grammatical accuracy but also maintaining the learner's original expression to support learning.
+Role prompting provides the strongest balance between correction performance and editing restraint. It achieves the highest precision, 55.03, meaning that a greater proportion of its edits correspond to reference corrections. Although its $F_{0.5}$ score, 50.64, is slightly lower than few-shot prompting, the difference is small at 1.17 points. At the same time, role prompting achieves the lowest mean OCI, 0.01050, and the lowest average edit distance, 5.52. Together, these metrics suggest that role prompting applies fewer but more targeted corrections.
 
-The paired OCI analysis adds an important critical qualification. The structured prompts do not merely look better at aggregate level; their lower OCI is consistent enough across the 500 paired sentences to be statistically significant. However, the effect sizes are not large, so the result should be interpreted as a reliable but moderate shift rather than a complete solution to over-correction. Its practical value comes from occurring alongside the accuracy results rather than replacing them.
+The comparison between role and few-shot prompting is especially important. Few-shot prompting favours broader correction coverage, as shown by its higher recall and highest $F_{0.5}$. Role prompting favours selectivity, as shown by its higher precision, lower OCI, and lower edit distance. This means that the two prompts should not be interpreted simply as ``better'' or ``worse''. Instead, they represent different correction behaviours. Few-shot prompting is more accuracy-oriented under ERRANT evaluation, while role prompting is more suitable for minimal-edit or learner-facing correction settings where preserving the learner's original wording is important.
+
+The paired OCI analysis adds a further qualification. The structured prompts do not only appear better at aggregate level; their lower OCI values are statistically reliable across the 500 paired sentences. However, the effect sizes are small to moderate. This means that prompt engineering produces a consistent behavioural shift, but it does not fully control over-correction. The practical value of the result comes from the combination of improved $F_{0.5}$ and reduced OCI, rather than from OCI reduction alone.
+
+Overall, Experiment 2 shows that prompt engineering can shift LLM-based GEC away from uncontrolled rewriting and towards more selective correction behaviour. The role prompt provides the best overall balance because it combines high precision, strong $F_{0.5}$, the lowest OCI, and the lowest edit distance. Few-shot prompting remains valuable when maximising correction coverage is the priority, but its higher OCI suggests a greater degree of intervention in the learner sentence.
 
 \section{Experiment 3: Sentence-Length Effects}
 
@@ -176,21 +186,21 @@ The experiment used a separate balanced subset of 450 sentences for the sentence
         \toprule
         \textbf{Condition} & \textbf{Length group} & \textbf{$F_{0.5}$} & \textbf{OCI (\%)} \\
         \midrule
-        Baseline    & Short  & 42.11 & 6.27 \\
-        Baseline    & Medium & 46.18 & 7.96 \\
-        Baseline    & Long   & 37.11 & 15.46 \\
+        Baseline    & Short  & 42.11 & 2.76 \\
+        Baseline    & Medium & 46.18 & 2.90 \\
+        Baseline    & Long   & 37.11 & 5.61 \\
         \addlinespace
-        Instruction & Short  & 48.55 & 4.42 \\
-        Instruction & Medium & 52.50 & 6.13 \\
-        Instruction & Long   & 43.13 & 11.65 \\
+        Instruction & Short  & 48.55 & 1.77 \\
+        Instruction & Medium & 52.50 & 2.23 \\
+        Instruction & Long   & 43.13 & 4.23 \\
         \addlinespace
-        Role        & Short  & 47.57 & 4.86 \\
-        Role        & Medium & 57.19 & 6.04 \\
-        Role        & Long   & 43.37 & 11.32 \\
+        Role        & Short  & 47.57 & 1.95 \\
+        Role        & Medium & 57.19 & 2.20 \\
+        Role        & Long   & 43.37 & 4.10 \\
         \addlinespace
-        Few-shot    & Short  & 49.81 & 4.14 \\
-        Few-shot    & Medium & 58.24 & 6.43 \\
-        Few-shot    & Long   & 44.85 & 12.47 \\
+        Few-shot    & Short  & 49.81 & 1.58 \\
+        Few-shot    & Medium & 58.24 & 2.34 \\
+        Few-shot    & Long   & 44.85 & 4.52 \\
         \bottomrule
     \end{tabular}
     \end{adjustbox}
@@ -198,12 +208,12 @@ The experiment used a separate balanced subset of 450 sentences for the sentence
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{figures/figure_5_3_sentence_length_effects.png}
+    \includegraphics[width=\textwidth]{figures/figure_5_3_sentence_length_all_values.png}
     \caption{Sentence-length effects on correction accuracy and over-correction}
     \label{fig:sentence_length_effects}
 \end{figure}
 
-Medium-length sentences produced the strongest $F_{0.5}$ scores across all prompt conditions. Few-shot prompting achieved the highest score in this group, 58.24, followed by role prompting at 57.19. Long sentences were the most difficult category. The baseline fell to 37.11 $F_{0.5}$ and reached 15.46\% OCI, while every non-baseline prompt still remained above 11\% OCI for long sentences.
+Medium-length sentences produced the strongest $F_{0.5}$ scores across all prompt conditions. Few-shot prompting achieved the highest score in this group, 58.24, followed by role prompting at 57.19. Long sentences were the most difficult category. The baseline fell to 37.11 $F_{0.5}$ and reached 5.61\% OCI, while every non-baseline prompt still remained above 4\% OCI for long sentences.
 
 \subsection{Discussion}
 
@@ -211,7 +221,7 @@ The sentence-length results show that over-correction is influenced by input com
 
 Short sentences produced lower OCI values than long sentences, but they did not always produce the highest correction scores. Short inputs often contain fewer grammatical cues, so the model has less context for deciding whether an edit is required. This can lead either to under-correction or to unnecessary additions.
 
-Long sentences remain the main challenge. Their higher OCI values suggest that the model is more likely to reorganise or paraphrase when the input is longer. The role prompt achieved the lowest OCI for long sentences, 11.32\%, suggesting that role-based framing remains the most restrained under complex input conditions. However, the increase in OCI across all prompts suggests that future systems may benefit from length-adaptive prompts that place stronger emphasis on preserving structure for longer inputs.
+Long sentences remain the main challenge. Their higher OCI values suggest that the model is more likely to reorganise or paraphrase when the input is longer. The role prompt achieved the lowest OCI for long sentences, 4.10\%, suggesting that role-based framing remains the most restrained under complex input conditions. However, the increase in OCI across all prompts suggests that future systems may benefit from length-adaptive prompts that place stronger emphasis on preserving structure for longer inputs.
 
 This result limits the generality of the main finding. Long and complex learner sentences remain difficult because the model must decide between local correction and sentence-level restructuring. The experiments suggest that current prompts can guide this decision, but cannot fully control it.
 
@@ -223,7 +233,7 @@ Experiment 4 tested whether OCI-based conclusions were stable under alternative 
 
 \subsection{Implementation}
 
-The experiment reused the Experiment 2 style metrics and recalculated OCI under five weighting schemes: default, edit-heavy, style-heavy, similarity-heavy, and equal weights. For each weighting scheme, prompt conditions were ranked by mean OCI, where rank 1 indicates the lowest over-correction score.
+The experiment reused the Experiment 2 style metrics and recalculated the divergence component of OCI under five weighting schemes: default, edit-heavy, style-heavy, similarity-heavy, and equal weights. The same utility adjustment was then applied in each case. For each weighting scheme, prompt conditions were ranked by mean OCI, where rank 1 indicates the lowest over-correction score.
 
 \subsection{Results}
 
@@ -237,11 +247,11 @@ The experiment reused the Experiment 2 style metrics and recalculated OCI under 
         \toprule
         \textbf{Weighting scheme} & \textbf{Rank 1} & \textbf{Rank 2} & \textbf{Rank 3} & \textbf{Rank 4} \\
         \midrule
-        Default           & Instruction & Role        & Few-shot & Baseline \\
-        Edit-heavy        & Role        & Instruction & Few-shot & Baseline \\
-        Style-heavy       & Instruction & Role        & Few-shot & Baseline \\
-        Similarity-heavy  & Instruction & Role        & Few-shot & Baseline \\
-        Equal weights     & Instruction & Role        & Few-shot & Baseline \\
+        Default           & Role (0.0105)        & Instruction (0.0105) & Few-shot (0.0112) & Baseline (0.0168) \\
+        Edit-heavy        & Role (0.0111)        & Instruction (0.0112) & Few-shot (0.0114) & Baseline (0.0160) \\
+        Style-heavy       & Role (0.0097)        & Instruction (0.0098) & Few-shot (0.0107) & Baseline (0.0167) \\
+        Similarity-heavy  & Instruction (0.0081) & Role (0.0082)        & Few-shot (0.0085) & Baseline (0.0134) \\
+        Equal weights     & Role (0.0087)        & Instruction (0.0087) & Few-shot (0.0093) & Baseline (0.0149) \\
         \bottomrule
     \end{tabular}
     \end{adjustbox}
@@ -254,13 +264,13 @@ The experiment reused the Experiment 2 style metrics and recalculated OCI under 
     \label{fig:oci_robustness}
 \end{figure}
 
-The OCI rankings were highly stable. The baseline was ranked last under every weighting scheme, confirming that it produced the highest over-correction risk. Few-shot prompting was consistently ranked third. Instruction and role prompting occupied the top two positions under every scheme. The only change occurred under the edit-heavy weighting, where role prompting moved ahead of instruction prompting.
+The OCI rankings were highly stable. The baseline was ranked last under every weighting scheme, confirming that it produced the highest over-correction risk. Few-shot prompting was consistently ranked third. Instruction and role prompting occupied the top two positions under every scheme. Role prompting ranked first in four of the five schemes, while instruction prompting ranked first under the similarity-heavy scheme.
 
 \subsection{Discussion}
 
-The robustness analysis strengthens confidence in the OCI-based conclusions. If the prompt rankings changed substantially under different weights, the metric would be difficult to interpret. Instead, the broad ranking remains stable: baseline is the least controlled condition, few-shot is more interventionist than instruction and role prompting, and instruction and role prompting form the most conservative pair.
+The robustness analysis strengthens confidence in the OCI-based conclusions. If the prompt rankings changed substantially under different weights, the metric would be difficult to interpret. Instead, the broad ranking remains stable: baseline is the least controlled condition, few-shot is more interventionist than instruction and role prompting, and role and instruction prompting form the most conservative pair.
 
-The small difference between instruction and role prompting should therefore be interpreted cautiously. Their OCI scores are close, and their rank changes only under the edit-heavy setting. This is consistent with Experiment 2, where role prompting had slightly lower edit distance but instruction prompting had a very similar OCI value.
+The small difference between instruction and role prompting should therefore be interpreted cautiously. Their OCI scores are close, and their rank changes only under the similarity-heavy setting. This is consistent with Experiment 2, where role prompting had slightly lower edit distance but instruction prompting had a very similar OCI value.
 
 At the same time, this experiment does not make OCI objective in an absolute sense. The weighting schemes test robustness, but the components still reflect design choices about what counts as stylistic divergence. The metric is strongest when used for relative comparison between prompts under the same experimental conditions. It is less appropriate as a standalone judgement that a particular individual sentence has definitely been over-corrected.
 
@@ -286,10 +296,10 @@ The experiment merged the ERRANT scores and mean OCI values from Experiment 2. E
         \toprule
         \textbf{Condition} & \textbf{Precision} & \textbf{Recall} & \textbf{$F_{0.5}$} & \textbf{Mean OCI} & \textbf{Interpretation} \\
         \midrule
-        Baseline    & 40.98 & 52.73 & 42.89 & 0.04350 & Weak/inefficient \\
-        Instruction & 52.82 & 39.63 & 49.52 & 0.02818 & Conservative \\
-        Role        & 55.03 & 38.39 & 50.64 & 0.02817 & Balanced \\
-        Few-shot    & 54.47 & 43.34 & 51.81 & 0.03043 & Accuracy-oriented \\
+        Baseline    & 40.98 & 52.73 & 42.89 & 0.01678 & Weak/inefficient \\
+        Instruction & 52.82 & 39.63 & 49.52 & 0.01053 & Conservative \\
+        Role        & 55.03 & 38.39 & 50.64 & 0.01050 & Balanced \\
+        Few-shot    & 54.47 & 43.34 & 51.81 & 0.01119 & Accuracy-oriented \\
         \bottomrule
     \end{tabular}
     \end{adjustbox}

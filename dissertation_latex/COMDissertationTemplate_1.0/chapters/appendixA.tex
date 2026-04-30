@@ -131,9 +131,9 @@ Table~\ref{tab:appendix_scripts} lists the main scripts used to generate outputs
         \texttt{src/step\_4\_errant\_evaluation/run\_experiment3\_errant.py} & Runs ERRANT evaluation for Experiment 3 \\
         \texttt{src/step\_5\_style\_evaluation/evaluate\_style\_experiment2.py} & Computes style metrics for Experiment 2 \\
         \texttt{src/step\_5\_style\_evaluation/evaluate\_style\_experiment3.py} & Computes style metrics for Experiment 3 \\
-        \texttt{src/step\_6\_oci/compute\_oci\_experiment2.py} & Computes final composite OCI for Experiment 2 \\
-        \texttt{src/step\_6\_oci/compute\_oci\_experiment3.py} & Computes final composite OCI for Experiment 3 \\
-        \texttt{src/experiment\_1\_prompt\_engineering/compute\_oci\_composite\_experiment1.py} & Recomputes Experiment 1 using the final composite OCI scale \\
+        \texttt{src/step\_6\_oci/compute\_oci\_experiment2.py} & Computes final utility-aware OCI for Experiment 2 \\
+        \texttt{src/step\_6\_oci/compute\_oci\_experiment3.py} & Computes final utility-aware OCI for Experiment 3 \\
+        \texttt{src/experiment\_1\_prompt\_engineering/compute\_oci\_composite\_experiment1.py} & Recomputes Experiment 1 using the final utility-aware OCI scale \\
         \texttt{src/experiment\_2\_compare\_prompts/paired\_oci\_significance.py} & Computes paired Wilcoxon tests and effect sizes \\
         \texttt{src/experiment\_4\_oci\_robustness/oci\_robustness\_analysis.py} & Tests OCI ranking robustness under alternative weighting schemes \\
         \texttt{src/experiment\_5\_tradeoff/f05\_oci\_tradeoff\_analysis.py} & Produces the $F_{0.5}$--OCI trade-off table and plot \\
@@ -169,12 +169,12 @@ The main reported ERRANT metrics are precision, recall, and $F_{0.5}$.
 
 \subsection{Style and OCI Evaluation}
 
-Style-sensitive metrics were computed by comparing each model output directly with the learner source sentence. The metrics include word-level edit distance, edit density, lexical diversity shift, readability change, and stylometric similarity.
+Style-sensitive metrics were computed by comparing each model output directly with the learner source sentence. The metrics include word-level edit distance, edit density, lexical diversity shift, readability change, stylometric similarity, and fluency change.
 
-The final Composite Over-Correction Index was computed using:
+The final Composite Over-Correction Index was computed using a divergence component and a utility adjustment:
 
 \[
-\text{OCI} =
+OCI_{\text{divergence}} =
 0.35D_{\text{edit}} +
 0.15D_{\text{density}} +
 0.20\Delta_{\text{TTR}} +
@@ -182,7 +182,18 @@ The final Composite Over-Correction Index was computed using:
 0.15D_{\text{cosine}}
 \]
 
-where each component is normalised before aggregation. Lower OCI indicates lower source-output divergence.
+\[
+Utility =
+0.5 \cdot \text{norm}(\Delta_{\text{fluency}})
++ 0.5 \cdot \text{CosSim}
+\]
+
+\[
+OCI =
+OCI_{\text{divergence}} \cdot (1 - Utility)
+\]
+
+where each divergence component and the fluency change are normalised before aggregation, and both the utility term and final OCI are clipped to $[0,1]$. Lower OCI indicates lower utility-adjusted source-output divergence.
 
 \subsection{Experiment 1 OCI Note}
 
@@ -192,7 +203,7 @@ During development, Experiment 1 also produced an earlier simple OCI output base
 outputs/experiment_1_prompt_engineering/oci_eval/aggregate_oci_composite.csv
 \end{verbatim}
 
-This recomputes Experiment 1 using the same composite OCI definition used in Experiments 2--4.
+This recomputes Experiment 1 using the same utility-aware OCI definition used in Experiments 2--4.
 
 \section{Statistical Testing}
 
@@ -228,17 +239,6 @@ The main result files used to construct Chapter 5 are listed below.
     \item \texttt{outputs/experiment\_4\_oci\_robustness/oci\_prompt\_rankings.csv}
     \item \texttt{outputs/experiment\_5\_tradeoff/f05\_oci\_tradeoff\_table.csv}
     \item \texttt{outputs/experiment\_6\_qualitative/qualitative\_examples.csv}
-\end{itemize}
-
-\section{Figures Used in Chapter 5}
-
-The figures used in Chapter 5 are stored in the dissertation figures directory:
-
-\begin{itemize}
-    \item \texttt{figures/figure\_5\_1\_f05\_vs\_oci.png}
-    \item \texttt{figures/figure\_5\_2\_prompt\_strategy\_comparison.png}
-    \item \texttt{figures/figure\_5\_3\_sentence\_length\_effects.png}
-    \item \texttt{figures/figure\_5\_4\_oci\_robustness.png}
 \end{itemize}
 
 \section{Reproducibility Notes}

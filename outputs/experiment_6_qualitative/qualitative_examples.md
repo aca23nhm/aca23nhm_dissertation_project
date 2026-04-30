@@ -25,8 +25,8 @@ The baseline baseline edits the sentence more aggressively, and the baseline bas
 **Metadata:**
 - baseline_edit_distance: 133
 - best_prompt_edit_distance: 113
-- baseline_oci: 0.043500
-- best_prompt_oci: 0.028173
+- baseline_oci: 0.016784
+- best_prompt_oci: 0.010496
 
 ## Example 2: Qualitative difference
 
@@ -48,8 +48,8 @@ The baseline baseline edits the sentence more aggressively, and the baseline bas
 **Metadata:**
 - baseline_edit_distance: 19
 - best_prompt_edit_distance: 1
-- baseline_oci: 0.043500
-- best_prompt_oci: 0.028173
+- baseline_oci: 0.016784
+- best_prompt_oci: 0.010496
 
 ## Example 3: Qualitative difference
 
@@ -71,8 +71,8 @@ The baseline baseline edits the sentence more aggressively, and the baseline bas
 **Metadata:**
 - baseline_edit_distance: 25
 - best_prompt_edit_distance: 12
-- baseline_oci: 0.043500
-- best_prompt_oci: 0.028173
+- baseline_oci: 0.016784
+- best_prompt_oci: 0.010496
 
 ## Example 4: Qualitative difference
 
@@ -94,8 +94,8 @@ The baseline baseline edits the sentence more aggressively, and the baseline bas
 **Metadata:**
 - baseline_edit_distance: 19
 - best_prompt_edit_distance: 6
-- baseline_oci: 0.043500
-- best_prompt_oci: 0.028173
+- baseline_oci: 0.016784
+- best_prompt_oci: 0.010496
 
 ## Example 5: Qualitative difference
 
@@ -117,8 +117,8 @@ The baseline baseline edits the sentence more aggressively, and the baseline bas
 **Metadata:**
 - baseline_edit_distance: 15
 - best_prompt_edit_distance: 3
-- baseline_oci: 0.043500
-- best_prompt_oci: 0.028173
+- baseline_oci: 0.016784
+- best_prompt_oci: 0.010496
 
 ## Example 6: Qualitative difference
 
@@ -140,8 +140,8 @@ The baseline baseline edits the sentence more aggressively, and the baseline bas
 **Metadata:**
 - baseline_edit_distance: 29
 - best_prompt_edit_distance: 18
-- baseline_oci: 0.043500
-- best_prompt_oci: 0.028173
+- baseline_oci: 0.016784
+- best_prompt_oci: 0.010496
 
 ## Example 7: Qualitative difference
 
@@ -163,8 +163,8 @@ The baseline baseline edits the sentence more aggressively, and the baseline bas
 **Metadata:**
 - baseline_edit_distance: 20
 - best_prompt_edit_distance: 9
-- baseline_oci: 0.043500
-- best_prompt_oci: 0.028173
+- baseline_oci: 0.016784
+- best_prompt_oci: 0.010496
 
 ## Example 8: Qualitative difference
 
@@ -186,5 +186,5 @@ The baseline baseline edits the sentence more aggressively, and the baseline bas
 **Metadata:**
 - baseline_edit_distance: 21
 - best_prompt_edit_distance: 11
-- baseline_oci: 0.043500
-- best_prompt_oci: 0.028173
+- baseline_oci: 0.016784
+- best_prompt_oci: 0.010496

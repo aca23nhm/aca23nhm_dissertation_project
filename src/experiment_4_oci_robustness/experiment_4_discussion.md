@@ -30,30 +30,30 @@ To validate the stability and reliability of the Over-Correction Index (OCI) met
 
 | Scheme | Rank 1 (Best) | Rank 2 | Rank 3 | Rank 4 (Worst) |
 |--------|---------------|--------|--------|---------------|
-| A_Default | instruction (0.0285) | role (0.0286) | fewshot (0.0307) | baseline (0.0442) |
-| B_Edit_heavy | role (0.0301) | instruction (0.0304) | fewshot (0.0313) | baseline (0.0420) |
-| C_Style_heavy | instruction (0.0264) | role (0.0265) | fewshot (0.0292) | baseline (0.0440) |
-| D_Similarity_heavy | instruction (0.0222) | role (0.0226) | fewshot (0.0235) | baseline (0.0358) |
-| E_Equal_weights | instruction (0.0236) | role (0.0238) | fewshot (0.0255) | baseline (0.0390) |
+| A_Default | role (0.0105) | instruction (0.0105) | fewshot (0.0112) | baseline (0.0168) |
+| B_Edit_heavy | role (0.0111) | instruction (0.0112) | fewshot (0.0114) | baseline (0.0160) |
+| C_Style_heavy | role (0.0097) | instruction (0.0098) | fewshot (0.0107) | baseline (0.0167) |
+| D_Similarity_heavy | instruction (0.0081) | role (0.0082) | fewshot (0.0085) | baseline (0.0134) |
+| E_Equal_weights | role (0.0087) | instruction (0.0087) | fewshot (0.0093) | baseline (0.0149) |
 
 ### Key Findings
 
 #### Ranking Stability Analysis
 - **Consistent top performers**: `instruction` and `role` prompts consistently rank in the top 2 across all schemes
 - **Stable bottom performer**: `baseline` prompt consistently ranks last (4th) across all schemes
-- **Minor variation in top ranking**: `instruction` is best in 4/5 schemes, `role` is best in 1/5 schemes
+- **Minor variation in top ranking**: `role` is best in 4/5 schemes, `instruction` is best in 1/5 schemes
 - **Few-shot consistency**: `fewshot` maintains 3rd position in all schemes
 
 #### OCI Sensitivity to Weighting
-- **Edit-heavy scheme (B)** shows the most variation, with `role` overtaking `instruction` as the best prompt
-- **Other schemes** maintain the same ranking order: instruction > role > fewshot > baseline
+- **Similarity-heavy scheme (D)** shows the main variation, with `instruction` overtaking `role` as the best prompt
+- **Other schemes** maintain the same ranking order: role > instruction > fewshot > baseline
 - **Similarity-heavy scheme (D)** shows the largest OCI reduction for optimized prompts, suggesting semantic similarity is a strong differentiator
 
 #### Mean OCI Ranges
-- **Baseline**: 0.0358 - 0.0442 (highest OCI, most over-correction)
-- **Few-shot**: 0.0235 - 0.0313 (moderate OCI)
-- **Role**: 0.0226 - 0.0301 (low OCI, most stable)
-- **Instruction**: 0.0222 - 0.0304 (lowest OCI in most schemes)
+- **Baseline**: 0.0134 - 0.0168 (highest OCI, most over-correction)
+- **Few-shot**: 0.0085 - 0.0114 (moderate OCI)
+- **Role**: 0.0082 - 0.0111 (low OCI, most stable)
+- **Instruction**: 0.0081 - 0.0112 (lowest OCI in the similarity-heavy scheme)
 
 ### Insights
 

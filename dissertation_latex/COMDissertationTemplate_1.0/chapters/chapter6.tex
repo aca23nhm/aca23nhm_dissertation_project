@@ -4,7 +4,7 @@
 
 This dissertation investigated the role of prompt engineering in shaping correction behaviour in large language model (LLM)-based grammatical error correction (GEC). While prior work has primarily focused on improving correction accuracy, this study addressed a less explored but critical issue: over-correction, where models introduce unnecessary changes that alter the learner's original wording, structure, or style.
 
-To address this, the study introduced a dual-evaluation framework combining ERRANT-based grammatical metrics with a newly proposed Composite Over-Correction Index (OCI). This framework enabled a systematic analysis of how different prompting strategies influence both correction performance and the degree of rewriting.
+To address this, the study introduced a dual-evaluation framework combining ERRANT-based grammatical metrics with a newly proposed utility-aware Composite Over-Correction Index (OCI). This framework enabled a systematic analysis of how different prompting strategies influence both correction performance and the degree of rewriting, while accounting for fluency gain and meaning preservation.
 
 \section{Summary of Findings}
 
@@ -16,7 +16,7 @@ Second, the comparison of prompting strategies revealed distinct behavioural pat
 
 Third, sentence-length analysis showed that prompt engineering improves performance across all input types; however, longer sentences remain more challenging. All prompting strategies showed reduced $F_{0.5}$ and increased OCI for longer inputs, suggesting that over-correction is influenced not only by prompt design but also by input complexity.
 
-Fourth, robustness analysis confirmed that the OCI metric produces stable results across different weighting schemes. The relative ranking of prompting strategies remained consistent, supporting the reliability of OCI as an indicator of rewriting behaviour.
+Fourth, robustness analysis confirmed that the utility-aware OCI metric produces stable results across different weighting schemes. The relative ranking of prompting strategies remained consistent, supporting the reliability of OCI as an indicator of rewriting behaviour.
 
 Fifth, the trade-off analysis demonstrated that grammatical accuracy and over-correction are not strictly opposing objectives. Certain prompts, particularly role-based prompts, were able to achieve both strong correction performance and reduced unnecessary rewriting. This finding challenges the assumption that higher accuracy must necessarily come at the cost of more aggressive editing, and instead suggests that prompt design determines how models navigate this trade-off space.
 
@@ -28,7 +28,7 @@ This dissertation makes three main contributions.
 
 First, it provides empirical evidence that prompt engineering is a key factor in influencing correction behaviour in LLM-based GEC. Rather than treating LLMs as fixed systems, the study demonstrates that their behaviour can be substantially shaped through prompt design.
 
-Second, it introduces the Composite Over-Correction Index (OCI), a novel metric designed to capture the extent of rewriting beyond grammatical correction. By combining multiple change-based signals, OCI provides a more comprehensive perspective on model behaviour than accuracy-based metrics alone.
+Second, it introduces the utility-aware Composite Over-Correction Index (OCI), a novel metric designed to capture the extent of rewriting beyond grammatical correction while reducing the penalty for changes that preserve meaning and improve fluency. By combining multiple change-based and utility-based signals, OCI provides a more comprehensive perspective on model behaviour than accuracy-based metrics alone.
 
 Third, it proposes a behavioural framework for interpreting prompting strategies. The study identifies three general prompt types: aggressive (baseline), conservative (instruction-based), and balanced (role-based), with few-shot prompting representing a high-performance but more interventionist approach. This categorisation offers a useful lens for understanding how prompts influence model outputs within a trade-off between correction accuracy and textual fidelity.
 
@@ -40,7 +40,7 @@ First, the experiments were conducted using a single dataset, W&I + LOCNESS. Alt
 
 Second, the study focused on a single LLM configuration. Different models may respond differently to the same prompts, and future work is needed to assess whether the observed behaviours generalise across architectures.
 
-Third, OCI measures textual divergence rather than explicitly identifying whether edits are unnecessary. While it provides a useful approximation of over-correction, it does not distinguish between beneficial stylistic improvements and undesirable rewriting in all cases.
+Third, OCI remains an indirect measure rather than an explicit judgement of whether individual edits are unnecessary. Although the utility-aware formulation accounts for fluency gain and meaning preservation, it still cannot fully distinguish beneficial stylistic improvements from undesirable rewriting in all cases.
 
 Finally, the study was conducted in a controlled evaluation setting. Real-world GEC applications may involve additional factors such as user interaction, feedback, and variability in input quality.
 
