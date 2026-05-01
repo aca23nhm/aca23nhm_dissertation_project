@@ -2,7 +2,7 @@
 
 Chapter 2 established the motivation for this study by reviewing grammatical error correction (GEC), the limitations of accuracy-only evaluation, and the problem of over-correction in large language model (LLM)-based systems. This chapter translates those issues into the requirements and experimental design of the project.
 
-The chapter defines the project aim, research questions, dataset, prompt conditions, system requirements, evaluation strategy, and analysis plan. The central focus is to examine whether prompt engineering can influence the balance between grammatical correction performance and unnecessary rewriting in second-language (L2) learner writing.
+The chapter defines the project aim, research questions, dataset, prompt conditions, system requirements, evaluation strategy, and analysis plan. The central focus is to examine whether prompt engineering can influence the balance between grammatical correction performance and over-correction risk in second-language (L2) learner writing.
 
 In this project, over-correction refers to changes made beyond what is required to correct grammatical errors. A correction may therefore be grammatically acceptable but still undesirable if it unnecessarily changes the learner's wording, structure, or style.
 
@@ -17,17 +17,17 @@ The objectives are:
     \item to compare prompt variants using both grammatical accuracy and rewriting-based measures;
     \item to identify which prompting strategy provides the best balance between correction quality and minimal editing;
     \item to examine whether sentence length affects correction behaviour;
-    \item to test whether the utility-aware Composite Over-Correction Index (OCI) remains stable under alternative weighting schemes.
+    \item to test whether OCI remains stable under alternative weighting schemes.
 \end{itemize}
 
 These objectives lead to the following research questions:
 
 \begin{itemize}
     \item \textbf{RQ1:} How do prompt variants influence grammatical correction performance and over-correction?
-    \item \textbf{RQ2:} Which prompting strategy provides the best balance between accuracy and reduced unnecessary rewriting?
+    \item \textbf{RQ2:} Which prompting strategy provides the best balance between accuracy and reduced over-correction risk?
     \item \textbf{RQ3:} How does sentence length affect correction performance and over-correction behaviour?
-    \item \textbf{RQ4:} Is there a measurable trade-off between grammatical accuracy and unnecessary rewriting?
-    \item \textbf{RQ5:} Is the utility-aware Composite Over-Correction Index stable under alternative weighting schemes?
+    \item \textbf{RQ4:} Is there a measurable trade-off between grammatical accuracy and potential over-correction?
+    \item \textbf{RQ5:} Is OCI stable under alternative weighting schemes?
 \end{itemize}
 
 \section{Dataset}
@@ -97,7 +97,7 @@ The project is organised into six analyses:
     \item \textbf{Sentence-length analysis:} results are compared across short, medium, and long sentences.
     \item \textbf{OCI robustness analysis:} alternative OCI weighting schemes are tested to examine whether prompt rankings remain stable.
     \item \textbf{Trade-off analysis:} correction performance and over-correction are compared to identify aggressive, conservative, and balanced prompt behaviours.
-    \item \textbf{Qualitative analysis:} selected sentence-level examples are examined to show how unnecessary rewriting appears in practice.
+    \item \textbf{Qualitative analysis:} selected sentence-level examples are examined to show how potential over-correction appears in practice.
 \end{enumerate}
 
 This structure allows the study to examine not only which prompt performs best, but also how different prompts influence correction behaviour.
@@ -106,9 +106,9 @@ This structure allows the study to examine not only which prompt performs best, 
 
 Grammatical correction performance is evaluated using ERRANT \cite{bryant-etal-2017-automatic}. The main reported metrics are precision, recall, and $F_{0.5}$. The $F_{0.5}$ score is used because it gives greater weight to precision, which is important in GEC where unnecessary corrections can reduce output quality \cite{ng-etal-2014-conll}.
 
-Over-correction is evaluated using change-based metrics that compare the corrected sentence with the original learner sentence. These include word-level edit distance, edit density, lexical diversity change, readability change, cosine similarity, and sentence-level fluency change. These measures do not directly prove that an edit is unnecessary, but they provide useful signals of how much the model has altered the learner's original writing and whether the alteration preserves meaning while improving fluency.
+Over-correction risk is evaluated using change-based metrics that compare the corrected sentence with the original learner sentence. These include word-level edit distance, edit density, lexical diversity change, readability change, cosine similarity, and sentence-level fluency change. These measures do not directly prove that an edit is unnecessary, but they provide useful signals of how much the model has altered the learner's original writing and whether the alteration preserves meaning while improving fluency.
 
-To summarise rewriting behaviour, these metrics are combined into a utility-aware Composite Over-Correction Index (OCI). A higher OCI indicates greater divergence from the original learner sentence after accounting for fluency improvement and meaning preservation. The full calculation and implementation details are provided in Chapter 4.
+To summarise rewriting behaviour, these metrics are combined into OCI. OCI is used to characterise the extent and nature of model-induced rewriting, with higher values indicating greater divergence after utility adjustment. The full calculation and implementation details are provided in Chapter 4.
 
 \section{Ethical and Practical Constraints}
 

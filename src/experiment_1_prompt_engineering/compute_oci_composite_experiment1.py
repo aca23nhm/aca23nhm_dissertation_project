@@ -1,8 +1,7 @@
-"""Compute final composite OCI for Experiment 1.
+"""Compute OCI for Experiment 1.
 
-The first Experiment 1 OCI script used an early, simple excess-edit score.
-This script recomputes Experiment 1 OCI using the final composite definition
-used in Experiments 2--4, so Chapter 5 can compare OCI values on one scale.
+This script computes the same OCI definition used across the dissertation:
+source-output divergence moderated by fluency gain and meaning preservation.
 """
 
 from pathlib import Path

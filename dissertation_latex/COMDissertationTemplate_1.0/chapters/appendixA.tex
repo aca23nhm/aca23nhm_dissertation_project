@@ -131,9 +131,9 @@ Table~\ref{tab:appendix_scripts} lists the main scripts used to generate outputs
         \texttt{src/step\_4\_errant\_evaluation/run\_experiment3\_errant.py} & Runs ERRANT evaluation for Experiment 3 \\
         \texttt{src/step\_5\_style\_evaluation/evaluate\_style\_experiment2.py} & Computes style metrics for Experiment 2 \\
         \texttt{src/step\_5\_style\_evaluation/evaluate\_style\_experiment3.py} & Computes style metrics for Experiment 3 \\
-        \texttt{src/step\_6\_oci/compute\_oci\_experiment2.py} & Computes final utility-aware OCI for Experiment 2 \\
-        \texttt{src/step\_6\_oci/compute\_oci\_experiment3.py} & Computes final utility-aware OCI for Experiment 3 \\
-        \texttt{src/experiment\_1\_prompt\_engineering/compute\_oci\_composite\_experiment1.py} & Recomputes Experiment 1 using the final utility-aware OCI scale \\
+        \texttt{src/step\_6\_oci/compute\_oci\_experiment2.py} & Computes OCI for Experiment 2 \\
+        \texttt{src/step\_6\_oci/compute\_oci\_experiment3.py} & Computes OCI for Experiment 3 \\
+        \texttt{src/experiment\_1\_prompt\_engineering/compute\_oci\_composite\_experiment1.py} & Computes OCI for Experiment 1 \\
         \texttt{src/experiment\_2\_compare\_prompts/paired\_oci\_significance.py} & Computes paired Wilcoxon tests and effect sizes \\
         \texttt{src/experiment\_4\_oci\_robustness/oci\_robustness\_analysis.py} & Tests OCI ranking robustness under alternative weighting schemes \\
         \texttt{src/experiment\_5\_tradeoff/f05\_oci\_tradeoff\_analysis.py} & Produces the $F_{0.5}$--OCI trade-off table and plot \\
@@ -171,7 +171,7 @@ The main reported ERRANT metrics are precision, recall, and $F_{0.5}$.
 
 Style-sensitive metrics were computed by comparing each model output directly with the learner source sentence. The metrics include word-level edit distance, edit density, lexical diversity shift, readability change, stylometric similarity, and fluency change.
 
-The final Composite Over-Correction Index was computed using a divergence component and a utility adjustment:
+OCI was computed using a divergence component and a utility adjustment:
 
 \[
 OCI_{\text{divergence}} =
@@ -193,17 +193,17 @@ OCI =
 OCI_{\text{divergence}} \cdot (1 - Utility)
 \]
 
-where each divergence component and the fluency change are normalised before aggregation, and both the utility term and final OCI are clipped to $[0,1]$. Lower OCI indicates lower utility-adjusted source-output divergence.
+where each divergence component and the fluency change are normalised before aggregation, and both the utility term and OCI are clipped to $[0,1]$. Lower OCI indicates lower utility-adjusted source-output divergence.
 
-\subsection{Experiment 1 OCI Note}
+\subsection{Experiment 1 Output Note}
 
-During development, Experiment 1 also produced an earlier simple OCI output based on excess edit distance. This file was retained for traceability, but it is not used for final cross-experiment comparison. The final Chapter 5 Experiment 1 results use:
+During development, Experiment 1 also produced an earlier diagnostic output based on excess edit distance. This file was retained for traceability, but it is not used for cross-experiment comparison. The Chapter 5 Experiment 1 results use:
 
 \begin{verbatim}
 outputs/experiment_1_prompt_engineering/oci_eval/aggregate_oci_composite.csv
 \end{verbatim}
 
-This recomputes Experiment 1 using the same utility-aware OCI definition used in Experiments 2--4.
+This computes Experiment 1 using the same OCI definition used in the other experiments.
 
 \section{Statistical Testing}
 

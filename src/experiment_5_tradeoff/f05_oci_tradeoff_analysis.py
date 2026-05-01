@@ -1,5 +1,5 @@
 """
-Experiment 5: F0.5 vs OCI Trade-off Analysis
+Experiment 5: F0.5 and OCI Trade-off Analysis
 
 Section 5.5 reuses Experiment 2 ERRANT results and Experiment 2 / Experiment 4 OCI results.
 This analysis is purely post-hoc and does not call any LLMs or regenerate outputs.
@@ -94,8 +94,8 @@ def plot_tradeoff(df):
     for _, row in df.iterrows():
         plt.text(row['mean_oci'] + 0.0005, row['f05'] + 0.0005, row['condition'], fontsize=10)
 
-    plt.title('Experiment 5: F0.5 vs OCI Trade-off')
-    plt.xlabel('Mean OCI')
+    plt.title('Experiment 5: Correction Accuracy and OCI')
+    plt.xlabel('Mean OCI (lower over-correction risk)')
     plt.ylabel('F0.5')
     plt.grid(True, linestyle='--', alpha=0.4)
     plt.tight_layout()

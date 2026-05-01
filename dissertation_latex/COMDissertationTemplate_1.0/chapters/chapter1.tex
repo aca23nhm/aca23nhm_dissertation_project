@@ -14,13 +14,13 @@ Rather than performing targeted grammatical edits, LLMs often produce broader re
 
 Although such revisions may improve readability, they can introduce unnecessary changes that obscure the original structure of learner writing. In the context of second-language (L2) learning, this behaviour is problematic. Effective feedback should not only correct errors but also preserve the learner’s original wording, allowing them to identify and reflect on specific linguistic mistakes.
 
-Excessive rewriting reduces transparency and may limit opportunities for error noticing, which is a key component of language learning. Furthermore, traditional evaluation metrics in GEC, such as ERRANT-based precision, recall, and $F_{0.5}$, focus on agreement with reference corrections and do not fully capture the extent of unnecessary rewriting.
+Excessive rewriting reduces transparency and may limit opportunities for error noticing, which is a key component of language learning. Furthermore, traditional evaluation metrics in GEC, such as ERRANT-based precision, recall, and $F_{0.5}$, focus on agreement with reference corrections and do not fully account for over-correction risk.
 
 These limitations highlight the need for approaches that balance grammatical accuracy with minimal intervention.
 
 \section{Aims and Objectives}
 
-The primary aim of this dissertation is to investigate how prompt-based strategies influence the extent of unnecessary rewriting in LLM-based grammatical error correction while maintaining effective correction performance.
+The primary aim of this dissertation is to investigate how prompt-based strategies influence potential over-correction in LLM-based grammatical error correction while maintaining effective correction performance.
 
 To achieve this aim, the study pursues the following objectives:
 
@@ -28,13 +28,13 @@ To achieve this aim, the study pursues the following objectives:
     \item to analyse the nature of over-correction in LLM-generated outputs;
     \item to develop and evaluate multiple prompting strategies, including instruction-based, role-based, and few-shot approaches;
     \item to compare prompting strategies using both grammatical accuracy and rewriting-based measures;
-    \item to introduce and apply a utility-aware Composite Over-Correction Index (OCI) to quantify unnecessary modifications while accounting for fluency gain and meaning preservation;
+    \item to introduce and apply OCI to provide an indicator of over-correction risk by combining divergence with fluency and meaning-preservation signals;
     \item to examine the trade-off between correction performance and over-correction;
     \item to investigate whether sentence length influences correction behaviour;
     \item to evaluate the robustness of OCI under alternative weighting schemes.
 \end{itemize}
 
-Through these objectives, the dissertation aims to identify prompt designs that reduce unnecessary rewriting while maintaining useful grammatical correction.
+Through these objectives, the dissertation aims to identify prompt designs that reduce over-correction risk while maintaining useful grammatical correction.
 
 \section{Scope of the Study}
 
@@ -50,14 +50,14 @@ While the findings provide insights into LLM-based GEC, they are specific to the
 
 The remainder of this dissertation is organised as follows.\\
 
-\textbf{Chapter 2} presents a critical review of the literature on grammatical error correction (GEC), with particular emphasis on evaluation practices and the limitations of accuracy-based metrics such as ERRANT. It examines the emergence of large language models (LLMs) in GEC, highlighting their strengths in fluency and generalisation alongside their tendency towards over-correction. The chapter further explores over-correction, its pedagogical implications for second-language (L2) learning, and the role of prompt engineering as a mechanism for influencing model behaviour. The chapter concludes by identifying key research gaps, particularly the lack of evaluation frameworks that capture unnecessary rewriting and the limited empirical study of prompt-based control in learner-oriented settings.\\
+\textbf{Chapter 2} presents a critical review of the literature on grammatical error correction (GEC), with particular emphasis on evaluation practices and the limitations of accuracy-based metrics such as ERRANT. It examines the emergence of large language models (LLMs) in GEC, highlighting their strengths in fluency and generalisation alongside their tendency towards over-correction. The chapter further explores over-correction, its pedagogical implications for second-language (L2) learning, and the role of prompt engineering as a mechanism for influencing model behaviour. The chapter concludes by identifying key research gaps, particularly the lack of evaluation frameworks that indicate over-correction risk and the limited empirical study of prompt-based control in learner-oriented settings.\\
 
-\textbf{Chapter 3} translates these gaps into a structured experimental framework. It defines the research questions, dataset selection, and prompting strategies evaluated in this study, including baseline, instruction-constrained, role-based, and few-shot approaches. The chapter outlines the methodology for comparing prompt conditions under a controlled setup, and introduces a dual evaluation framework combining ERRANT-based accuracy metrics with change-based measures of textual modification. It also defines the utility-aware Composite Over-Correction Index (OCI), which is used to quantify unnecessary rewriting while accounting for fluency and meaning preservation.\\
+\textbf{Chapter 3} translates these gaps into a structured experimental framework. It defines the research questions, dataset selection, and prompting strategies evaluated in this study, including baseline, instruction-constrained, role-based, and few-shot approaches. The chapter outlines the methodology for comparing prompt conditions under a controlled setup, and introduces a dual evaluation framework combining ERRANT-based accuracy metrics with change-based measures of textual modification. It also defines OCI as a proxy for over-correction risk while accounting for fluency and meaning preservation.\\
 
 \textbf{Chapter 4} describes the design and implementation of the experimental pipeline. It details how original learner sentences are processed, how prompts are applied consistently across conditions, and how outputs are stored and evaluated. The chapter explains the implementation of both accuracy-based and change-based evaluation components, including the calculation of OCI. It also outlines the analysis procedures used in the study, including prompt refinement, strategy comparison, sentence-length analysis, robustness testing, trade-off analysis, and qualitative inspection, as well as the steps taken to ensure reproducibility and validity.\\
 
-\textbf{Chapter 5} presents the results and discussion of the experimental study. The analysis is structured around six experiments: prompt refinement, comparison of prompting strategies, sentence-length effects, robustness of the OCI metric, trade-off analysis between correction performance and over-correction, and qualitative analysis of model behaviour. The chapter demonstrates how different prompting strategies produce distinct correction behaviours, and shows that structured prompts can reduce unnecessary rewriting while maintaining strong grammatical performance. It also highlights the relationship between sentence complexity and over-correction, and provides qualitative examples to explain how over-correction manifests in practice.\\
+\textbf{Chapter 5} presents the results and discussion of the experimental study. The analysis is structured around six experiments: prompt refinement, comparison of prompting strategies, sentence-length effects, robustness of the OCI metric, trade-off analysis between correction performance and over-correction, and qualitative analysis of model behaviour. The chapter demonstrates how different prompting strategies produce distinct correction behaviours, and shows that structured prompts can reduce over-correction risk while maintaining strong grammatical performance. It also highlights the relationship between sentence complexity and potential over-correction, and provides qualitative examples to explain how over-correction can manifest in practice.\\
 
 \textbf{Chapter 6} concludes the dissertation by summarising the key findings and contributions of the study. It discusses the implications of prompt engineering for controlling correction behaviour in LLM-based GEC, particularly in educational contexts where minimal and transparent feedback is important. The chapter also outlines the limitations of the study, including dataset and model constraints, and proposes directions for future research, such as adaptive prompting strategies and more fine-grained evaluation of over-correction.\\
 
-% Overall, the dissertation demonstrates that prompt design plays a central role in shaping the balance between grammatical accuracy and unnecessary rewriting, and provides a structured framework for analysing over-correction in LLM-based grammatical error correction. 
+% Overall, the dissertation demonstrates that prompt design plays a central role in shaping the balance between grammatical accuracy and over-correction risk, and provides a structured framework for analysing potential over-correction in LLM-based grammatical error correction. 

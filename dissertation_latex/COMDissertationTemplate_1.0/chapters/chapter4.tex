@@ -2,7 +2,7 @@
 
 \section{Overview}
 
-Chapter 3 defined the experimental requirements and analysis plan. This chapter explains how that plan was implemented as a modular evaluation pipeline. The system was designed to process original learner sentences, apply prompt variants, store model outputs, and evaluate them using both grammatical accuracy and over-correction measures.
+Chapter 3 defined the experimental requirements and analysis plan. This chapter explains how that plan was implemented as a modular evaluation pipeline. The system was designed to process original learner sentences, apply prompt variants, store model outputs, and evaluate them using both grammatical accuracy and indicators of over-correction risk.
 
 Unlike a trainable GEC model, the system developed in this project is an evaluation framework. Its purpose is not to improve model parameters, but to measure how prompt formulation changes correction behaviour. This distinction is important because prompt engineering is the main experimental variable.
 
@@ -44,7 +44,7 @@ The implemented workflow is summarised in Table~\ref{tab:chapter4_pipeline_stage
         \hline
         6 & Change-based evaluation & Measure textual divergence from the original sentence \\
         \hline
-        7 & OCI computation & Combine change-based metrics into an over-correction score \\
+        7 & OCI computation & Combine change-based and utility signals into an over-correction risk indicator \\
         \hline
         8 & Analysis & Run prompt comparison, sentence-length analysis, robustness checks, trade-off analysis, and qualitative inspection \\
         \hline
@@ -137,11 +137,11 @@ The following metrics were computed:
     \end{tabular}
 \end{table}
 
-These metrics do not directly prove that an edit is unnecessary. Instead, they provide operational signals of textual change. When interpreted alongside ERRANT results and qualitative examples, they help identify whether a prompt tends to preserve or rewrite learner wording.
+These metrics do not directly prove that an edit is unnecessary. Instead, they provide operational signals of textual change. When interpreted alongside ERRANT results and qualitative examples, they help indicate whether a prompt tends to preserve or rewrite learner wording.
 
-\subsection{Composite Over-Correction Index}
+\subsection{OCI Calculation}
 
-The Composite Over-Correction Index (OCI) was implemented as a utility-aware score. First, a divergence score was computed from multiple change-based signals. Each component was normalised using min--max scaling:
+In this work, the Composite Over-Correction Index (OCI) is defined as a metric that integrates source-output divergence with a utility adjustment reflecting fluency gain and meaning preservation. First, a divergence score was computed from multiple change-based signals. Each component was normalised using min--max scaling:
 
 \begin{equation}
 \text{norm}(x) = \frac{x - \min(x)}{\max(x) - \min(x)}
@@ -169,7 +169,7 @@ w_5 = 0.15
 
 Greater weight was assigned to edit distance because direct textual change is the clearest signal of rewriting. Edit density controlled for sentence length, while lexical diversity, readability, and cosine similarity captured broader changes in vocabulary, structure, and overall similarity.
 
-The final reported OCI then adjusted this divergence score by a utility term:
+The utility component was then calculated as:
 
 \begin{equation}
 Utility = 0.5 \cdot \text{norm}(\Delta_{\text{fluency}}) + 0.5 \cdot \text{CosSim}
@@ -179,7 +179,9 @@ Utility = 0.5 \cdot \text{norm}(\Delta_{\text{fluency}}) + 0.5 \cdot \text{CosSi
 OCI = OCI_{\text{divergence}} \cdot (1 - Utility)
 \end{equation}
 
-Both the utility term and final OCI were clipped to the range $[0,1]$. This means that edits are penalised most strongly when they create divergence without improving fluency or preserving meaning. Conversely, a correction that changes the surface form but preserves meaning and improves fluency receives a lower final OCI than the raw divergence score alone would assign.
+Both the utility term and OCI were clipped to the range $[0,1]$. This means that edits are penalised most strongly when they create divergence without improving fluency or preserving meaning. Conversely, a correction that changes the surface form but preserves meaning and improves fluency receives a lower OCI than the raw divergence score alone would assign.
+
+Equal weighting was used to balance fluency improvement and meaning preservation without imposing additional assumptions. The utility adjustment is therefore intended to moderate the divergence score rather than provide an absolute judgement of edit necessity.
 
 OCI values were computed at sentence level and then aggregated by prompt variant, prompt strategy, and sentence-length group.
 
@@ -189,7 +191,7 @@ OCI values were computed at sentence level and then aggregated by prompt variant
 
 Prompt refinement compared variants within each structured prompt family. For each variant, ERRANT scores and OCI values were calculated. The selected prompt was not chosen using $F_{0.5}$ alone; instead, selection considered both correction accuracy and over-correction behaviour.
 
-This was important because a prompt with high grammatical accuracy may also introduce more unnecessary rewriting. The selected prompt therefore needed to show a favourable balance between accuracy and edit restraint.
+This was important because a prompt with high grammatical accuracy may also introduce greater over-correction risk. The selected prompt therefore needed to show a favourable balance between accuracy and edit restraint.
 
 \subsection{Prompt Strategy Comparison}
 
@@ -207,11 +209,11 @@ This tested whether longer sentences were more likely to produce lower $F_{0.5}$
 
 To test whether OCI-based conclusions depended heavily on the chosen default weights, the divergence component of the OCI calculation was repeated using alternative weighting schemes, with the same utility adjustment applied afterwards. Prompt rankings were then compared across schemes.
 
-This robustness check was included because OCI is a composite metric. If prompt rankings changed completely under small weighting changes, the metric would be less reliable. Stable rankings would suggest that the main conclusions are not caused by one arbitrary weighting choice.
+This robustness check was included because OCI is a composite indicator. If prompt rankings changed completely under small weighting changes, the metric would be less reliable. Stable rankings would suggest that the main conclusions are not caused by one arbitrary weighting choice.
 
 \subsection{Trade-Off and Qualitative Analysis}
 
-The trade-off analysis compared $F_{0.5}$ and OCI for each prompt condition. This allowed prompt behaviours to be interpreted in relation to both grammatical performance and unnecessary rewriting.
+The trade-off analysis compared $F_{0.5}$ and OCI for each prompt condition. This allowed prompt behaviours to be interpreted in relation to both grammatical performance and over-correction risk.
 
 Qualitative analysis was then used to inspect selected sentence-level examples. These examples compared the original sentence, baseline output, and best prompt output. The purpose was to make numerical OCI differences more interpretable by showing practical cases of lexical substitution, structural rewriting, and minimal correction.
 
@@ -231,7 +233,7 @@ Testing on a small subset made it easier to identify formatting errors, path iss
 
 \subsection{Metric Verification}
 
-Metric outputs were manually inspected using selected examples. Minimal corrections were expected to produce low edit distance and low OCI, while heavily rewritten outputs were expected to produce higher values.
+Metric outputs were manually inspected using selected examples. Minimal corrections were expected to produce low edit distance and low OCI, while heavily rewritten outputs were expected to produce higher values when divergence was not offset by fluency gain and meaning preservation.
 
 Cosine similarity was also checked to ensure that its direction aligned with both parts of the OCI formula. It was inverted as $(1 - \text{CosSim})$ in the divergence component, where higher values represent greater difference, and used directly in the utility component, where higher values represent stronger meaning preservation.
 
@@ -239,7 +241,7 @@ Cosine similarity was also checked to ensure that its direction aligned with bot
 
 Prompt ranking was validated to ensure that prompt selection was not based only on grammatical accuracy. Both $F_{0.5}$ and OCI were considered when identifying the strongest prompt variants.
 
-This validation step was important because the project investigates over-correction, not only correction accuracy. A prompt that achieved the highest $F_{0.5}$ but produced substantially higher OCI was therefore not automatically treated as the best overall prompt.
+This validation step was important because the project investigates over-correction risk, not only correction accuracy. A prompt that achieved the highest $F_{0.5}$ but produced substantially higher OCI was therefore not automatically treated as the best overall prompt.
 
 \subsection{Reproducibility and Error Handling}
 

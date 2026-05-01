@@ -1,7 +1,7 @@
 """
 Experiment 4: OCI Robustness and Sensitivity Analysis
 
-This script performs a robustness analysis of the Over-Correction Index (OCI) using existing Experiment 2 outputs.
+This script performs a robustness analysis of OCI using existing Experiment 2 outputs.
 It does NOT generate new LLM outputs - it only analyzes the existing style metrics from Experiment 2.
 
 Purpose: Test whether OCI prompt rankings remain stable under alternative weighting schemes.
@@ -142,7 +142,7 @@ def min_max_normalize(values):
     return (values - min_val) / (max_val - min_val)
 
 def compute_weighted_oci(norm_components, weights):
-    """Compute utility-aware OCI using given divergence weights."""
+    """Compute OCI using the supplied divergence weights."""
     divergence = np.zeros(len(norm_components['norm_edit_distance']))
     for component, weight in weights.items():
         norm_key = f'norm_{component}'
