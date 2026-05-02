@@ -1,7 +1,0 @@
-\chapter*{\Large \center Abstract}
-
-Large Language Models (LLMs) can be used for Grammatical Error Correction (GEC) through prompting, without training a separate correction model. In learner writing, this is useful but also risky. A model may produce a fluent sentence while changing vocabulary or sentence structure more than a minimal grammar correction requires. For second-language (L2) learners, this can make the original error harder to notice.
-
-The study tests whether prompt engineering can reduce this problem in LLM-based GEC. Using a W\&I + LOCNESS subset, it compares baseline, instruction-constrained, role-based, and few-shot prompts. Outputs are evaluated with ERRANT precision, recall, and $F_{0.5}$, alongside a Composite Over-Correction Index (OCI). OCI combines source-output divergence with signals of fluency improvement and meaning preservation, so it is used as an indicator of over-correction risk rather than as proof that individual edits are unnecessary.
-
-The results suggest that prompt wording changes correction behaviour in this setting. Instruction-constrained and role-based prompts reduce OCI relative to the baseline while maintaining stronger ERRANT $F_{0.5}$ scores. The main conclusion is that prompt design should not be judged only by correction accuracy. For learner-facing GEC, it is also necessary to consider how far the model moves away from the learner's original sentence.
