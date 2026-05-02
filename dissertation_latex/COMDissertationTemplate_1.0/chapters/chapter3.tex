@@ -2,13 +2,13 @@
 
 Chapter 2 established the motivation for this study by reviewing grammatical error correction (GEC), the limitations of accuracy-only evaluation, and the problem of over-correction in large language model (LLM)-based systems. This chapter translates those issues into the requirements and experimental design of the project.
 
-The chapter defines the project aim, research questions, dataset, prompt conditions, system requirements, evaluation strategy, and analysis plan. The central focus is to examine whether prompt engineering can influence the balance between grammatical correction performance and over-correction risk in second-language (L2) learner writing.
+The chapter defines the project aim, research questions, dataset, prompt conditions, system requirements, evaluation strategy, and analysis plan. The focus is whether the prompts tested here change the balance between grammatical correction performance and over-correction risk in second-language (L2) learner writing.
 
 In this project, over-correction refers to changes made beyond what is required to correct grammatical errors. A correction may therefore be grammatically acceptable but still undesirable if it unnecessarily changes the learner's wording, structure, or style.
 
 \section{Aims and Objectives}
 
-The aim of this project is to examine how different prompt designs affect correction performance and over-correction in LLM-based grammatical error correction.
+The aim of this project is to examine how different prompt designs affect correction performance and over-correction risk in LLM-based grammatical error correction.
 
 The objectives are:
 
@@ -87,7 +87,7 @@ The main non-functional requirements are:
 
 The methodology follows a controlled experimental design. Learner sentences and reference corrections are first extracted from the dataset. Each sentence is then passed through every prompt condition, producing parallel corrected outputs for comparison.
 
-The outputs are evaluated from two perspectives. The first perspective is grammatical accuracy, where model outputs are compared against reference corrections. The second perspective is textual modification, where each corrected output is compared with the original learner sentence to estimate the degree of rewriting.
+The outputs are evaluated from two perspectives. The first is grammatical accuracy, where model outputs are compared against reference corrections. The second is textual modification, where each corrected output is compared with the original learner sentence to estimate the degree of rewriting.
 
 The project is organised into six analyses:
 
@@ -100,7 +100,7 @@ The project is organised into six analyses:
     \item \textbf{Qualitative analysis:} selected sentence-level examples are examined to show how potential over-correction appears in practice.
 \end{enumerate}
 
-This structure allows the study to examine not only which prompt performs best, but also how different prompts influence correction behaviour.
+This structure allows the study to compare both prompt performance and prompt behaviour, rather than selecting a prompt only because it achieves the highest $F_{0.5}$.
 
 \section{Evaluation Metrics}
 
@@ -112,9 +112,9 @@ To summarise rewriting behaviour, these metrics are combined into OCI. OCI is us
 
 \section{Ethical and Practical Constraints}
 
-The project uses an existing learner corpus and does not involve collecting new participant data. Learner text is handled in anonymised form and analysed only for linguistic purposes. Since the project focuses on evaluation rather than model training, no learner data is used to fine-tune a model.
+The project uses an existing learner corpus and does not involve collecting new participant data. Learner text is handled in anonymised form and analysed only for linguistic purposes. Since the project focuses on evaluation rather than model training, no learner data is used to fine-tune a model. The API calls use only the sentence text required for correction and do not add new participant identifiers.
 
-A practical limitation is that the study evaluates prompt engineering within a controlled setting rather than across multiple models or datasets. Therefore, the findings should be interpreted as evidence of how prompt design affects behaviour in the evaluated setup, rather than as a universal conclusion about all LLM-based GEC systems.
+A practical limitation is that the study evaluates prompt engineering within a controlled setting using one model configuration, OpenAI GPT-4o with fixed decoding settings, rather than across multiple models or datasets. Therefore, the findings should be interpreted as evidence of how prompt design affects behaviour in the evaluated setup, rather than as a universal conclusion about all LLM-based GEC systems.
 
 %\section{Summary}
 

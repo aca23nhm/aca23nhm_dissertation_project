@@ -2,11 +2,11 @@
 
 \section{Overview}
 
-Chapter 3 defined the experimental requirements and analysis plan. This chapter explains how that plan was implemented as a modular evaluation pipeline. The system was designed to process original learner sentences, apply prompt variants, store model outputs, and evaluate them using both grammatical accuracy and indicators of over-correction risk.
+Chapter 3 set out the experimental requirements and analysis plan. In implementation, that plan became an evaluation pipeline for processing learner sentences, applying prompt variants, storing model outputs, and evaluating each output using both grammatical accuracy and indicators of over-correction risk.
 
-Unlike a trainable GEC model, the system developed in this project is an evaluation framework. Its purpose is not to improve model parameters, but to measure how prompt formulation changes correction behaviour. This distinction is important because prompt engineering is the main experimental variable.
+The system is not a trainable GEC model. It does not update model parameters or learn from the W\&I + LOCNESS data. Its purpose is to keep the input data and model settings fixed while changing the prompt, so that differences in output can be analysed as prompt effects.
 
-The implementation follows a modular design. Each stage of the pipeline was implemented as a separate component so that it could be tested independently before being integrated into the full workflow. This helped reduce debugging difficulty and ensured that issues in one stage, such as dataset formatting or metric calculation, did not affect the entire experiment.
+I implemented the pipeline in separate stages rather than as one large script. This made the work easier to test, especially when checking dataset formatting, prompt rendering, ERRANT file generation, and OCI calculation.
 
 Hardware, software, library versions, and full prompt templates are provided in Appendix~A.
 
@@ -14,11 +14,11 @@ Hardware, software, library versions, and full prompt templates are provided in 
 
 \subsection{Design Rationale}
 
-The system was designed to support controlled comparison between prompt conditions. The same original learner sentences, reference corrections, model settings, and sentence order were used across all prompt variants. This ensured that observed differences in output could be attributed mainly to prompt design rather than to differences in data or configuration.
+The main design requirement was controlled comparison between prompt conditions. The same learner sentences, reference corrections, model settings, and sentence order were used for all prompt variants. This does not remove every source of variation in a hosted LLM, but it makes prompt design the main factor being tested.
 
-A within-sentence design was adopted. Each original learner sentence was processed under every prompt condition, producing parallel outputs for the same input. This allowed sentence-level comparison between prompts and supported paired analysis.
+I used a within-sentence design: each learner sentence was processed under every prompt condition. This produced parallel outputs for the same input and allowed paired sentence-level comparisons.
 
-The evaluation was separated into two branches. The first branch measured grammatical correction quality using ERRANT. The second branch measured textual divergence from the original learner sentence. This separation was necessary because a correction can be grammatically valid while still involving unnecessary rewriting.
+The evaluation was split into two branches. ERRANT measured agreement with the reference correction, while the change-based branch measured divergence from the original learner sentence. I kept these separate because a sentence can be grammatically acceptable while still being rewritten more heavily than a learner-facing correction should be.
 
 \subsection{Pipeline Architecture}
 
@@ -98,7 +98,7 @@ The prompt rendering stage was kept separate from output generation so that prom
 
 Each learner sentence was processed under every prompt condition. The model output was stored together with the original sentence, reference correction, prompt type, and prompt version.
 
-Fixed model settings were used across all conditions. This was necessary because changes in decoding parameters could affect correction behaviour and introduce a confounding variable. The purpose of the experiment was to compare prompts, not sampling strategies.
+I kept the model settings fixed across all conditions. The experiments used OpenAI GPT-4o with temperature 0.0, top-p 1.0, a maximum output length of 128 tokens, and seed 1234, as specified in the project configuration file. Changing these settings could have changed the correction behaviour, so they were held constant. The comparison is therefore between prompts, not sampling strategies.
 
 Basic output cleaning was applied only to remove formatting artefacts, such as unnecessary quotation marks or repeated prompt text. The corrected sentence itself was not manually edited.
 
@@ -110,7 +110,7 @@ ERRANT was then used to compute precision, recall, and $F_{0.5}$. The $F_{0.5}$ 
 
 \subsection{Change-Based Evaluation}
 
-A separate evaluation branch measured how much each model output diverged from the original learner sentence. This branch compared the source sentence with the model output, rather than comparing the model output with the gold reference.
+A separate evaluation branch measured how much each model output diverged from the original learner sentence. This part of the pipeline compares the source sentence with the model output, rather than comparing the model output with the gold reference.
 
 The following metrics were computed:
 
@@ -137,11 +137,11 @@ The following metrics were computed:
     \end{tabular}
 \end{table}
 
-These metrics do not directly prove that an edit is unnecessary. Instead, they provide operational signals of textual change. When interpreted alongside ERRANT results and qualitative examples, they help indicate whether a prompt tends to preserve or rewrite learner wording.
+These metrics do not prove that an edit is unnecessary. They give operational signals of textual change. When they are read together with ERRANT results and qualitative examples, they help show whether a prompt tends to preserve or rewrite learner wording.
 
 \subsection{OCI Calculation}
 
-In this work, the Composite Over-Correction Index (OCI) is defined as a metric that integrates source-output divergence with a utility adjustment reflecting fluency gain and meaning preservation. First, a divergence score was computed from multiple change-based signals. Each component was normalised using min--max scaling:
+In this work, the Composite Over-Correction Index (OCI) is defined as a metric that integrates source-output divergence with a utility adjustment reflecting fluency gain and meaning preservation. I first computed a divergence score from multiple change-based signals. Each component was normalised using min--max scaling:
 
 \begin{equation}
 \text{norm}(x) = \frac{x - \min(x)}{\max(x) - \min(x)}
@@ -181,7 +181,7 @@ OCI = OCI_{\text{divergence}} \cdot (1 - Utility)
 
 Both the utility term and OCI were clipped to the range $[0,1]$. This means that edits are penalised most strongly when they create divergence without improving fluency or preserving meaning. Conversely, a correction that changes the surface form but preserves meaning and improves fluency receives a lower OCI than the raw divergence score alone would assign.
 
-Equal weighting was used to balance fluency improvement and meaning preservation without imposing additional assumptions. The utility adjustment is therefore intended to moderate the divergence score rather than provide an absolute judgement of edit necessity.
+Equal weighting was used to balance fluency improvement and meaning preservation without adding a further assumption about which is more important. The utility adjustment is intended to moderate the divergence score, not to make an absolute judgement about whether an edit is necessary.
 
 OCI values were computed at sentence level and then aggregated by prompt variant, prompt strategy, and sentence-length group.
 
@@ -191,7 +191,7 @@ OCI values were computed at sentence level and then aggregated by prompt variant
 
 Prompt refinement compared variants within each structured prompt family. For each variant, ERRANT scores and OCI values were calculated. The selected prompt was not chosen using $F_{0.5}$ alone; instead, selection considered both correction accuracy and over-correction behaviour.
 
-This was important because a prompt with high grammatical accuracy may also introduce greater over-correction risk. The selected prompt therefore needed to show a favourable balance between accuracy and edit restraint.
+This mattered because a prompt with high grammatical accuracy may still introduce greater over-correction risk. I therefore selected prompts by looking for a balance between accuracy and edit restraint.
 
 \subsection{Prompt Strategy Comparison}
 
@@ -209,7 +209,7 @@ This tested whether longer sentences were more likely to produce lower $F_{0.5}$
 
 To test whether OCI-based conclusions depended heavily on the chosen default weights, the divergence component of the OCI calculation was repeated using alternative weighting schemes, with the same utility adjustment applied afterwards. Prompt rankings were then compared across schemes.
 
-This robustness check was included because OCI is a composite indicator. If prompt rankings changed completely under small weighting changes, the metric would be less reliable. Stable rankings would suggest that the main conclusions are not caused by one arbitrary weighting choice.
+This robustness check was included because OCI is a composite indicator. If prompt rankings changed completely under small weighting changes, the metric would be difficult to use for comparison. Stable rankings suggest that the main conclusions are not driven by one arbitrary weighting choice.
 
 \subsection{Trade-Off and Qualitative Analysis}
 
@@ -241,7 +241,7 @@ Cosine similarity was also checked to ensure that its direction aligned with bot
 
 Prompt ranking was validated to ensure that prompt selection was not based only on grammatical accuracy. Both $F_{0.5}$ and OCI were considered when identifying the strongest prompt variants.
 
-This validation step was important because the project investigates over-correction risk, not only correction accuracy. A prompt that achieved the highest $F_{0.5}$ but produced substantially higher OCI was therefore not automatically treated as the best overall prompt.
+This validation step was needed because the project investigates over-correction risk as well as correction accuracy. A prompt with the highest $F_{0.5}$ was not automatically treated as the best prompt if it also produced substantially higher OCI.
 
 \subsection{Reproducibility and Error Handling}
 

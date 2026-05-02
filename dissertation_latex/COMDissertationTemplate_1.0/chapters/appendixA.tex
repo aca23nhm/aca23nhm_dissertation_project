@@ -72,14 +72,18 @@ Experiment 3 used a separate balanced subset of 450 sentences, with 150 short, 1
 All prompt conditions were evaluated under fixed model settings to support controlled comparison.
 
 \begin{itemize}
-    \item Model family: GPT-based large language model
-    \item Decoding temperature: 0
+    \item Provider: OpenAI API
+    \item Model: \texttt{gpt-4o}
+    \item Decoding temperature: 0.0
     \item Top-p: 1.0
+    \item Maximum output length: 128 tokens
+    \item Seed: 1234
+    \item Request timeout: 60 seconds
     \item Output format: corrected sentence only
     \item Fine-tuning: none
 \end{itemize}
 
-The same model settings were used across prompt conditions within each experiment. The project therefore evaluates prompt design rather than model retraining.
+The same model settings were used across prompt conditions within each experiment. These values correspond to \texttt{configs/model.yaml}. The project therefore evaluates prompt design rather than model retraining or decoding variation.
 
 \section{Prompt Files}
 

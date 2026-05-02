@@ -4,29 +4,29 @@
 
 \subsection{Definition and Scope of GEC}
 
-Grammatical Error Correction (GEC) is a subfield of Natural Language Processing (NLP) concerned with automatically transforming erroneous sentences into grammatically acceptable forms while preserving intended meaning \cite{ng-etal-2014-conll}. Although traditionally focused on morpho-syntactic violations such as subject--verb agreement, tense errors, article misuse, and word order \cite{bryant-etal-2017-automatic}, contemporary systems address a broader range of deviations, including spelling, punctuation, lexical choice, and limited sentence restructuring \cite{10.1162/coli_a_00478}. In practice, GEC therefore extends beyond narrow rule enforcement to improving clarity and overall comprehensibility.
+Grammatical Error Correction (GEC) is a Natural Language Processing (NLP) task concerned with automatically transforming erroneous sentences into grammatically acceptable forms while preserving intended meaning \cite{ng-etal-2014-conll}. Earlier work often focused on morpho-syntactic violations such as subject--verb agreement, tense errors, article misuse, and word order \cite{bryant-etal-2017-automatic}. More recent systems address a wider range of issues, including spelling, punctuation, lexical choice, and limited sentence restructuring \cite{10.1162/coli_a_00478}. In practice, this means that GEC sits close to writing improvement, even though the two tasks are not the same.
 
-The literature commonly distinguishes between \textit{grammaticality}, \textit{fluency}, and \textit{style} \cite{napoles-etal-2017-jfleg}. Grammaticality concerns conformity to linguistic rules, whereas fluency refers to naturalness and readability, and style reflects authorial preference rather than correctness. Modern neural systems increasingly optimise for fluency, often producing broader rewrites rather than minimal edits \cite{loem2023exploringeffectivenessgpt3grammatical}. This shift complicates the distinction between GEC and writing enhancement systems, which prioritise paraphrasing and rhetorical refinement over minimal correction \cite{ke2019automated}. As generative models continue to improve, maintaining a principled distinction between grammatical correction and stylistic rewriting becomes both technically and pedagogically significant.
+The literature commonly distinguishes between \textit{grammaticality}, \textit{fluency}, and \textit{style} \cite{napoles-etal-2017-jfleg}. Grammaticality concerns conformity to linguistic rules, fluency refers to naturalness and readability, and style reflects authorial preference rather than correctness. Modern neural systems increasingly optimise for fluency, often producing broader rewrites rather than minimal edits \cite{loem2023exploringeffectivenessgpt3grammatical}. This creates a practical difficulty for GEC: a sentence may sound better after correction while also moving away from the learner's own wording. The distinction between grammatical correction and writing enhancement therefore matters for both evaluation and learner feedback \cite{ke2019automated}.
 
 \subsection{Historical Evolution of GEC Systems}
 
-Methodological developments in NLP have shaped the evolution of GEC, with approaches progressing from rule-based systems to statistical models and, more recently, large-scale neural architectures \cite{10.1162/coli_a_00478}.
+GEC has developed alongside wider changes in NLP, moving from rule-based systems to statistical models and, more recently, large-scale neural architectures \cite{10.1162/coli_a_00478}.
 
 \subsubsection{Rule-Based Systems}
 
-Early GEC systems relied on hand-crafted linguistic rules designed to detect and correct specific error types. These systems typically targeted well-defined morpho-syntactic phenomena, such as subject--verb agreement, article usage, and verb tense errors \cite{ng-etal-2014-conll}. Rule-based approaches offered interpretability and precise control over-corrections; however, they were limited by coverage constraints. Developing comprehensive rule sets required substantial linguistic expertise, and such systems struggled to generalise beyond predefined error categories \cite{10.1162/coli_a_00478}. As a result, performance was often inconsistent across diverse learner inputs.
+Early GEC systems relied on hand-crafted linguistic rules designed to detect and correct specific error types. These systems typically targeted well-defined morpho-syntactic phenomena, such as subject--verb agreement, article usage, and verb tense errors \cite{ng-etal-2014-conll}. Rule-based approaches offered interpretability and precise control over corrections, but they were limited by coverage. Building and maintaining large rule sets required linguistic expertise, and such systems struggled when learner errors fell outside predefined categories \cite{10.1162/coli_a_00478}.
 
 \subsubsection{Statistical Machine Translation (SMT)-Based GEC}
 
-The introduction of Statistical Machine Translation (SMT) marked a significant paradigm shift. Rather than treating correction as isolated rule application, SMT-based approaches reframed GEC as a monolingual translation task, converting ``incorrect'' sentences into corrected counterparts \cite{brockett2006correcting}. This formulation enabled systems to learn correction patterns from parallel corpora of learner text and annotated revisions.
+Statistical Machine Translation (SMT) changed the way GEC was framed. Rather than treating correction as isolated rule application, SMT-based approaches treated it as a monolingual translation task, converting ``incorrect'' sentences into corrected counterparts \cite{brockett2006correcting}. This allowed systems to learn correction patterns from parallel corpora of learner text and annotated revisions.
 
-SMT approaches demonstrated notable improvements in flexibility and coverage compared to rule-based systems \cite{ng-etal-2014-conll}. However, they remained dependent on aligned training data and often required complex feature engineering. Furthermore, these systems were not explicitly designed to preserve minimal edits and could introduce broader sentence-level modifications \cite{10.1162/coli_a_00478}, highlighting an early instance of the tension between correction accuracy and minimality.
+SMT approaches improved flexibility and coverage compared to rule-based systems \cite{ng-etal-2014-conll}. However, they remained dependent on aligned training data and often required complex feature engineering. They were also not explicitly designed to preserve minimal edits, so broader sentence-level changes could still appear in the output \cite{10.1162/coli_a_00478}. This is an early example of the tension between correction accuracy and minimality.
 
 \subsubsection{Neural Sequence-to-Sequence Models}
 
 With the emergence of neural sequence-to-sequence (Seq2Seq) architectures \cite{NIPS2014_5a18e133}, GEC systems began to benefit from distributed representations and end-to-end learning. Neural models, particularly those incorporating attention mechanisms \cite{bahdanau2016neuralmachinetranslationjointly}, improved fluency and contextual coherence in corrected outputs. Unlike SMT systems, neural approaches required less manual feature engineering and were better able to model long-range dependencies within sentences.
 
-Neural Machine Translation (NMT) approaches became dominant in shared tasks, outperforming SMT systems on benchmarks such as CoNLL-2014 and subsequent evaluations \cite{ng-etal-2014-conll,10.1162/coli_a_00478}. However, increased fluency introduced new challenges: neural models tended to prioritise natural-sounding output, occasionally at the expense of minimal correction. This raised concerns regarding over-correction and unnecessary rewriting, particularly in educational contexts \cite{napoles-etal-2017-jfleg}.
+Neural Machine Translation (NMT) approaches became dominant in shared tasks, outperforming SMT systems on benchmarks such as CoNLL-2014 and subsequent evaluations \cite{ng-etal-2014-conll,10.1162/coli_a_00478}. However, increased fluency introduced a new problem: neural models could prefer natural-sounding output even when a smaller grammatical edit would be enough. This raised concerns about over-correction and unnecessary rewriting, particularly in educational contexts \cite{napoles-etal-2017-jfleg}.
 
 \subsubsection{Transformer-Based Approaches}
 
@@ -43,7 +43,7 @@ At the same time, the generative capacity of Transformer-based systems increased
 
 \section{Evaluation in GEC: Metrics and Limitations}
 
-As GEC systems evolved from rule-based approaches to neural and Transformer architectures, evaluation frameworks developed in parallel. Reliable metrics are essential for benchmarking and model comparison; however, correction quality is difficult to measure because multiple valid revisions may exist for a single sentence. This section reviews dominant evaluation metrics and highlights their limitations, particularly in capturing unnecessary changes beyond minimal grammatical correction.
+As GEC systems moved from rule-based approaches to neural and Transformer architectures, evaluation frameworks developed alongside them. Reliable metrics are needed for benchmarking and model comparison. The difficulty is that correction quality is not always a single target, because one learner sentence may have several valid revisions. This section reviews the main evaluation metrics and explains why they are limited for unnecessary changes beyond minimal grammatical correction.
 
 \subsection{ERRANT and the M\textsuperscript{2} Scorer}
 
@@ -74,7 +74,7 @@ F_{0.5} =
 \]
 The use of $F_{0.5}$ reflects a practical preference for avoiding false positives (unnecessary edits), as excessive corrections may degrade text quality \cite{ng-etal-2014-conll}.
 
-Despite its standardisation benefits, M\textsuperscript{2} relies on a limited set of gold references. Consequently, valid alternative corrections may be penalised if they do not precisely match annotated edits, a limitation that becomes more pronounced in neural systems capable of generating fluent or structurally varied revisions \cite{napoles-etal-2017-jfleg}.
+Despite its standardisation benefits, M\textsuperscript{2} relies on a limited set of gold references. Valid alternative corrections may be penalised if they do not precisely match annotated edits. This limitation becomes more visible in neural systems, where outputs can be fluent but structurally different from the reference \cite{napoles-etal-2017-jfleg}.
 
 To improve diagnostic capability, Bryant et al.\ introduced the ERRANT toolkit \cite{bryant-etal-2017-automatic}. ERRANT performs automatic alignment between the original learner sentence and its corrected counterpart using a linguistically informed algorithm. It extracts the minimal edits required to transform the source into the correction and assigns each edit to a standardised taxonomy of fine-grained error types (e.g., missing, replacement, unnecessary, and word-order errors). This structured representation enables per-error-type performance analysis and supports interpretable, edit-based evaluation beyond aggregate scoring. However, because ERRANT remains fundamentally alignment-based, it retains the same dependency on gold annotations and the same primary focus on grammatical accuracy, without explicitly accounting for over-correction risk.
 
@@ -84,11 +84,11 @@ Edit-based metrics such as M\textsuperscript{2} and ERRANT assume that closer al
 
 Crucially, these metrics evaluate correctness but not proportionality. Systems may introduce changes beyond what is required for grammatical repair without substantial score penalties. As neural systems and LLMs become increasingly generative, this tendency towards broader rewriting becomes more pronounced \cite{loem2023exploringeffectivenessgpt3grammatical}.
 
-In educational contexts, this misalignment is particularly significant. Excessive rewriting can obscure learner constructions and reduce opportunities for noticing and reflection, processes central to second language acquisition theory \cite{schmidt1990role}. Optimisation towards precision, recall, and $F_{0.5}$ therefore does not necessarily correspond to pedagogical effectiveness. These limitations motivate complementary evaluation measures that extend beyond grammatical accuracy to capture the extent of textual modification.
+In educational contexts, this mismatch matters. Excessive rewriting can obscure learner constructions and reduce opportunities for noticing and reflection, processes central to second language acquisition theory \cite{schmidt1990role}. Optimising for precision, recall, and $F_{0.5}$ therefore does not necessarily mean that the output is pedagogically useful. This is why the present project uses complementary measures that look at the extent of textual modification as well as grammatical accuracy.
 
 \subsection{Measuring Textual Change and Minimality}
 
-To complement accuracy-based evaluation, alternative metrics aim to quantify how much a corrected sentence deviates from the original input.
+To complement accuracy-based evaluation, other metrics can estimate how much a corrected sentence deviates from the original input.
 
 \subsubsection{Edit Distance and Minimality}
 
@@ -98,7 +98,7 @@ However, edit distance measures surface change only. It does not determine wheth
 
 \subsubsection{BLEU and Its Limitations}
 
-BLEU \cite{papineni2002bleu} evaluates n-gram overlap between a system output and one or more reference corrections. While widely used in machine translation, BLEU has limitations for GEC. Because multiple valid corrections may exist, lexical differences can reduce overlap even when the correction is appropriate. Moreover, BLEU does not explicitly account for minimality: a heavily rewritten but fluent sentence may still achieve substantial n-gram overlap.
+BLEU \cite{papineni2002bleu} evaluates n-gram overlap between a system output and one or more reference corrections. Although it is widely used in machine translation, BLEU has limitations for GEC. Because multiple valid corrections may exist, lexical differences can reduce overlap even when the correction is appropriate. BLEU also does not explicitly account for minimality: a heavily rewritten but fluent sentence may still achieve substantial n-gram overlap.
 
 \subsubsection{SARI and Retention-Sensitive Metrics}
 
@@ -108,7 +108,7 @@ SARI \cite{xu2016optimizing}, originally developed for text simplification, eval
 
 Beyond edit counts and n-gram overlap, additional measures can capture broader changes in sentence structure and vocabulary. Lexical diversity metrics, such as Type--Token Ratio (TTR), measure vocabulary variation, while readability indices such as the Flesch--Kincaid Grade Level \cite{kincaid1975derivation} estimate structural complexity. Syntactic features, including sentence length and part-of-speech distribution, further reflect structural modification. Cosine similarity over lexical and syntactic feature vectors provides a quantitative estimate of similarity between the original and corrected sentences \cite{koppel2009computational}. Fluency-oriented indicators are also relevant because not every surface change is equally undesirable: a correction that preserves meaning and improves fluency may have greater pedagogical utility than a rewrite that changes wording without clear benefit.
 
-These measures do not directly evaluate correctness; instead, they provide indirect signals of how much the corrected sentence departs from the original and whether that departure appears useful. As such, they are useful for identifying potential over-correction, rather than for evaluating stylistic quality in itself.
+These measures do not directly evaluate correctness. Instead, they provide indirect signals of how much the corrected sentence departs from the original and whether that departure appears useful. For this dissertation, that makes them useful for estimating potential over-correction risk, rather than for judging stylistic quality in isolation.
 
 \subsubsection{Worked Example}
 
@@ -153,27 +153,27 @@ Similarity Metrics & Structural/lexical overlap & Requires feature engineering \
 \end{tabular}
 \end{table}
 
-Overall, while traditional edit-based metrics remain essential for benchmarking grammatical accuracy, they are insufficient for evaluating over-correction risk. Combining accuracy-based, change-based, and utility-sensitive measures provides a more suitable framework for analysing potential over-correction in LLM-based GEC.
+Traditional edit-based metrics remain useful for benchmarking grammatical accuracy, but they are not sufficient for evaluating over-correction risk. This is why the later experiments combine ERRANT with change-based and utility-sensitive measures.
 
 \section{Large Language Models in GEC}
 
-The transition from task-specific neural architectures to large-scale pre-trained language models represents a fundamental shift in GEC. Earlier systems were trained directly on parallel corpora of erroneous and corrected sentences, learning to map learner input to gold-standard revisions. In contrast, large language models (LLMs) acquire broad linguistic competence through large-scale self-supervised pre-training, typically by predicting missing or subsequent words across massive text corpora without manual annotation.
+The move from task-specific neural architectures to large-scale pre-trained language models changes how GEC can be approached. Earlier systems were trained directly on parallel corpora of erroneous and corrected sentences, learning to map learner input to gold-standard revisions. Large language models (LLMs), by contrast, acquire broad linguistic competence through large-scale self-supervised pre-training, typically by predicting missing or subsequent words across massive text corpora without manual annotation.
 
-This training paradigm enables zero-shot and few-shot correction without task-specific fine-tuning. Rather than retraining model parameters for GEC, correction behaviour can be elicited through natural language instructions alone.
+This makes zero-shot and few-shot correction possible without task-specific fine-tuning. Instead of retraining model parameters for GEC, correction behaviour can be elicited through natural language instructions alone.
 
 \subsection{From Fine-Tuned Models to Prompt-Based GEC}
 
 Traditional neural GEC systems relied on supervised fine-tuning using annotated learner corpora such as NUCLE and W\&I + LOCNESS \cite{ng-etal-2014-conll,bryant-etal-2019-bea}. These systems were optimised explicitly for edit-based metrics such as $F_{0.5}$, and their performance was constrained by the size and diversity of available annotated datasets.
 
-The emergence of large Transformer-based models, including GPT-3 \cite{NEURIPS2020_1457c0d6}, demonstrated that sufficiently scaled autoregressive architectures can perform new tasks through in-context learning. In this setting, the model adapts to a task based solely on instructions and optional examples provided in the prompt, without updating its internal parameters.
+Large Transformer-based models, including GPT-3 \cite{NEURIPS2020_1457c0d6}, showed that autoregressive language models can perform new tasks through in-context learning. In this setting, the model adapts to a task based on instructions and optional examples in the prompt, without updating its internal parameters.
 
 In GEC, this enables prompt-based correction. Zero-shot prompting provides only task instructions (e.g., ``Correct grammatical errors''), while few-shot prompting includes example input--output pairs that illustrate the desired behaviour \cite{NEURIPS2020_1457c0d6}. Empirical studies show that LLMs can achieve competitive correction performance under these conditions despite the absence of task-specific training \cite{loem2023exploringeffectivenessgpt3grammatical}. This reduces dependence on annotated corpora and simplifies deployment across domains.
 
-However, prompt-based GEC differs fundamentally from supervised encoder--decoder systems. Because LLMs are trained to generate fluent and plausible continuations rather than to minimise edits, their outputs are influenced by instruction phrasing and contextual framing. Consequently, prompt design becomes central to influencing correction granularity and the extent of unnecessary rewriting.
+However, prompt-based GEC differs from supervised encoder--decoder systems. Because LLMs are trained to generate fluent and plausible continuations rather than to minimise edits, their outputs are influenced by instruction phrasing and contextual framing. Prompt design therefore becomes one of the main ways to influence correction granularity and the extent of unnecessary rewriting.
 
 \subsection{Advantages of LLM-Based GEC}
 
-LLM-based GEC offers three principal advantages: fluency, generalisation, and adaptability.
+LLM-based GEC is attractive for three reasons: fluency, generalisation, and adaptability.
 
 \subsubsection{Fluency and Contextual Coherence}
 
@@ -185,7 +185,7 @@ Empirical studies report that GPT-style models not only resolve surface-level gr
 
 Unlike fine-tuned systems limited to annotated learner datasets \cite{ng-etal-2014-conll,bryant-etal-2019-bea}, LLMs leverage knowledge acquired from large-scale heterogeneous pre-training data \cite{NEURIPS2020_1457c0d6}. Through prompting alone, they can perform GEC without direct exposure to task-specific corpora.
 
-This broader linguistic coverage facilitates cross-domain application and may enable handling of error types underrepresented in benchmark datasets. Nevertheless, alignment with pedagogical objectives remains uncertain, particularly when fluency improvements extend beyond minimal grammatical correction and introduce unnecessary modifications.
+This broader linguistic coverage may help with error types that are underrepresented in benchmark datasets. The limitation is that pedagogical alignment remains uncertain, especially when fluency improvements extend beyond minimal grammatical correction and introduce unnecessary modifications.
 
 \subsubsection{Adaptability Through Prompt Engineering}
 
@@ -209,7 +209,7 @@ LLMs may over-edit by rephrasing clauses or substituting vocabulary to enhance f
 
 Because correction behaviour is governed by natural language instructions rather than explicit task-specific training, outputs are sensitive to prompt formulation \cite{liu2023pretrain}. Small variations in wording or example selection can alter both correction accuracy and the degree of rewriting.
 
-While carefully engineered prompts may encourage minimal edits, consistent behaviour cannot be guaranteed. Such instability poses challenges for reliability in educational deployment and underscores the importance of systematically examining prompt-induced variation in rewriting behaviour.
+Carefully engineered prompts may encourage minimal edits, but they do not guarantee consistent behaviour. This is the reason the present study compares prompt-induced variation in rewriting behaviour rather than assuming that a constraint in the prompt will always be followed.
 
 \subsection*{Summary}
 
@@ -218,7 +218,7 @@ LLMs offer substantial improvements in fluency, generalisation, and adaptability
 \section{Fluency Bias, Over-Correction, and Educational Alignment}
 \label{sec:fluency-bias}
 
-The increasing use of LLMs in GEC has revealed a systematic tendency often described as \textit{fluency bias}. Whereas earlier GEC systems were optimised for minimal error repair, generative LLMs are trained to produce highly probable and natural-sounding text. This creates a structural tension between grammatical correction and the introduction of unnecessary modifications beyond minimal repair, particularly in educational contexts.
+The increasing use of LLMs in GEC has drawn attention to a tendency often described as \textit{fluency bias}. Whereas earlier GEC systems were optimised for edit-based correction, generative LLMs are trained to produce probable and natural-sounding text. This creates a tension between grammatical correction and changes that go beyond minimal repair, particularly in educational contexts.
 
 \subsection{Defining Fluency Bias}
 
@@ -232,7 +232,7 @@ Empirical studies document systematic rewriting in GPT-based systems \cite{loem2
 
 Over-correction is the observable manifestation of fluency bias. Systems introduce lexical or structural changes beyond resolving grammatical errors, producing outputs that are grammatically valid yet unnecessarily different from the original phrasing.
 
-Importantly, over-correction is not inherently incorrect, and it is difficult to define or measure directly because some broad revisions may be useful in context. However, evaluation metrics such as M\textsuperscript{2} and ERRANT reward grammatical accuracy without explicitly penalising unnecessary rewriting. Consequently, systems exhibiting strong fluency bias may achieve competitive $F_{0.5}$ scores while deviating from minimal-edit principles.
+Over-correction is not inherently incorrect, and it is difficult to define or measure directly because some broad revisions may be useful in context. Evaluation metrics such as M\textsuperscript{2} and ERRANT reward grammatical accuracy without explicitly penalising unnecessary rewriting. As a result, systems with strong fluency bias may achieve competitive $F_{0.5}$ scores while still moving away from minimal-edit principles.
 
 Comparative analyses suggest that fine-tuned encoder--decoder models trained on annotated learner corpora tend to produce more localised edits aligned with gold references \cite{ng-etal-2014-conll,bryant-etal-2019-bea}, whereas LLM outputs display greater lexical and structural variation despite similar quantitative performance. Equivalent scores may therefore mask qualitatively different correction behaviours.
 
@@ -244,7 +244,7 @@ Extensive reformulation may obscure the learner's original wording and reduce tr
 
 Repeated exposure to fully rewritten sentences may also foster dependency, reducing learner engagement in active revision \cite{ke2019automated}. Educational feedback should scaffold learning rather than replace cognitive effort.
 
-These concerns reflect a broader alignment challenge. The intended objective in educational GEC is targeted grammatical repair with minimal necessary modification, whereas the learned objective of LLMs is fluent sequence generation. Fluency bias therefore represents a structural misalignment between model optimisation and instructional goals.
+These concerns reflect a broader alignment challenge. In educational GEC, the intended objective is targeted grammatical repair with minimal necessary modification. For LLMs, the learned objective is fluent sequence generation. Fluency bias therefore creates a mismatch between model optimisation and instructional goals.
 
 \subsection{Illustrative Example}
 
@@ -290,11 +290,11 @@ Prompt engineering refers to the strategic formulation of instructions and conte
 
 \subsection{Prompting Strategies for Behavioural Control}
 
-Prompt-based control of LLM behaviour can be categorised into several related strategies, including instruction-based, constraint-based, role-based, and example-driven prompting. Although conceptually distinct, these approaches operate along a continuum of behavioural specification, differing primarily in the degree of guidance and structure imposed on the model.
+Prompt-based control of LLM behaviour can be grouped into instruction-based, constraint-based, role-based, and example-driven prompting. These approaches overlap in practice, but they differ in how much guidance and structure they give to the model.
 
 \subsubsection{Instruction-Based Prompts}
 
-Instruction-based prompting involves providing explicit natural-language directives that define the scope of the task. In zero-shot configurations, the model receives only an instruction and the input sentence, without demonstration examples \cite{NEURIPS2020_1457c0d6}. The clarity and specificity of the instruction therefore play a central role in shaping model behaviour.
+Instruction-based prompting uses natural-language directions to define the scope of the task. In zero-shot configurations, the model receives only an instruction and the input sentence, without demonstration examples \cite{NEURIPS2020_1457c0d6}. The clarity and specificity of the instruction therefore play a central role in shaping model behaviour.
 
 For GEC, a generic instruction such as:
 
@@ -318,7 +318,7 @@ Constraint-based prompting extends instruction-based approaches by introducing o
 
 This approach aligns with the minimal-edit paradigm historically emphasised in shared tasks such as CoNLL-2014 \cite{ng-etal-2014-conll}. By narrowing the permissible transformation space, constraint-based prompts aim to reduce unnecessary rewriting and lexical substitution.
 
-Nevertheless, constraints function as soft guidance rather than enforceable rules. Because LLMs remain optimised for generative coherence, adherence to constraints is probabilistic rather than deterministic \cite{liu2023pretrain}. Moreover, overly restrictive prompts may suppress legitimate structural corrections, particularly in sentences where grammatical and phrasing issues are intertwined. Evaluating constraint-based prompts therefore requires balancing minimal modification against correction completeness.
+Constraints still function as soft guidance rather than enforceable rules. Because LLMs remain optimised for generative coherence, adherence to constraints is probabilistic rather than deterministic \cite{liu2023pretrain}. Overly restrictive prompts may also suppress legitimate structural corrections, particularly in sentences where grammatical and phrasing issues are intertwined. Evaluating constraint-based prompts therefore requires balancing minimal modification against correction completeness.
 
 \subsubsection{Role-Based Prompts}
 
@@ -330,21 +330,21 @@ Role-based prompting introduces behavioural framing by assigning the model a spe
 
 Role conditioning has been shown to influence tone, lexical choices, and interpretive stance in LLMs \cite{wei2022finetuned,liu2023pretrain}. Framing the model as an educator rather than an editor may implicitly encourage more restrained corrections and better alignment with pedagogical goals.
 
-However, role effects emerge from latent associations acquired during pre-training and may therefore be less predictable than explicit constraints. While role-based prompts may influence output style and explanatory framing, tendencies towards broader rewriting can still persist \cite{NEURIPS2020_1457c0d6}. Consequently, role framing alone may be insufficient to eliminate fluency bias, but may complement other control mechanisms.
+Role effects emerge from latent associations acquired during pre-training, so they may be less predictable than explicit constraints. Role-based prompts may influence output style and explanatory framing, but tendencies towards broader rewriting can still persist \cite{NEURIPS2020_1457c0d6}. Role framing alone is therefore unlikely to eliminate fluency bias, although it may complement other control mechanisms.
 
 \subsubsection{Few-Shot and Example-Driven Prompts}
 
-Few-shot prompting introduces an additional layer of behavioural control by providing demonstration examples within the prompt \cite{NEURIPS2020_1457c0d6}. Rather than relying solely on abstract directives, the model is shown explicit input--output pairs that illustrate the desired form of correction. These examples act as behavioural templates, guiding the model towards analogous transformations.
+Few-shot prompting adds demonstration examples to the prompt \cite{NEURIPS2020_1457c0d6}. Rather than relying only on abstract instructions, the model is shown explicit input--output pairs that illustrate the desired form of correction. These examples act as templates, guiding the model towards similar transformations.
 
-In the context of GEC, example-driven prompts can explicitly demonstrate minimal-edit behaviour. Research on in-context learning indicates that few-shot examples can shape model outputs, sometimes more strongly than high-level instructions alone \cite{liu2023pretrain}. Factors such as example ordering, similarity to the input, and diversity have been shown to affect performance \cite{wei2022finetuned}.
+In the context of GEC, example-driven prompts can demonstrate minimal-edit behaviour directly. Research on in-context learning indicates that few-shot examples can shape model outputs, sometimes more strongly than high-level instructions alone \cite{liu2023pretrain}. Factors such as example ordering, similarity to the input, and diversity have been shown to affect performance \cite{wei2022finetuned}.
 
 However, few-shot prompting introduces methodological challenges. Longer prompts increase computational cost and approach context-length constraints. Additionally, poorly selected examples may encourage consistent rewriting patterns that go beyond minimal correction. Careful control of example content is therefore necessary to ensure that behavioural effects result from prompt structure rather than implicit data leakage.
 
 \subsubsection*{Synthesis and Research Focus}
 
-Taken together, these prompting strategies offer complementary mechanisms of behavioural regulation: instructions define task scope, constraints narrow the permissible edit space, role framing influences interpretive stance, and examples provide concrete behavioural templates. Prior work suggests that prompting can influence correction behaviour, but the extent to which it can reduce unnecessary rewriting in learner-facing GEC remains insufficiently established.
+These prompting strategies control different parts of the correction request. Instructions define the task, constraints narrow the allowed edits, role framing changes the stance of the response, and examples show the model what kind of correction is expected. Prior work suggests that prompting can influence correction behaviour, but it is still unclear how far it can reduce unnecessary rewriting in learner-facing GEC.
 
-This dissertation does not attempt to resolve prompt controllability in general. Rather, it investigates a narrower and more specific question: whether a small set of structured prompting strategies can reduce over-correction, relative to a simple baseline prompt, while maintaining broadly comparable grammatical correction performance in an L2-focused setting. This more limited focus reflects the controlled scope of the empirical study reported in later chapters.
+The present project does not attempt to resolve prompt controllability in general. It asks a narrower question: whether a small set of structured prompting strategies can reduce over-correction risk, relative to a simple baseline prompt, while maintaining broadly comparable grammatical correction performance in an L2-focused setting. This limited focus matches the controlled empirical study reported in later chapters.
 
 \subsection{Prompt Sensitivity and Behavioural Stability}
 
@@ -387,17 +387,17 @@ Figure~\ref{fig:prompt_pipeline} illustrates this control locus.
 \label{fig:prompt_pipeline}
 \end{figure}
 
-This framework underpins the experimental design of the present study, which evaluates how structured prompting influences the balance between grammatical accuracy and over-correction risk.
+This literature motivates the experimental design of the present study: the later chapters test whether structured prompting changes the balance between grammatical accuracy and over-correction risk.
 
 \section{Ethical and Professional Considerations}
 
-Deploying LLM-based GEC in educational contexts raises ethical and professional considerations beyond technical performance. While this dissertation focuses on regulating over-correction through prompt engineering, responsible implementation requires attention to learner agency, transparency, fairness, and regulatory risks.
+Deploying LLM-based GEC in educational contexts raises ethical and professional issues beyond technical performance. Although this dissertation focuses on regulating over-correction through prompt engineering, a real system would also need to consider learner agency, transparency, fairness, and data handling.
 
 \subsection{Human--AI Interaction, Transparency, and Learner Agency}
 
 LLM-based writing systems can generate fully revised text rather than highlighting isolated rule violations. This shifts the locus of agency in the revision process: instead of guiding learners towards self-correction, the system may effectively perform revision on their behalf.
 
-Human--AI interaction research emphasises that AI systems should augment, rather than replace, human cognitive effort \cite{amershi2019guidelines}. In educational contexts, feedback is most effective when it scaffolds learning rather than automates it. Studies of automated writing evaluation show that learner uptake depends on clarity, perceived fairness, and opportunities for iterative revision \cite{ke2019automated}. Overly comprehensive or opaque corrections may therefore reduce reflective engagement, particularly when they involve unnecessary rewriting beyond grammatical repair.
+Human--AI interaction research emphasises that AI systems should augment, rather than replace, human cognitive effort \cite{amershi2019guidelines}. In educational contexts, feedback is most useful when it supports learning rather than simply automating revision. Studies of automated writing evaluation show that learner uptake depends on clarity, perceived fairness, and opportunities for iterative revision \cite{ke2019automated}. Overly broad or opaque corrections may therefore reduce reflective engagement, particularly when they involve unnecessary rewriting beyond grammatical repair.
 
 Transparency refers to the extent to which users can understand what a system has changed and why. Earlier rule-based systems provided relatively interpretable transformations linked to identifiable grammatical rules, whereas LLMs operate through high-dimensional statistical representations that lack inherent interpretability \cite{NIPS2017_3f5ee243}. Prompting can influence correction scope, but it does not inherently provide explanations. Without highlighted edits or rationales, learners may struggle to infer the underlying grammatical principles. Responsible AI frameworks emphasise transparency, accountability, and user awareness in high-impact domains such as education \cite{floridi2018ai4people}.
 
@@ -407,7 +407,7 @@ Integrating LLM-based correction tools into L2 learning environments introduces 
 
 \subsubsection{Learner Dependency and Reduced Critical Engagement}
 
-When systems provide fully rewritten sentences rather than targeted corrections, learners may rely on automated revision instead of engaging in active error analysis. Research on automated writing evaluation highlights similar concerns: excessive automation can reduce reflective learning and learner autonomy \cite{ke2019automated}. Furthermore, accepting corrections without examining underlying rules may weaken metalinguistic awareness. Schmidt's noticing hypothesis emphasises that conscious attention to linguistic form supports acquisition \cite{schmidt1990role}. Extensive or unnecessary rewriting may therefore limit learning by obscuring the specific source of error.
+When systems provide fully rewritten sentences rather than targeted corrections, learners may rely on automated revision instead of engaging in active error analysis. Research on automated writing evaluation raises similar concerns: excessive automation can reduce reflective learning and learner autonomy \cite{ke2019automated}. Accepting corrections without examining underlying rules may also weaken metalinguistic awareness. Schmidt's noticing hypothesis emphasises that conscious attention to linguistic form supports acquisition \cite{schmidt1990role}. Extensive or unnecessary rewriting may therefore limit learning by obscuring the specific source of error.
 
 \subsubsection{Linguistic Homogenisation and Bias}
 
@@ -415,7 +415,7 @@ LLMs are trained on large-scale text corpora that reflect dominant linguistic no
 
 \subsubsection{Data Privacy and Security}
 
-Processing learner writing introduces privacy considerations, particularly when texts contain personal or sensitive information. Educational institutions in the UK and EU must comply with the General Data Protection Regulation (GDPR), which requires lawful, transparent, and purpose-limited processing of personal data. Improper storage, transmission, or third-party API usage may create regulatory risk. Secure data handling, anonymisation, and restricted data retention are therefore essential safeguards.
+Processing learner writing introduces privacy considerations, particularly when texts contain personal or sensitive information. This project uses an existing anonymised corpus rather than collecting new participant data. The practical risk is therefore lower than in a deployed classroom system, but secure storage, limited retention, and careful handling of model inputs remain necessary safeguards.
 
 \subsubsection{Academic Integrity and Misuse}
 
@@ -448,13 +448,13 @@ Academic Misuse & Medium & High & Establish clear usage guidelines; distinguish 
 
 \subsection{Study Safeguards}
 
-In this study, all learner data are anonymised prior to analysis, and no personally identifiable information is retained. Where external APIs are used, data transmission policies comply with institutional and regulatory standards. Data minimisation, by collecting only the information necessary for linguistic analysis, further reduces ethical risk while maintaining methodological validity.
+In this study, the learner data are handled in anonymised form, and no additional personal information is collected. The experiments store only the source sentences, prompt labels, model outputs, and evaluation results needed for the analysis. Because the model calls use an external API, the study avoids adding any participant identifiers beyond the existing anonymised corpus records.
 
 \vspace{3cm}
 
 \section{Identified Research Gaps}
 
-Despite rapid advances in GEC and the emergence of LLM-based approaches, several gaps remain at the intersection of evaluation, controllability, and pedagogy. These gaps are especially important in educational contexts, where grammatical accuracy alone is not sufficient and where preservation of learner wording is important alongside correction quality.
+Despite recent progress in GEC and LLM-based approaches, several gaps remain at the intersection of evaluation, controllability, and pedagogy. These gaps matter for this project because grammatical accuracy alone is not enough in learner-facing correction; preservation of learner wording is also part of the feedback problem.
 
 \subsection{Gap 1: Limited Evaluation of Unnecessary Changes}
 
@@ -472,14 +472,14 @@ More specifically, the literature provides limited evidence on whether structure
 
 Prompt engineering has been widely studied in general NLP \cite{liu2023pretrain,wei2022finetuned}, but its application to learner-oriented GEC remains underexplored. Much of the LLM-based GEC literature focuses on feasibility, benchmark performance, or general prompt effectiveness rather than on whether prompt design can support pedagogically appropriate behaviour, such as preserving learner wording and avoiding unnecessary reformulation.
 
-In particular, there remains a lack of controlled studies that bring together prompt design, evaluation of textual modification, and educational considerations within a single framework. This is important because prompt effectiveness in general text generation does not automatically translate into pedagogically appropriate behaviour in L2 feedback settings.
+In particular, there are still relatively few controlled studies that bring together prompt design, evaluation of textual modification, and educational considerations. Prompt effectiveness in general text generation does not automatically mean that the output is appropriate for L2 feedback.
 
 \subsection*{Synthesis and Positioning of the Present Study}
 
-Taken together, these gaps point to a narrower but important unresolved problem: current GEC evaluation practice does not adequately account for over-correction risk, and current prompt-based research does not yet clearly establish how far structured prompting can moderate this behaviour in learner-oriented settings.
+These gaps lead to the narrower problem addressed in this dissertation: current GEC evaluation practice does not adequately account for over-correction risk, and prompt-based work has not yet shown clearly how far structured prompts can moderate rewriting in learner-oriented settings.
 
-The present dissertation addresses this problem in three bounded ways. First, it supplements conventional ERRANT-based accuracy evaluation with additional measures intended to capture divergence from the source sentence. Second, it compares a small set of prompting strategies under controlled conditions in order to test whether prompt formulation affects the degree of rewriting. Third, it interprets these findings in relation to pedagogical concerns about transparency, minimality, and preservation of learner wording.
+The project addresses the problem in three bounded ways. First, it supplements conventional ERRANT-based accuracy evaluation with measures that track divergence from the source sentence. Second, it compares a small set of prompting strategies under controlled conditions to test whether prompt formulation affects the degree of rewriting. Third, it interprets these findings in relation to pedagogical concerns about transparency, minimality, and preservation of learner wording.
 
-The contribution of this dissertation is therefore not to offer a complete theory of over-correction, nor to provide a comprehensive pedagogical evaluation of LLM-based GEC. Rather, it provides a controlled empirical case study showing how prompt design can influence the balance between grammatical correction and over-correction risk, and it proposes an evaluation perspective that is more sensitive to potential over-correction than accuracy-only reporting.
+The contribution of this dissertation is therefore not a complete theory of over-correction, nor a full pedagogical evaluation of LLM-based GEC. Its contribution is more specific: it provides a controlled empirical case study showing how prompt design can influence the balance between grammatical correction and over-correction risk, and it uses an evaluation perspective that is more sensitive to potential over-correction than accuracy-only reporting.
 
-Overall, the literature suggests that LLM-based GEC introduces a genuine tension between grammatical correction and unnecessary rewriting, and that existing evaluation practices do not fully account for this tension. It also suggests that prompt engineering may offer a practical means of influencing model behaviour, but the extent of that control remains uncertain in learner-oriented settings. On this basis, the present dissertation adopts a focused empirical approach: it evaluates whether a small set of structured prompts can reduce indicators of over-correction risk relative to a baseline prompt, using a combined framework of accuracy-based and change-sensitive measures. In doing so, it aims to make a modest but concrete contribution to the study of controllable, pedagogically aware LLM-based GEC.
+The literature therefore leaves a practical question for this project: can a small set of structured prompts reduce indicators of over-correction risk relative to a simple baseline prompt? The dissertation answers this question through a controlled comparison using ERRANT-based accuracy metrics and change-sensitive measures based on the source sentence.
