@@ -36,7 +36,7 @@ At the same time, the generative capacity of Transformer-based systems increased
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/evolution_of_gec.PNG}
+    \includegraphics[width=13cm]{figures/evolution_of_gec.PNG}
     \caption{Evolution of Grammatical Error Correction Approaches}
     \label{fig:gec-timeline}
 \end{figure}
@@ -84,24 +84,24 @@ LLMs make GEC more flexible by enabling correction through prompting rather than
 
 LLM-based GEC systems can produce fluent and natural-sounding corrections, but this strength can also lead to over-correction. In this dissertation, over-correction refers to cases where the model changes the learner's wording, vocabulary, or sentence structure beyond what is needed for grammatical repair, especially when those changes do not provide clear benefit.
 
-One reason for this behaviour is fluency bias. Because LLMs are trained to generate probable and natural-sounding text, they may favour polished sentences over minimal edits \cite{NEURIPS2020_1457c0d6,NIPS2017_3f5ee243}. In GEC, this can appear as lexical substitution, clause restructuring, or broader rephrasing. Although such changes may improve readability, they can also move the correction away from the learner's original expression \cite{loem2023exploringeffectivenessgpt3grammatical}.
+One reason for this behaviour is fluency bias. Because LLMs are trained to generate probable and natural-sounding text, they may favour polished sentences over minimal edits \cite{NEURIPS2020_1457c0d6,NIPS2017_3f5ee243}. In GEC, this can appear as lexical substitution, clause restructuring, or broader rephrasing. Although these changes may improve readability, they can also move the correction away from the learner's original expression \cite{loem2023exploringeffectivenessgpt3grammatical}.
 
-Over-correction is difficult to define as simply incorrect, because some broader revisions may be useful in context. However, in learner-facing GEC, excessive rewriting can reduce the pedagogical value of feedback. Minimal correction allows learners to compare the original and corrected forms more directly, which supports noticing and reflection \cite{schmidt1990role}. By contrast, fluency-oriented rewriting may introduce several changes at once, making it harder for learners to identify the specific source of the error.
+Over-correction is difficult to define as simply incorrect, because some broader revisions may be useful in context. However, in learner-facing GEC, excessive rewriting can reduce the pedagogical value of feedback. Minimal correction allows learners to compare the original and corrected forms more directly, supporting noticing and reflection \cite{schmidt1990role}. By contrast, fluency-oriented rewriting may introduce several changes at once, making it harder to identify the specific source of the error.
 
-This also raises an alignment issue. The intended goal of educational GEC is targeted grammatical repair with minimal necessary modification, while the learned behaviour of LLMs often favours fluent sequence generation. As a result, a model may produce an output that is grammatically acceptable but less useful as feedback for L2 learners.
+This creates an alignment issue. The intended goal of educational GEC is targeted grammatical repair with minimal necessary modification, while the learned behaviour of LLMs often favours fluent sequence generation. As a result, a model may produce an output that is grammatically acceptable but less useful as feedback for L2 learners.
 
 \subsection{Illustrative Example}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/minimal_vs_fluency.PNG}
+    \includegraphics[width=13cm]{figures/minimal_vs_fluency.PNG}
     \caption{Minimal Correction vs Fluency-biased Rewrite}
     \label{fig:minimal-vs-fluency}
 \end{figure}
 
 The minimal correction changes only the grammar that needs correction, while keeping the structure of the learner's sentence largely intact. The fluency-biased rewrite introduces lexical substitution and structural reformulation. This increases the amount of modification and makes the original error less visible.
 
-\subsubsection{Comparative Summary}
+\subsubsection*{Comparative Summary}
 \begin{table}[htbp]
 \centering
 \caption{Pedagogical Comparison: Minimal Correction vs Fluency-Biased Rewrite}
@@ -123,11 +123,11 @@ Dependency Risk & Lower & Higher \\
 \end{tabular}
 \end{table}
 
-These differences show why over-correction cannot be understood through grammatical accuracy alone. To evaluate learner-facing GEC systems more appropriately, it is necessary to consider both whether a correction is grammatically valid, how far it moves away from the learner's original sentence, and whether those changes preserve meaning or improve fluency. The next section therefore reviews existing GEC evaluation metrics and their limitations for measuring unnecessary rewriting.
+These differences show why over-correction cannot be understood through grammatical accuracy alone. To evaluate learner-facing GEC systems more appropriately, it is necessary to consider grammatical validity alongside the extent and usefulness of changes made to the learner's original sentence. The next section therefore reviews existing GEC evaluation metrics and their limitations for measuring unnecessary rewriting.
 
 \section{Evaluation in GEC: Metrics and Limitations}
 
-Having discussed over-correction in LLM-based GEC, this section turns to how correction quality is evaluated. Evaluation is important because GEC systems must be assessed not only on whether they produce grammatically acceptable sentences, but also on how much they alter the learner's original writing and whether those changes appear useful. This distinction is central to this dissertation, since a correction can be grammatically valid while still involving unnecessary rewriting.
+Having discussed over-correction in LLM-based GEC, this section reviews how correction quality is evaluated. Standard GEC evaluation usually focuses on grammatical accuracy by comparing system outputs with human reference corrections. This is useful for measuring whether a system corrects grammatical errors, but it does not fully show whether the system has changed the learner's original wording more than necessary. For this reason, learner-facing GEC requires both accuracy-based evaluation and source-output analysis.
 
 \subsection{ERRANT and the M\textsuperscript{2} Scorer}
 
@@ -160,23 +160,23 @@ This weighting reflects the importance of avoiding false positives, since unnece
 
 ERRANT extends this edit-based approach by automatically aligning the original learner sentence with the corrected sentence and assigning edits to linguistic error categories \cite{bryant-etal-2017-automatic}. This makes it useful for analysing grammatical correction quality in a more interpretable way. ERRANT can therefore show not only whether a correction matches the reference, but also what type of grammatical edit has been made.
 
-However, ERRANT and M\textsuperscript{2} remain primarily accuracy-based metrics. They rely on reference annotations and reward agreement with gold edits. As a result, they do not directly measure whether a model has rewritten the learner's sentence more than necessary.
+However, ERRANT and M\textsuperscript{2} remain primarily accuracy-based metrics. They reward agreement with annotated edits, but they do not directly measure whether a system has rewritten the learner's sentence more than necessary.
 
 \subsection{Limitations of Accuracy-Only Evaluation}
 
-Accuracy-based metrics are useful for benchmarking GEC systems, but they do not fully capture over-correction risk. A system output may align well with a reference correction while still making additional lexical or structural changes. Similarly, a valid alternative correction may be penalised if it does not match the available reference annotation.
+Accuracy-based metrics are useful for benchmarking GEC systems, but they are limited when the correction can be expressed in several valid ways. A system output may be grammatically acceptable but receive a lower score if it does not match the available reference annotation. Conversely, an output may align with a reference correction while still making additional lexical or structural changes.
 
-This limitation becomes more important for LLM-based GEC. Because LLMs are generative, they may produce natural-sounding outputs that involve broader rephrasing than a traditional minimal-edit correction. Fluency-oriented datasets such as JFLEG \cite{napoles-etal-2017-jfleg} also show that correction can involve wider revision, while studies of GPT-style systems report similar tendencies towards rewriting \cite{loem2023exploringeffectivenessgpt3grammatical}.
+This issue becomes more important for LLM-based GEC because LLMs can produce fluent outputs that go beyond minimal grammatical repair. Fluency-oriented datasets such as JFLEG \cite{napoles-etal-2017-jfleg} show that correction can involve wider revision, while studies of GPT-style systems report similar tendencies towards rewriting \cite{loem2023exploringeffectivenessgpt3grammatical}.
 
-For learner-facing GEC, this creates a mismatch between grammatical accuracy and pedagogical usefulness. A correction may improve the surface quality of a sentence but reduce the visibility of the learner's original error. This means that accuracy-based metrics should be complemented by measures that consider how far the corrected output moves away from the original sentence.
+For learner-facing GEC, this creates a mismatch between grammatical accuracy and pedagogical usefulness. A correction may improve surface fluency but make the learner's original error less visible. Evaluation therefore needs to consider not only whether the correction is accurate, but also how much the output changes and whether those changes are useful.
 
 \subsection{Measuring Textual Change and Minimality}
 
-To estimate over-correction risk, it is useful to examine how much the corrected sentence differs from the original learner sentence, while also considering whether the change preserves meaning or improves fluency. These source-output comparisons do not replace grammatical accuracy metrics. Instead, they provide additional evidence about rewriting behaviour.
+To analyse over-correction risk, the corrected output can be compared directly with the original learner sentence. This source-output perspective captures aspects of correction behaviour that reference-based accuracy metrics do not measure.
 
-Several types of measures can be used for this purpose. Word-level edit distance measures the amount of surface rewriting, while edit density adjusts this change by sentence length. Lexical diversity and readability measures can indicate shifts in vocabulary and sentence complexity. Similarity-based measures can also help estimate whether the corrected output remains close to the source sentence in meaning and form.
+Several types of measures can support this analysis. Word-level edit distance measures surface rewriting, while edit density adjusts this change by sentence length. Lexical diversity and readability measures can indicate shifts in vocabulary and sentence complexity. Similarity-based measures can estimate whether the corrected output remains close to the source sentence in meaning and form.
 
-A further issue is that textual change is not always undesirable. Some corrections may move away from the original sentence while still preserving meaning and improving fluency. This means that evaluation should consider not only the amount of change, but also whether the change appears useful. In learner-facing GEC, the challenge is therefore to distinguish unnecessary rewriting from beneficial correction.
+However, the amount of change should not be interpreted in isolation. Some corrections may alter the original sentence while still preserving meaning and improving fluency. For this reason, over-correction risk should be interpreted through both the extent of change and the apparent usefulness of that change.
 
 \subsubsection{Edit Distance and Minimality}
 
@@ -210,7 +210,7 @@ The minimal correction introduces only necessary grammatical changes. Word-level
 
 In contrast, the over-corrected version replaces several lexical items, such as ``went'' with ``attended'', ``because'' with ``in order to'', and ``finish'' with ``complete''. It also changes the phrasing more broadly. These changes increase edit distance, affect readability and lexical properties, and reduce similarity to the original sentence.
 
-This example shows why grammatical correctness alone is not enough to distinguish minimal correction from unnecessary rewriting. A fuller evaluation of learner-facing GEC therefore needs to consider both correction accuracy and the extent of change from the original sentence.
+This example shows why grammatical correctness alone is not enough to distinguish minimal correction from unnecessary rewriting. A fuller evaluation of learner-facing GEC therefore needs to consider both correction accuracy and the extent and usefulness of changes made to the original sentence.
 
 \subsection{Comparative Summary of Metrics}
 

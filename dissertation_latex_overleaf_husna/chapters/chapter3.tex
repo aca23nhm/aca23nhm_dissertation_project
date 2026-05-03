@@ -1,10 +1,10 @@
 \chapter{Requirements and Analysis}
 
-Chapter 2 established the motivation for this study by reviewing grammatical error correction (GEC), the limitations of accuracy-only evaluation, and the problem of unnecessary rewriting in large language model (LLM)-based systems. This chapter turns those issues into specific project requirements and explains how they shape the experimental design.
+Chapter 2 established the motivation for this study by reviewing grammatical error correction (GEC), the limitations of accuracy-only evaluation, and the problem of unnecessary rewriting in large language model (LLM)-based systems. This chapter translates those issues into project requirements and defines the experimental design used in this dissertation.
 
-The chapter defines the project aim, research questions, dataset, prompt conditions, system requirements, evaluation strategy, and analysis plan. The focus is whether the prompts tested in this project change the balance between grammatical correction performance and over-correction risk in second-language (L2) learner writing.
+The chapter outlines the project aim, research questions, dataset, prompt conditions, system requirements, evaluation strategy, and practical constraints. The focus is whether different prompt designs change the balance between grammatical correction performance and over-correction risk in second-language (L2) learner writing.
 
-In this project, over-correction refers to changes made beyond what is needed for grammatical repair. A correction may therefore be grammatically acceptable but still undesirable if it unnecessarily changes the learner's wording, structure, or style without clear benefit. This means that over-correction risk cannot be assessed through textual change alone. The evaluation must also consider whether the change preserves meaning and improves fluency.
+In this project, over-correction refers to changes made beyond what is needed for grammatical repair. A correction may therefore be grammatically acceptable but still undesirable if it unnecessarily changes the learner's wording, structure, or style without clear benefit. For this reason, the study does not treat textual change alone as over-correction. Instead, over-correction risk is considered in relation to the extent of source-output change, meaning preservation, and fluency improvement.
 
 \section{Aims and Objectives}
 
@@ -17,7 +17,7 @@ The objectives are:
     \item to compare prompt variants using both grammatical accuracy and over-correction risk indicators;
     \item to identify which prompting strategy provides the best balance between correction quality and minimal, useful editing;
     \item to examine whether sentence length affects correction behaviour;
-    \item to test whether the over-correction risk ranking remains stable under alternative weighting schemes.
+    \item to test whether over-correction risk rankings remain stable under alternative weighting schemes.
 \end{itemize}
 
 These objectives lead to the following research questions:
@@ -34,7 +34,7 @@ These objectives lead to the following research questions:
 
 This project uses the W\&I + LOCNESS dataset from the BEA-2019 shared task \cite{bryant-etal-2019-bea}. The dataset is suitable because it contains learner-written English sentences with manually annotated corrections, making it compatible with standard GEC evaluation methods such as ERRANT.
 
-The dataset is used solely to assess the model outputs, rather than to train or fine-tune the model. Each learner sentence is processed independently, allowing outputs from different prompt conditions to be compared on the same input. This controlled setup helps ensure that differences in correction behaviour can be attributed mainly to prompt design rather than to changes in data.
+The dataset is used only for evaluation. No model training or fine-tuning is performed. Each learner sentence is processed independently, allowing outputs from different prompt conditions to be compared using the same input. This controlled setup helps ensure that differences in correction behaviour can be attributed mainly to prompt design rather than to changes in data.
 
 For sentence-length analysis, the input sentences are divided into three groups:
 
@@ -44,7 +44,7 @@ For sentence-length analysis, the input sentences are divided into three groups:
     \item \textbf{Long:} 21 or more tokens.
 \end{itemize}
 
-Minimal preprocessing is applied so that the original surface form of each learner sentence is preserved. This is important because the study compares the corrected output with the original sentence when analysing rewriting behaviour and over-correction risk.
+Minimal preprocessing is applied so that the original surface form of each learner sentence is preserved. This is important because the study compares each corrected output with the original sentence when analysing rewriting behaviour and over-correction risk.
 
 \section{Prompting Strategies}
 
@@ -57,7 +57,7 @@ Prompt design is treated as the main experimental variable. Four prompting strat
     \item \textbf{Few-shot minimal-edit prompt:} a prompt that includes example input--output pairs demonstrating minimal grammatical correction.
 \end{enumerate}
 
-The baseline prompt provides a comparison point, while the structured prompt strategies are designed to encourage more controlled correction behaviour. Multiple variants are tested for the structured strategies so that prompt wording can be refined before the final strategy comparison.
+The baseline prompt provides a comparison point, while the structured prompt strategies are intended to encourage more controlled correction behaviour. Multiple variants are tested for the structured strategies so that prompt wording can be refined before the final strategy comparison.
 
 All prompt conditions use the same dataset, model settings, and input order. This allows the experiment to isolate the effect of prompt formulation on grammatical accuracy and over-correction risk.
 
@@ -70,8 +70,8 @@ The system must support a controlled comparison of prompt outputs. The main func
     \item apply each prompt condition to the same input sentences;
     \item store generated outputs with sentence IDs and prompt metadata;
     \item evaluate grammatical correction performance using ERRANT;
-    \item compute change-based and utility-related signals by comparing outputs with the original learner sentences;
-    \item support sentence-length analysis, prompt ranking, robustness checks, trade-off analysis, and qualitative inspection.
+    \item compute over-correction risk indicators by comparing outputs with the original learner sentences;
+    \item retain sentence-level outputs for later inspection and qualitative analysis.
 \end{itemize}
 
 The main non-functional requirements are:
@@ -79,34 +79,34 @@ The main non-functional requirements are:
 \begin{itemize}
     \item \textbf{Reproducibility:} prompts, settings, and outputs must be stored clearly;
     \item \textbf{Consistency:} the same dataset and model parameters must be used across prompt conditions;
-    \item \textbf{Traceability:} sentence-level outputs must be retained for later inspection;
+    \item \textbf{Traceability:} sentence-level outputs must be linked to prompt labels and evaluation results;
     \item \textbf{Ethics:} learner text must be anonymised and used only for linguistic analysis.
 \end{itemize}
 
-\section{Methodology}
+\section{Experimental Design}
 
-The methodology follows a controlled experimental design. Learner sentences and reference corrections are first extracted from the dataset. Each sentence is then passed through every prompt condition, producing parallel corrected outputs for comparison.
+The study follows a controlled experimental design. Learner sentences and reference corrections are first extracted from the dataset. Each sentence is then passed through every prompt condition, producing parallel corrected outputs for comparison.
 
-The outputs are evaluated from two perspectives. The first is grammatical accuracy, where model outputs are compared against reference corrections. The second is over-correction risk, where each corrected output is assessed using the OCI metric defined in Chapter 4.
+The outputs are evaluated from two perspectives. The first is grammatical accuracy, where model outputs are compared against reference corrections using ERRANT. The second is over-correction risk, where each corrected output is compared with the original learner sentence using the OCI indicator implemented in Chapter 4.
 
-The project is organised into six analyses:
+The study is organised into six analyses:
 
 \begin{enumerate}
     \item \textbf{Prompt refinement:} variants within each prompt family are compared to identify the strongest version.
-    \item \textbf{Prompt strategy comparison:} the best instruction-constrained, role-based, and few-shot prompts are compared against the baseline.
+    \item \textbf{Prompt strategy comparison:} the selected instruction-constrained, role-based, and few-shot prompts are compared against the baseline.
     \item \textbf{Sentence-length analysis:} results are compared across short, medium, and long sentences.
     \item \textbf{OCI robustness analysis:} alternative weighting schemes are tested to examine whether prompt rankings remain stable.
-    \item \textbf{Trade-off analysis:} correction performance and over-correction risk are compared to identify aggressive, controlled, and balanced prompt behaviours.
+    \item \textbf{Trade-off analysis:} grammatical correction performance and over-correction risk are compared to identify aggressive, controlled, and balanced prompt behaviours.
     \item \textbf{Qualitative analysis:} selected sentence-level examples are examined to show how potential over-correction appears in practice.
 \end{enumerate}
 
 This structure allows the study to compare both prompt performance and prompt behaviour, rather than selecting a prompt only because it achieves the highest $F_{0.5}$.
 
-\section{Evaluation Metrics}
+\section{Evaluation Strategy}
 
 Grammatical correction performance is evaluated using ERRANT \cite{bryant-etal-2017-automatic}. The main reported metrics are precision, recall, and $F_{0.5}$. The $F_{0.5}$ score is used because it gives greater weight to precision, which is important in GEC where unnecessary corrections can reduce output quality \cite{ng-etal-2014-conll}.
 
-Over-correction risk is evaluated using the Composite Over-Correction Index (OCI). In this dissertation, OCI is used as an indicator of over-correction risk rather than as a direct judgement that an edit is unnecessary. A higher OCI indicates greater potential over-correction risk under the metric. The full calculation and implementation details are provided in Chapter 4.
+Over-correction risk is evaluated using the Composite Over-Correction Index (OCI). In this dissertation, OCI is used as an indicator of over-correction risk rather than as a direct judgement that an individual edit is unnecessary. A higher OCI indicates greater potential over-correction risk under the metric. The calculation of OCI is implemented and explained in Chapter 4.
 
 \section{Ethical and Practical Constraints}
 
