@@ -4,7 +4,7 @@
 
 This dissertation examined how prompt engineering influences correction behaviour in LLM-based grammatical error correction (GEC). The study was concerned not only with whether a prompt improves ERRANT accuracy, but also with whether it causes the model to change the learner's sentence more than necessary.
 
-To investigate this, the experiments combined ERRANT-based grammatical evaluation with the Composite Over-Correction Index (OCI). This allowed the baseline, instruction-constrained, role-based, and few-shot prompts to be compared in terms of grammatical correction performance and utility-adjusted over-correction risk.
+To investigate this, the experiments combined ERRANT-based grammatical evaluation with the Composite Over-Correction Index (OCI). This allowed the baseline, instruction-constrained, role-based, and few-shot prompts to be compared in terms of grammatical correction performance and over-correction risk.
 
 \section{Summary of Findings}
 
@@ -28,7 +28,7 @@ This dissertation makes three main contributions.
 
 First, it provides empirical evidence from the W\&I + LOCNESS subset used in this study that prompt wording can influence LLM-based GEC behaviour. Although the comparison is limited to one fixed OpenAI GPT-4o configuration, the differences between the baseline, instruction-constrained, role-based, and few-shot prompts were visible across ERRANT, OCI, and edit-distance results.
 
-Second, the dissertation applies OCI as an indicator of over-correction risk. OCI combines source-output change with utility signals related to fluency improvement and meaning preservation. This made it possible to discuss rewriting behaviour alongside ERRANT accuracy, rather than treating $F_{0.5}$ as the only measure of success.
+Second, the dissertation applies OCI as an indicator of over-correction risk. This made it possible to discuss rewriting behaviour alongside ERRANT accuracy, rather than treating $F_{0.5}$ as the only measure of success.
 
 Third, the study offers a practical interpretation of the prompt strategies tested in the project. The baseline behaved as the least controlled condition. The instruction-constrained prompt was more conservative. The role-based prompt gave the strongest balance between accuracy and restraint. The few-shot prompt was the most accuracy-oriented, but it also appeared slightly more interventionist.
 
@@ -40,7 +40,7 @@ The first limitation is the use of a single dataset, W\&I + LOCNESS. Although th
 
 The second limitation is that the experiments used one LLM configuration: OpenAI GPT-4o with fixed decoding settings. Other models may respond differently to the same prompts, particularly if they differ in instruction tuning or generation behaviour.
 
-Another limitation is that OCI does not measure over-correction directly. It can indicate possible over-correction risk, but it cannot definitively judge whether each individual edit is necessary. Although the formula considers source-output change, fluency gain, and meaning preservation, it cannot always separate useful stylistic improvement from undesirable rewriting.
+Another limitation is that OCI does not measure over-correction directly. It can indicate possible over-correction risk, but it cannot definitively judge whether each individual edit is necessary or separate useful stylistic improvement from undesirable rewriting in all cases.
 
 Finally, the study was carried out in a controlled evaluation setting. A real learner-facing GEC tool would involve additional factors, such as user interaction, how feedback is displayed, and more varied input quality.
 
@@ -58,6 +58,6 @@ User feedback would also make the evaluation more realistic. Learners or teacher
 
 \section{Final Remarks}
 
-This dissertation shows that prompt engineering affects more than grammatical accuracy. In the experiments, different prompts also changed how much the model rewrote the learner's original sentence, and whether those changes were supported by fluency improvement and meaning preservation. Evaluating ERRANT performance together with OCI therefore gave a fuller view of correction behaviour than accuracy alone.
+This dissertation shows that prompt engineering affects more than grammatical accuracy. In the experiments, different prompts also changed how much the model rewrote the learner's original sentence. Evaluating ERRANT performance together with OCI therefore gave a fuller view of correction behaviour than accuracy alone.
 
 The main conclusion is that a useful learner-facing GEC prompt should not simply encourage the model to make more edits. It should guide the model to correct grammatical errors while preserving as much of the learner's own expression as possible.

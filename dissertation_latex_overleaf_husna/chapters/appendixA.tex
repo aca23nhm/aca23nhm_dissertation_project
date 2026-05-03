@@ -175,29 +175,7 @@ The main reported ERRANT metrics are precision, recall, and $F_{0.5}$.
 
 Style-sensitive metrics were computed by comparing each model output directly with the learner source sentence. The metrics include word-level edit distance, edit density, lexical diversity shift, readability change, stylometric similarity, and fluency change.
 
-OCI was computed using a divergence component and a utility adjustment:
-
-\[
-OCI_{\text{divergence}} =
-0.35D_{\text{edit}} +
-0.15D_{\text{density}} +
-0.20\Delta_{\text{TTR}} +
-0.15\Delta_{\text{readability}} +
-0.15D_{\text{cosine}}
-\]
-
-\[
-Utility =
-0.5 \cdot \text{norm}(\Delta_{\text{fluency}})
-+ 0.5 \cdot \text{CosSim}
-\]
-
-\[
-OCI =
-OCI_{\text{divergence}} \cdot (1 - Utility)
-\]
-
-where each divergence component and the fluency change are normalised before aggregation, and both the utility term and OCI are clipped to $[0,1]$. Lower OCI indicates lower utility-adjusted source-output divergence.
+OCI was computed using the formula and implementation described in Chapter 4. Lower OCI indicates lower over-correction risk under this metric.
 
 \subsection{Experiment 1 Output Note}
 

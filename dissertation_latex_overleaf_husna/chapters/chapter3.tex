@@ -87,7 +87,7 @@ The main non-functional requirements are:
 
 The methodology follows a controlled experimental design. Learner sentences and reference corrections are first extracted from the dataset. Each sentence is then passed through every prompt condition, producing parallel corrected outputs for comparison.
 
-The outputs are evaluated from two perspectives. The first is grammatical accuracy, where model outputs are compared against reference corrections. The second is over-correction risk, where each corrected output is compared with the original learner sentence and assessed using signals of textual change, meaning preservation, and fluency improvement.
+The outputs are evaluated from two perspectives. The first is grammatical accuracy, where model outputs are compared against reference corrections. The second is over-correction risk, where each corrected output is assessed using the OCI metric defined in Chapter 4.
 
 The project is organised into six analyses:
 
@@ -106,11 +106,7 @@ This structure allows the study to compare both prompt performance and prompt be
 
 Grammatical correction performance is evaluated using ERRANT \cite{bryant-etal-2017-automatic}. The main reported metrics are precision, recall, and $F_{0.5}$. The $F_{0.5}$ score is used because it gives greater weight to precision, which is important in GEC where unnecessary corrections can reduce output quality \cite{ng-etal-2014-conll}.
 
-Over-correction risk is evaluated using a combination of source-output change signals and utility-related signals. The change-based measures compare the corrected sentence with the original learner sentence and include word-level edit distance, edit density, lexical diversity change, readability change, and cosine similarity. These measures indicate how much the model has altered the learner's original writing.
-
-However, textual change alone is not treated as over-correction. Some changes may be useful if they preserve meaning and improve fluency. For this reason, the evaluation also considers utility-related signals, including meaning preservation and sentence-level fluency change. This follows the distinction made in Chapter 2 between unnecessary rewriting and beneficial correction.
-
-To summarise these signals, the project defines a Composite Over-Correction Index (OCI). In this dissertation, OCI is used as an indicator of over-correction risk rather than as a direct judgement that an edit is unnecessary. It combines source-output change with utility adjustment, so that divergence from the original sentence is interpreted alongside meaning preservation and fluency improvement. A higher OCI indicates greater potential over-correction risk after this adjustment. The full calculation and implementation details are provided in Chapter 4.
+Over-correction risk is evaluated using the Composite Over-Correction Index (OCI). In this dissertation, OCI is used as an indicator of over-correction risk rather than as a direct judgement that an edit is unnecessary. A higher OCI indicates greater potential over-correction risk under the metric. The full calculation and implementation details are provided in Chapter 4.
 
 \section{Ethical and Practical Constraints}
 
