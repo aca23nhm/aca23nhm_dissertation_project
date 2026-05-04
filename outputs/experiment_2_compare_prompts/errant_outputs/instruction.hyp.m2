@@ -6,6 +6,8 @@ A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S How to provide student with more real and relevant input, in the daily routine of an art class, seems to be a dare for Arts and Crafts teachers, who need to bring together the development of the artistic language and the learning of a foreign language.
 A 3 4|||R:NOUN:NUM|||students|||REQUIRED|||-NONE-|||0
+A 9 10|||R:NOUN|||input|||REQUIRED|||-NONE-|||0
+A 17 18|||R:NOUN|||class|||REQUIRED|||-NONE-|||0
 
 S In your article you write from a education center with assistance for new franchisees.
 A 2 3|||R:NOUN|||article,|||REQUIRED|||-NONE-|||0
@@ -28,7 +30,7 @@ S Harry and Alice are seven and one years old.
 A 7 8|||R:NOUN:NUM|||year|||REQUIRED|||-NONE-|||0
 
 S In contrast, to my present learning, it is precisely crucial.
-A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
+A 1 2|||R:NOUN|||contrast|||REQUIRED|||-NONE-|||0
 
 S Beijing is also a city which has many kinds of snacks and foods from different countries.
 A 5 6|||R:DET|||that|||REQUIRED|||-NONE-|||0
@@ -63,17 +65,17 @@ S You can get to know other countires and new individuals.
 A 6 7|||R:SPELL|||countries|||REQUIRED|||-NONE-|||0
 
 S I carefully approached the window of the house and I see two men with the paintings.
-A 7 8|||R:NOUN|||house,|||REQUIRED|||-NONE-|||0
 A 10 11|||R:VERB:TENSE|||saw|||REQUIRED|||-NONE-|||0
 
 S Tanny is a human - rocket that's warming up on a neighbor track line.
 A 3 6|||R:ORTH|||human-rocket|||REQUIRED|||-NONE-|||0
+A 11 12|||R:ADJ|||nearby|||REQUIRED|||-NONE-|||0
 
 S This new way of teaching pupils has received a mix response.
 A 9 10|||R:MORPH|||mixed|||REQUIRED|||-NONE-|||0
 
 S what the meaning of friend?
-A 0 1|||R:OTHER|||What is|||REQUIRED|||-NONE-|||0
+A 0 1|||R:ORTH|||What|||REQUIRED|||-NONE-|||0
 
 S Kids have to pay 10 euros just for the entrance getting anything else.
 A 10 10|||M:PREP|||without|||REQUIRED|||-NONE-|||0
@@ -124,7 +126,6 @@ S Sincerely,
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S The success of the soap opera depends on the theme, the people have to weather to relate to it or have interest on it.
-A 9 10|||R:NOUN|||theme;|||REQUIRED|||-NONE-|||0
 A 14 15|||R:OTHER|||be able|||REQUIRED|||-NONE-|||0
 A 22 23|||R:PREP|||in|||REQUIRED|||-NONE-|||0
 
@@ -146,7 +147,6 @@ A 10 11|||R:NOUN|||life.|||REQUIRED|||-NONE-|||0
 
 S When he grew up he struggled to pass his illness and he became a sane, strong, handsome young adult man.
 A 3 4|||R:OTHER|||up,|||REQUIRED|||-NONE-|||0
-A 7 8|||R:VERB|||overcome|||REQUIRED|||-NONE-|||0
 A 9 10|||R:NOUN|||illness,|||REQUIRED|||-NONE-|||0
 
 S Thereby, engineers must take demanding knowledge to be successful in a career.
@@ -232,13 +232,13 @@ A 19 19|||M:DET|||a|||REQUIRED|||-NONE-|||0
 A 21 22|||R:OTHER|||of being|||REQUIRED|||-NONE-|||0
 
 S The life in university have a lot of difficult and interesting things.
-A 0 2|||U:DET|||Life|||REQUIRED|||-NONE-|||0
 A 4 5|||R:VERB:SVA|||has|||REQUIRED|||-NONE-|||0
 
 S In addition, you wo n't have better opportunity to see it than this week, because just moment in Spain the festival's cinema is happening.
 A 3 5|||R:ORTH|||won't|||REQUIRED|||-NONE-|||0
 A 6 6|||M:DET|||a|||REQUIRED|||-NONE-|||0
-A 16 16|||M:OTHER|||at the|||REQUIRED|||-NONE-|||0
+A 15 16|||R:OTHER|||at|||REQUIRED|||-NONE-|||0
+A 16 16|||M:DET|||this|||REQUIRED|||-NONE-|||0
 
 S He's back home for getting ready for school when he's try to forget what he saw, but he ca n't.
 A 3 4|||U:PREP||||||REQUIRED|||-NONE-|||0
@@ -286,42 +286,26 @@ A 7 8|||R:ADV|||more carefully|||REQUIRED|||-NONE-|||0
 
 S One day I visit my friend Jimmy in New York city, he was a young man who was specialist on trains and tourism, he talked about how the citizens and the commuters move from one place to another, he told me that the grand central terminal was the largest terminal of the city, he show me were the landmarks of the big apple were so sightseers could go, he show me the city and we went to different parts first he took me to Columbus circle in the south west corner of central park were there were the most expensive apartments then we went to the lake were the jogging tracks that circle the lake area popular with early morning visitors, then we went to the museum of natural history that was located near the metropolitan museum of art then I got focal on the subway trains so we went to Grand central terminal when we arrive I was amazed to see many people going to work so he told me that it was conveniently for people to use the train because is very fastest and for the government it was a grat economic business then he told me that one of the characteristics of
 A 3 4|||R:VERB:TENSE|||visited|||REQUIRED|||-NONE-|||0
-A 10 11|||R:NOUN|||City;|||REQUIRED|||-NONE-|||0
+A 10 11|||R:ORTH|||City,|||REQUIRED|||-NONE-|||0
 A 18 18|||M:DET|||a|||REQUIRED|||-NONE-|||0
-A 22 23|||R:OTHER|||tourism.|||REQUIRED|||-NONE-|||0
-A 23 24|||R:ORTH|||He|||REQUIRED|||-NONE-|||0
-A 37 38|||R:OTHER|||another.|||REQUIRED|||-NONE-|||0
-A 38 39|||R:ORTH|||He|||REQUIRED|||-NONE-|||0
 A 43 46|||R:ORTH|||Grand Central Terminal|||REQUIRED|||-NONE-|||0
-A 50 51|||R:PREP|||in|||REQUIRED|||-NONE-|||0
-A 52 53|||R:NOUN|||city.|||REQUIRED|||-NONE-|||0
-A 53 54|||R:ORTH|||He|||REQUIRED|||-NONE-|||0
 A 54 55|||R:VERB:TENSE|||showed|||REQUIRED|||-NONE-|||0
 A 56 57|||R:SPELL|||where|||REQUIRED|||-NONE-|||0
 A 61 63|||R:ORTH|||Big Apple|||REQUIRED|||-NONE-|||0
-A 67 68|||R:OTHER|||go.|||REQUIRED|||-NONE-|||0
-A 68 69|||R:ORTH|||He|||REQUIRED|||-NONE-|||0
 A 69 70|||R:VERB:TENSE|||showed|||REQUIRED|||-NONE-|||0
-A 72 73|||R:NOUN|||city,|||REQUIRED|||-NONE-|||0
-A 78 79|||R:NOUN|||parts.|||REQUIRED|||-NONE-|||0
-A 79 80|||R:OTHER|||First,|||REQUIRED|||-NONE-|||0
 A 85 86|||R:ORTH|||Circle|||REQUIRED|||-NONE-|||0
 A 88 90|||R:ORTH|||southwest|||REQUIRED|||-NONE-|||0
-A 92 93|||R:ORTH|||Central|||REQUIRED|||-NONE-|||0
-A 93 94|||R:NOUN|||Park,|||REQUIRED|||-NONE-|||0
+A 92 94|||R:ORTH|||Central Park|||REQUIRED|||-NONE-|||0
 A 94 95|||R:SPELL|||where|||REQUIRED|||-NONE-|||0
-A 100 101|||R:NOUN|||apartments.|||REQUIRED|||-NONE-|||0
-A 101 102|||R:ORTH|||Then|||REQUIRED|||-NONE-|||0
-A 106 107|||R:NOUN|||lake,|||REQUIRED|||-NONE-|||0
 A 107 108|||R:SPELL|||where|||REQUIRED|||-NONE-|||0
-A 115 205|||U:OTHER||||||REQUIRED|||-NONE-|||0
+A 115 116|||R:SPELL|||are|||REQUIRED|||-NONE-|||0
+A 120 205|||R:OTHER|||visitors|||REQUIRED|||-NONE-|||0
 
 S This film is about a family that lives in a very big house.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S To conclude I would say a single Europe is already happening and that it will continue to do so is guaranteed.
 A 1 2|||R:OTHER|||conclude,|||REQUIRED|||-NONE-|||0
-A 10 11|||R:OTHER|||happening,|||REQUIRED|||-NONE-|||0
 
 S Dear Mr...,
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
@@ -340,6 +324,7 @@ A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S Mom and dad spent their life to grow up their children, to feed them, to love them!
 A 2 3|||R:ORTH|||Dad|||REQUIRED|||-NONE-|||0
+A 5 6|||R:NOUN:NUM|||lives|||REQUIRED|||-NONE-|||0
 
 S Let us play cards.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
@@ -373,11 +358,10 @@ S Last Friday, Michael and I was in the school playing happily with each other i
 A 5 6|||R:VERB:SVA|||were|||REQUIRED|||-NONE-|||0
 
 S The government is not only one to blamed but also people who leaving here, who never cares of their environment.
-A 4 4|||M:DET|||the|||REQUIRED|||-NONE-|||0
 A 7 7|||M:VERB:TENSE|||be|||REQUIRED|||-NONE-|||0
 A 12 13|||R:VERB|||live|||REQUIRED|||-NONE-|||0
 A 16 17|||R:VERB:SVA|||care|||REQUIRED|||-NONE-|||0
-A 17 18|||R:PREP|||about|||REQUIRED|||-NONE-|||0
+A 17 18|||R:PREP|||for|||REQUIRED|||-NONE-|||0
 
 S I think that international sporting occasions can be one of the best ways to ease tensions or to release patriotism safely.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
@@ -456,8 +440,7 @@ S My duties were pretty simple.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S In this respect, newspapers seem to be more credible than numerous websites that make up fake stories much more than publishing real news.
-A 20 20|||M:PRON|||they|||REQUIRED|||-NONE-|||0
-A 20 21|||R:VERB:FORM|||publish|||REQUIRED|||-NONE-|||0
+A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S Restpectfully,
 A 0 1|||R:NOUN|||Respectfully,|||REQUIRED|||-NONE-|||0
@@ -466,7 +449,9 @@ S Not only do I have a big nuclear family who is made up by four siblings, but I
 A 13 14|||R:PREP|||of|||REQUIRED|||-NONE-|||0
 
 S Angel
-A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
+A 0 0|||M:OTHER|||The teacher asked if anyone had seen|||REQUIRED|||-NONE-|||0
+A 0 1|||R:NOUN|||Angel's|||REQUIRED|||-NONE-|||0
+A 1 1|||M:NOUN|||notebook.|||REQUIRED|||-NONE-|||0
 
 S I'll have plenty of time to do what I want, however I would like to spend my time in the right things.
 A 10 11|||R:OTHER|||however,|||REQUIRED|||-NONE-|||0
@@ -494,7 +479,7 @@ S It is the story about a little lion and his life.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S From the airport to my house there are just 5 minutes.
-A 5 6|||R:NOUN|||house,|||REQUIRED|||-NONE-|||0
+A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S I found your web site and this my first try.
 A 3 5|||R:ORTH|||website|||REQUIRED|||-NONE-|||0
@@ -558,7 +543,7 @@ A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S It is inevitably true that, excessive use of public transport leads to higher level of pollution.
 A 4 5|||R:OTHER|||that|||REQUIRED|||-NONE-|||0
-A 12 12|||M:DET|||a|||REQUIRED|||-NONE-|||0
+A 13 14|||R:NOUN:NUM|||levels|||REQUIRED|||-NONE-|||0
 
 S This is a power of the information technology.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
@@ -681,7 +666,6 @@ S We will explain some concepts that we will use later in our analysis.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S But my new friends from this group were very polite and we worked together, so it was much easier, than I thought at first.
-A 9 10|||R:ADJ|||polite,|||REQUIRED|||-NONE-|||0
 A 18 19|||R:OTHER|||easier|||REQUIRED|||-NONE-|||0
 
 S So there he meets the oldest - gorgeous Marcus'sister and he immediately falls in love and since then the go - between appears in the story.
@@ -696,8 +680,7 @@ S "Tick".
 A 0 1|||R:OTHER|||Tick.|||REQUIRED|||-NONE-|||0
 
 S At the late night in Hongdae, lots of people drink with their friends and walk around on the street with in drunken condition themselves.
-A 0 3|||U:OTHER|||Late|||REQUIRED|||-NONE-|||0
-A 3 3|||M:PREP|||at|||REQUIRED|||-NONE-|||0
+A 1 2|||U:DET||||||REQUIRED|||-NONE-|||0
 A 19 20|||U:PREP||||||REQUIRED|||-NONE-|||0
 A 21 21|||M:DET|||a|||REQUIRED|||-NONE-|||0
 
@@ -792,8 +775,7 @@ A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 S and the second one is that fashion or style of young people who do n't like more go somewhere using a car than bike.
 A 0 1|||R:ORTH|||And|||REQUIRED|||-NONE-|||0
 A 13 15|||R:ORTH|||don't|||REQUIRED|||-NONE-|||0
-A 16 17|||R:OTHER|||to|||REQUIRED|||-NONE-|||0
-A 22 22|||M:ADJ|||more|||REQUIRED|||-NONE-|||0
+A 17 17|||M:VERB:FORM|||to|||REQUIRED|||-NONE-|||0
 A 23 23|||M:DET|||a|||REQUIRED|||-NONE-|||0
 
 S I went with her and I waited for her the whole lesson.
@@ -822,6 +804,7 @@ A 1 2|||R:NOUN:NUM|||experience|||REQUIRED|||-NONE-|||0
 
 S However, because of the increasing standard of living, a growing number of people have chosen to travel which has brought a heavy pressure of transportation.
 A 16 17|||R:OTHER|||travel,|||REQUIRED|||-NONE-|||0
+A 20 21|||U:DET||||||REQUIRED|||-NONE-|||0
 A 23 24|||R:PREP|||on|||REQUIRED|||-NONE-|||0
 
 S There are different number of residents in different states, but it uses the states to represent the residents. I do not think the election is fair enough for the US to ask for"real democracy"for Hong Kong.
@@ -831,6 +814,7 @@ S If somebody says that there is no future for public transport i mind immediate
 A 10 11|||R:NOUN|||transport,|||REQUIRED|||-NONE-|||0
 A 11 12|||R:ORTH|||I|||REQUIRED|||-NONE-|||0
 A 14 15|||R:OTHER|||Today,|||REQUIRED|||-NONE-|||0
+A 20 21|||R:PREP|||on|||REQUIRED|||-NONE-|||0
 
 S I think that, as Robert once recommended, we should discuss the whole spectrum of our cooperation, not just the seminars, define the feasible components and have a WJC - WO MOU on such subject signed.
 A 23 24|||R:OTHER|||components,|||REQUIRED|||-NONE-|||0
@@ -894,7 +878,6 @@ S So If we have our car, it is much easier than using transport.
 A 1 2|||R:ORTH|||if|||REQUIRED|||-NONE-|||0
 
 S As a result, I think more people will prefer to take public transport rather than driving due to the high price of the oil.
-A 15 16|||R:VERB:FORM|||drive|||REQUIRED|||-NONE-|||0
 A 22 23|||U:DET||||||REQUIRED|||-NONE-|||0
 
 S Old local buildings often do not provide opportunities to make any money, they only cost town planners a lot of money because they probably need to be renovated.
@@ -996,11 +979,11 @@ S However from now one we can buying what we really need, on the other hand this
 A 0 1|||R:OTHER|||However,|||REQUIRED|||-NONE-|||0
 A 3 4|||R:SPELL|||on|||REQUIRED|||-NONE-|||0
 A 6 7|||R:VERB:FORM|||buy|||REQUIRED|||-NONE-|||0
-A 10 11|||R:OTHER|||need;|||REQUIRED|||-NONE-|||0
 A 14 15|||R:NOUN|||hand,|||REQUIRED|||-NONE-|||0
 A 25 25|||M:PREP|||to|||REQUIRED|||-NONE-|||0
 
 S If I was having a day off to go to a doctor, I would prefer other people from asking details about it by say that I just had some errands to run.
+A 2 3|||R:VERB:SVA|||were|||REQUIRED|||-NONE-|||0
 A 17 17|||M:ADV|||not|||REQUIRED|||-NONE-|||0
 A 17 18|||R:PART|||to|||REQUIRED|||-NONE-|||0
 A 18 19|||R:VERB:FORM|||ask|||REQUIRED|||-NONE-|||0
@@ -1055,7 +1038,9 @@ S I actually had to stop the whole class and ask them to nominate one person to 
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S I would show you the restaurant where is my favorite choice.
-A 6 7|||R:OTHER|||that|||REQUIRED|||-NONE-|||0
+A 7 8|||U:VERB||||||REQUIRED|||-NONE-|||0
+A 10 11|||R:NOUN|||choice|||REQUIRED|||-NONE-|||0
+A 11 11|||M:OTHER|||is.|||REQUIRED|||-NONE-|||0
 
 S Unlike popular understandings of History (and even presumably scientific ones, I must say), History is not an unstoppable march towards"progress", whatever that word means.
 A 19 20|||R:OTHER|||towards"progress,"whatever|||REQUIRED|||-NONE-|||0
@@ -1072,8 +1057,7 @@ S He surfs three or four hours each day.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S Marta
-A 0 1|||R:NOUN|||I'm sorry,|||REQUIRED|||-NONE-|||0
-A 1 1|||M:OTHER|||it seems there is no sentence provided for correction. Could you please provide the sentence you would like me to correct?|||REQUIRED|||-NONE-|||0
+A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S They meet by chance and started a tortuous relationship as friends.
 A 1 2|||R:VERB:TENSE|||met|||REQUIRED|||-NONE-|||0
@@ -1117,6 +1101,8 @@ A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S As an independent learner, it is my sole responsibility to autonomic learning, which is a very important factor in future passing EAP1 successfully, as well as giving me an advantage in terms of coping with the challenges of future Bachelor of Nursing in Australia.
 A 9 10|||R:PREP|||for|||REQUIRED|||-NONE-|||0
+A 19 20|||R:ADV|||successfully|||REQUIRED|||-NONE-|||0
+A 22 23|||R:OTHER|||in the future,|||REQUIRED|||-NONE-|||0
 A 38 38|||M:DET|||a|||REQUIRED|||-NONE-|||0
 
 S Remember, I told you about it last time, when we met Jenny.
@@ -1135,8 +1121,7 @@ A 17 18|||R:ORTH|||3 months,|||REQUIRED|||-NONE-|||0
 A 21 22|||R:OTHER|||test,|||REQUIRED|||-NONE-|||0
 
 S It directly depends on the city in which you live but, as time goes by, public transport becomes more and more necessary.
-A 9 10|||R:VERB|||live,|||REQUIRED|||-NONE-|||0
-A 10 11|||R:OTHER|||but|||REQUIRED|||-NONE-|||0
+A 9 10|||R:OTHER|||live,|||REQUIRED|||-NONE-|||0
 
 S She could n't help staring and realised his eyes were not the shade of any typical blue.
 A 1 3|||R:ORTH|||couldn't|||REQUIRED|||-NONE-|||0
@@ -1156,7 +1141,7 @@ A 1 2|||R:SPELL|||vandalism|||REQUIRED|||-NONE-|||0
 A 3 4|||R:ORTH|||Patras|||REQUIRED|||-NONE-|||0
 
 S So he is thoughtful.
-A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
+A 0 1|||R:OTHER|||So,|||REQUIRED|||-NONE-|||0
 
 S I must have seem cruel to him because, despite our daily disagreements, he adored me and was serious about settling down soon.
 A 3 4|||R:VERB:FORM|||seemed|||REQUIRED|||-NONE-|||0
@@ -1164,11 +1149,9 @@ A 3 4|||R:VERB:FORM|||seemed|||REQUIRED|||-NONE-|||0
 S hello John good days and what we need to, do this delicious cake is: eggs, flour, yeast, sugar, and flavor of the cake that we want such as chocolate, vanilla, fruit
 A 0 1|||R:ORTH|||Hello|||REQUIRED|||-NONE-|||0
 A 1 2|||R:OTHER|||John,|||REQUIRED|||-NONE-|||0
-A 3 4|||R:OTHER|||days,|||REQUIRED|||-NONE-|||0
+A 3 4|||R:NOUN|||day,|||REQUIRED|||-NONE-|||0
 A 8 9|||R:OTHER|||to|||REQUIRED|||-NONE-|||0
-A 19 19|||M:DET|||the|||REQUIRED|||-NONE-|||0
 A 25 26|||R:VERB|||want,|||REQUIRED|||-NONE-|||0
-A 30 30|||M:CONJ|||or|||REQUIRED|||-NONE-|||0
 A 30 31|||R:NOUN|||fruit.|||REQUIRED|||-NONE-|||0
 
 S When I went to karate I'm not even sick.
@@ -1185,10 +1168,9 @@ S One of my favourite is eatwith.com.
 A 3 4|||R:NOUN:NUM|||favourites|||REQUIRED|||-NONE-|||0
 
 S A balancing act
-A 1 2|||R:MORPH|||balance|||REQUIRED|||-NONE-|||0
+A 2 3|||R:NOUN|||act.|||REQUIRED|||-NONE-|||0
 
 S They had a lot of things in common, they liked the same kind of music, the same kind of food and they both liked to read about fantasies and comics.
-A 7 8|||R:NOUN|||common;|||REQUIRED|||-NONE-|||0
 A 19 20|||R:OTHER|||food,|||REQUIRED|||-NONE-|||0
 
 S We are used to just turn the lights or air - conditioning on when we do n't really need it.
@@ -1239,7 +1221,6 @@ S Please find attached my Curriculum Vitae for your review.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S So yes, I recommend you to carry on with your music classes but if you prefer to do sports I will support you also.
-A 5 6|||U:VERB:FORM||||||REQUIRED|||-NONE-|||0
 A 11 12|||R:NOUN|||classes,|||REQUIRED|||-NONE-|||0
 A 18 19|||R:NOUN|||sports,|||REQUIRED|||-NONE-|||0
 
@@ -1266,14 +1247,12 @@ S In my opinion I think that the love story is enclosed to explain better the si
 A 2 3|||R:NOUN|||opinion,|||REQUIRED|||-NONE-|||0
 
 S Several hours later, he found an open sweet shop and he bought some bonbons for her.
-A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
+A 10 11|||U:PRON||||||REQUIRED|||-NONE-|||0
 
 S Built by using the most modern technology, full of the latest inventions which man can create?
 A 15 16|||R:VERB|||create.|||REQUIRED|||-NONE-|||0
 
 S Could they hear my old mind working to guide them, lead them and TREND them and get up out this damn wheelchair and take them by the hand.
-A 11 12|||R:OTHER|||them,|||REQUIRED|||-NONE-|||0
-A 13 14|||R:ORTH|||trend|||REQUIRED|||-NONE-|||0
 A 19 19|||M:PREP|||of|||REQUIRED|||-NONE-|||0
 
 S Also I'm preparing materials for the next publication.
@@ -1354,7 +1333,12 @@ A 2 4|||R:OTHER|||five-star|||REQUIRED|||-NONE-|||0
 S I have other qualities like, cooking like super chef or even better than that, I am the person more organizated in this country, and I love to work with children because it is a form to teach everything you know to other people and help to improve like person.
 A 4 5|||R:OTHER|||like|||REQUIRED|||-NONE-|||0
 A 7 7|||M:DET|||a|||REQUIRED|||-NONE-|||0
+A 17 19|||R:OTHER|||most|||REQUIRED|||-NONE-|||0
 A 19 20|||R:SPELL|||organized|||REQUIRED|||-NONE-|||0
+A 20 20|||M:NOUN|||person|||REQUIRED|||-NONE-|||0
+A 34 35|||R:NOUN|||way|||REQUIRED|||-NONE-|||0
+A 45 46|||R:OTHER|||them|||REQUIRED|||-NONE-|||0
+A 47 48|||R:PREP|||as|||REQUIRED|||-NONE-|||0
 A 48 48|||M:DET|||a|||REQUIRED|||-NONE-|||0
 
 S So we need to stand together.
@@ -1373,8 +1357,8 @@ S Travelling by car is great.
 A 0 1|||R:VERB:FORM|||Traveling|||REQUIRED|||-NONE-|||0
 
 S Dream walked towards me and said do you know how to satisfy a lady.
-A 5 7|||R:OTHER|||said,"Do|||REQUIRED|||-NONE-|||0
-A 13 14|||R:OTHER|||lady?"|||REQUIRED|||-NONE-|||0
+A 5 6|||R:OTHER|||said,|||REQUIRED|||-NONE-|||0
+A 13 14|||R:OTHER|||lady?|||REQUIRED|||-NONE-|||0
 
 S Due to Puerquitour is something to share, the second day we shared it with Diana, one of my friends from Vancouver.
 A 3 4|||R:VERB:FORM|||being|||REQUIRED|||-NONE-|||0
@@ -1508,6 +1492,7 @@ S the more sport you practise the better you feel, indeed, your mood would not b
 A 0 1|||R:ORTH|||The|||REQUIRED|||-NONE-|||0
 A 4 5|||R:OTHER|||practice,|||REQUIRED|||-NONE-|||0
 A 8 9|||R:OTHER|||feel;|||REQUIRED|||-NONE-|||0
+A 12 13|||R:VERB:TENSE|||will|||REQUIRED|||-NONE-|||0
 A 16 17|||R:OTHER|||anymore,|||REQUIRED|||-NONE-|||0
 
 S In other words, it must be more affordable than driving to work every day.
@@ -1515,14 +1500,12 @@ A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S Now, It is holidays and we need or we want to meet the places around the country.
 A 1 2|||R:ORTH|||it|||REQUIRED|||-NONE-|||0
-A 3 4|||R:OTHER|||holidays,|||REQUIRED|||-NONE-|||0
 
 S It is a great and famous sightseeing place and it also is an important place of Japanese culture.
 A 7 8|||R:NOUN|||place,|||REQUIRED|||-NONE-|||0
 
 S Which meant some of fish were damaged thanks to the revolution, which also meant that while they were reproducing, the genes of the baby were changed.
 A 4 4|||M:DET|||the|||REQUIRED|||-NONE-|||0
-A 23 24|||R:NOUN:NUM|||babies|||REQUIRED|||-NONE-|||0
 
 S I really enjoy playing it because it's very exciting because everything could happens.
 A 12 13|||R:VERB|||happen.|||REQUIRED|||-NONE-|||0
@@ -1534,7 +1517,8 @@ S There is also a good choice of food for vegetarians, so Mike and Ann will have
 A 15 17|||R:WO|||not have|||REQUIRED|||-NONE-|||0
 
 S Though the road was wet and slippy, he rode his motorbike fast and skilfully, getting his way through the other cars and trucks.
-A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
+A 6 7|||R:OTHER|||slippery,|||REQUIRED|||-NONE-|||0
+A 13 14|||R:OTHER|||skillfully,|||REQUIRED|||-NONE-|||0
 
 S With car we are more independent than with public transport.
 A 1 1|||M:DET|||a|||REQUIRED|||-NONE-|||0
@@ -1592,8 +1576,7 @@ A 35 36|||R:NOUN|||transport,|||REQUIRED|||-NONE-|||0
 
 S One of the greatest achievements of new computing, is the internet, where you can connect to other computers, download stuff, etc. via Ethernet cable or Wireless Connection (Wi - Fi).
 A 7 8|||R:NOUN|||computing|||REQUIRED|||-NONE-|||0
-A 20 21|||R:OTHER|||etc.,|||REQUIRED|||-NONE-|||0
-A 27 30|||R:ORTH|||(Wi-Fi).|||REQUIRED|||-NONE-|||0
+A 25 30|||R:ORTH|||wireless connection (Wi-Fi).|||REQUIRED|||-NONE-|||0
 
 S yesterday, I watched a science fiction movie called blade runner.
 A 0 1|||R:ORTH|||Yesterday,|||REQUIRED|||-NONE-|||0
@@ -1639,7 +1622,7 @@ A 36 37|||R:PREP|||in|||REQUIRED|||-NONE-|||0
 A 39 40|||R:NOUN|||scene,|||REQUIRED|||-NONE-|||0
 A 43 44|||R:MORPH|||sudden|||REQUIRED|||-NONE-|||0
 A 45 46|||R:SPELL|||which|||REQUIRED|||-NONE-|||0
-A 46 47|||R:VERB:SVA|||turns|||REQUIRED|||-NONE-|||0
+A 46 47|||R:VERB|||makes|||REQUIRED|||-NONE-|||0
 
 S The square is also home to Lenin's tomb, a granite mausoleum to the revered founder of Socialism.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
@@ -1655,7 +1638,6 @@ S I have written many poems, few articles and even a few stories.
 A 6 7|||R:NOUN|||articles,|||REQUIRED|||-NONE-|||0
 
 S Another advantage is that developing natural gas industry equals new jobs what is profitable for people living in whereabouts.
-A 5 5|||M:DET|||the|||REQUIRED|||-NONE-|||0
 A 10 11|||R:NOUN|||jobs,|||REQUIRED|||-NONE-|||0
 A 11 12|||R:PRON|||which|||REQUIRED|||-NONE-|||0
 A 18 18|||M:DET|||the|||REQUIRED|||-NONE-|||0
@@ -1688,11 +1670,10 @@ A 8 9|||R:SPELL|||Blau,|||REQUIRED|||-NONE-|||0
 A 11 12|||R:OTHER|||that,|||REQUIRED|||-NONE-|||0
 
 S INTRODUCTION
-A 0 1|||R:OTHER|||The sentence you provided does not contain any grammatical errors.|||REQUIRED|||-NONE-|||0
+A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S Fuji is very beautiful, so it has been the subject of countless works of art such as the'Thirty - six Views of Mt. Fuji', a series of"ukiyo - e"paintings by Hokusai.
 A 17 20|||R:ORTH|||the'Thirty-six|||REQUIRED|||-NONE-|||0
-A 23 25|||R:OTHER|||Fuji,'a|||REQUIRED|||-NONE-|||0
 A 26 29|||R:ORTH|||of"ukiyo-e"paintings|||REQUIRED|||-NONE-|||0
 
 S I woke up 5H00 o'clock in the morning,
@@ -1740,7 +1721,6 @@ S I apologise to you.
 A -1 -1|||noop|||-NONE-|||REQUIRED|||-NONE-|||0
 
 S When I finished my studies I will stay a long hours with children.
-A 2 3|||R:VERB:TENSE|||finish|||REQUIRED|||-NONE-|||0
 A 4 5|||R:NOUN|||studies,|||REQUIRED|||-NONE-|||0
 A 8 9|||U:DET||||||REQUIRED|||-NONE-|||0
 
@@ -1785,7 +1765,6 @@ A 33 34|||R:OTHER|||easily.|||REQUIRED|||-NONE-|||0
 S For example, when we staying at the queue, coming to the cash register and it appears that the price on the label is more expensive.
 A 4 4|||M:VERB:TENSE|||are|||REQUIRED|||-NONE-|||0
 A 5 6|||R:PREP|||in|||REQUIRED|||-NONE-|||0
-A 12 13|||R:NOUN|||register,|||REQUIRED|||-NONE-|||0
 
 S For example during a foorball match if you wrong is n't too important because you have a team which can remedy, evin if ypu do nothing.
 A 1 2|||R:OTHER|||example,|||REQUIRED|||-NONE-|||0
@@ -1889,5 +1868,4 @@ A 14 15|||R:NOUN|||centre,|||REQUIRED|||-NONE-|||0
 S The narrator describes her as woman that has earned a good reputation being aggressive with his little brother.
 A 5 5|||M:DET|||a|||REQUIRED|||-NONE-|||0
 A 6 7|||R:PRON|||who|||REQUIRED|||-NONE-|||0
-A 12 12|||M:PREP|||for|||REQUIRED|||-NONE-|||0
 

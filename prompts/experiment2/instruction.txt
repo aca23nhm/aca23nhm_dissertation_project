@@ -1,7 +1,4 @@
 Correct only grammatical errors in the sentence below.
-Do not change word choice, tone, or sentence structure unless strictly required for grammar.
-Do not add or remove words unnecessarily.
-Do not improve style or vocabulary.
-Keep the original meaning and style intact.
+Do not change word choice or sentence structure.
 Return only the corrected sentence. No explanation.
 <SENTENCE>

@@ -6,7 +6,7 @@ EXP1_JSONL = Path("outputs/experiment_1_prompt_engineering/experiment1_500_outpu
 EXP2_JSONL = Path("outputs/experiment_2_compare_prompts/experiment2_outputs.jsonl")
 
 # Prompts to reuse from Experiment 1
-REUSE_PROMPTS = {"instruction_v4", "role_v4", "fewshot_v4"}
+REUSE_PROMPTS = {"instruction_v2", "role_v4", "fewshot_v4"}
 
 def main():
     EXP2_JSONL.parent.mkdir(parents=True, exist_ok=True)
@@ -21,7 +21,7 @@ def main():
             prompt_id = obj.get("prompt_id")
             if prompt_id in REUSE_PROMPTS:
                 # Change prompt_id to match experiment2 naming
-                if prompt_id == "instruction_v4":
+                if prompt_id == "instruction_v2":
                     obj["prompt_id"] = "instruction"
                 elif prompt_id == "role_v4":
                     obj["prompt_id"] = "role"
