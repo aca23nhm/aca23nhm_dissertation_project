@@ -1,0 +1,59 @@
+\chapter{Conclusion}
+
+\section{Overview}
+
+This dissertation examined how prompt engineering influences correction behaviour in LLM-based grammatical error correction (GEC). The study focused not only on grammatical accuracy, but also on the extent to which model outputs preserve or rewrite the learner's original sentence.
+
+To investigate this, the experiments combined ERRANT-based evaluation with the Composite Over-Correction Index (OCI). This allowed prompt strategies to be compared in terms of both correction performance and over-correction risk.
+
+\section{Summary of Findings}
+
+The findings indicate that prompt design affects both grammatical correction performance and rewriting behaviour. In the evaluated setup, structured prompts consistently outperformed the simple baseline, suggesting that generic correction instructions leave the model with too much freedom to decide how much rewriting is appropriate.
+
+The prompt strategies also showed different behavioural profiles. Instruction-constrained prompting produced the lowest OCI and therefore represented the most conservative strategy. Few-shot prompting achieved the highest $F_{0.5}$ score, making it the most accuracy-oriented strategy. Within the evaluated setup, role-based prompting provided the strongest overall balance under the chosen evaluation criteria, because it combined high precision, strong $F_{0.5}$, low OCI, and the lowest average edit distance.
+
+The analysis also showed that over-correction risk is influenced by input complexity. Longer sentences produced higher OCI values and lower correction scores across prompt conditions, indicating that complex learner sentences create more opportunities for restructuring, paraphrasing, or accumulated local edits.
+
+Overall, the results suggest that higher correction accuracy does not necessarily require greater over-correction risk. Structured prompting improved both $F_{0.5}$ and OCI relative to the baseline, while the qualitative analysis showed that uncontrolled prompts were more likely to introduce paraphrasing or stylistic rewriting. This supports prompt design as a practical mechanism for steering LLM-based GEC towards more controlled and learner-sensitive correction behaviour, although the evidence remains specific to the model, dataset subset, and prompts tested here.
+
+\section{Contributions}
+
+This dissertation makes three main contributions.
+
+First, it provides empirical evidence that prompt wording can influence LLM-based GEC behaviour. Within the controlled setup used in this study, different prompt strategies produced measurable differences in grammatical accuracy, OCI, and edit distance.
+
+Second, it applies OCI as a comparative indicator of over-correction risk. By combining OCI with ERRANT-based evaluation, the study shows why correction behaviour needs to be analysed beyond accuracy alone.
+
+Third, it offers a practical interpretation of prompt strategies for learner-facing GEC. The results suggest that instruction-constrained prompts are useful when restraint is the priority, few-shot prompts are useful when reference-matching accuracy is prioritised, and role-based prompts provide the strongest overall balance under the chosen evaluation criteria.
+
+\section{Limitations}
+
+This study has several limitations.
+
+The first limitation is the use of a single dataset, W\&I + LOCNESS. Although this dataset is widely used in GEC research, the findings may not fully generalise to other learner corpora, writing levels, or domains.
+
+The second limitation is that the experiments used one LLM configuration with fixed decoding settings. Other models may respond differently to the same prompts, particularly if they differ in instruction tuning, fluency bias, or generation behaviour.
+
+A further limitation is that OCI remains an indirect measure of over-correction risk. Although the metric incorporates a utility adjustment based on fluency improvement and meaning preservation, these signals are only proxies for correction benefit. They help reduce the penalty for changes that appear useful, but they cannot fully determine whether each edit is pedagogically necessary or whether a stylistic change should be considered helpful or excessive.
+
+This creates a broader threat to validity for the evaluation. OCI relies on automatic proxy signals, and the robustness analysis only tests whether prompt rankings are sensitive to alternative weighting choices. It does not validate OCI against learner or teacher judgements. The findings should therefore be interpreted as evidence of relative prompt behaviour under the implemented metric, rather than as a complete pedagogical evaluation of the corrections.
+
+Finally, the study was carried out in a controlled evaluation setting. A real learner-facing GEC tool would involve additional factors, including user interaction, feedback presentation, learner proficiency, and variation in input quality.
+
+\section{Future Work}
+
+Several directions could extend this work.
+
+One direction is to evaluate the same prompt families across multiple models and datasets. This would help determine whether the observed prompt behaviours generalise beyond the model configuration and W\&I + LOCNESS subset used in this dissertation.
+
+Future work could also develop more fine-grained over-correction metrics. OCI is useful for comparing prompt conditions, but it cannot determine on its own whether a specific edit is pedagogically helpful. Additional semantic, discourse-level, or human-judgement features could make this distinction clearer.
+
+Another possible direction is adaptive prompting. The sentence-length analysis suggests that longer inputs may require stronger constraints on preserving learner wording. Future systems could therefore adjust prompt instructions based on sentence length, complexity, or detected error type.
+
+Finally, user-based evaluation would make the analysis more realistic. Learners and teachers could judge whether corrections are helpful, too minimal, or too interventionist, providing insight that automatic metrics alone cannot fully capture.
+
+\section{Final Remarks}
+
+This dissertation shows that prompt engineering affects more than grammatical accuracy. In the experiments, prompt design also influenced how much the model rewrote the learner's original sentence. Evaluating ERRANT performance together with OCI therefore provided a fuller view of correction behaviour than accuracy-based evaluation alone.
+
+The main conclusion is that effective learner-facing GEC should support correction without replacing the learner's voice. Rather than maximising edits or fluency, prompts should guide models towards corrections that are accurate, restrained, and transparent. In this sense, prompt engineering offers a practical route towards more pedagogically aligned LLM-based writing support.
