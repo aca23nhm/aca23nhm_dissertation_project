@@ -22,7 +22,7 @@ This dissertation makes three main contributions.
 
 First, it provides empirical evidence that prompt wording can influence LLM-based GEC behaviour. Within the controlled setup used in this study, different prompt strategies produced measurable differences in grammatical accuracy, OCI, and edit distance.
 
-Second, it applies OCI as a comparative indicator of over-correction risk. By combining OCI with ERRANT-based evaluation, the study shows why correction behaviour needs to be analysed beyond accuracy alone.
+Second, it applies OCI as a comparative indicator of over-correction risk within a dual evaluation framework. By combining ERRANT-based accuracy, OCI, paired statistical testing, and a small human validation sample, the study shows why correction behaviour needs to be analysed beyond accuracy alone.
 
 Third, it offers a practical interpretation of prompt strategies for learner-facing GEC. The results suggest that instruction-constrained prompts are useful when restraint is the priority, few-shot prompts are useful when reference-matching accuracy is prioritised, and role-based prompts provide the strongest overall balance under the chosen evaluation criteria.
 
@@ -34,9 +34,7 @@ The first limitation is the use of a single dataset, W\&I + LOCNESS. Although th
 
 The second limitation is that the experiments used one LLM configuration with fixed decoding settings. Other models may respond differently to the same prompts, particularly if they differ in instruction tuning, fluency bias, or generation behaviour.
 
-A further limitation is that OCI remains an indirect measure of over-correction risk. Although the metric incorporates a utility adjustment based on fluency improvement and meaning preservation, these signals are only proxies for correction benefit. They help reduce the penalty for changes that appear useful, but they cannot fully determine whether each edit is pedagogically necessary or whether a stylistic change should be considered helpful or excessive.
-
-This creates a broader threat to validity for the evaluation. OCI relies on automatic proxy signals, and the robustness analysis only tests whether prompt rankings are sensitive to alternative weighting choices. It does not validate OCI against learner or teacher judgements. The findings should therefore be interpreted as evidence of relative prompt behaviour under the implemented metric, rather than as a complete pedagogical evaluation of the corrections.
+A further limitation is that OCI remains an indirect measure of over-correction risk. Although the metric incorporates a utility adjustment based on fluency improvement and meaning preservation, these signals are only proxies for correction benefit. The small human validation sample improves confidence that OCI relates to perceived correction risk, but it also shows ambiguity: high OCI did not reliably identify all manually labelled high-risk cases. The findings should therefore be interpreted as evidence of relative prompt behaviour under the implemented metric, rather than as a complete pedagogical evaluation of the corrections.
 
 Finally, the study was carried out in a controlled evaluation setting. A real learner-facing GEC tool would involve additional factors, including user interaction, feedback presentation, learner proficiency, and variation in input quality.
 

@@ -114,6 +114,8 @@ Grammatical correction performance is evaluated using ERRANT \cite{bryant-etal-2
 
 Over-correction risk is evaluated using the Composite Over-Correction Index (OCI). In this dissertation, OCI is used as an indicator of over-correction risk rather than as a direct judgement that an individual edit is unnecessary. A higher OCI indicates greater potential over-correction risk under the metric. The calculation of OCI is implemented and explained in Chapter 4.
 
+Because each prompt is evaluated on the same sentence set, OCI comparisons are treated as paired. The analysis therefore uses Wilcoxon signed-rank tests and bootstrap confidence intervals for baseline--prompt OCI differences. A small human validation sample is also used to check OCI interpretation: 60 outputs are sampled from low, medium, and high OCI bands and labelled as minimal correction, useful rewrite, over-correction, meaning change, or under-correction/error.
+
 \section{Ethical and Practical Constraints}
 
 The project uses an existing learner corpus and does not involve collecting new participant data. Learner text is handled in anonymised form and analysed only for linguistic purposes. Since the project focuses on evaluation rather than model training, no learner data is used to fine-tune a model. The API calls use only the sentence text required for correction and do not add new participant identifiers.
