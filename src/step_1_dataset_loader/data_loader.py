@@ -43,7 +43,7 @@ def load_dataset(path: str | Path) -> List[Item]:
             src = (row.get("source") or "").strip()
             ref = (row.get("reference") or "").strip()
 
-            # Basic sanity checks; you can relax these if needed.
+            # Skip rows that cannot be used as sentence-level examples.
             if not sid or not src:
                 continue
 
@@ -71,7 +71,7 @@ def sample_subset(items: Sequence[Item], n: int, seed: int = 42) -> List[Item]:
         rng.shuffle(items_list)
         return items_list
 
-    # random.sample is deterministic given a deterministic RNG
+    # The seeded RNG keeps the sampled subset reproducible.
     return rng.sample(items_list, n)
 
 

@@ -6,17 +6,15 @@ import subprocess
 from pathlib import Path
 
 
-# Repo root (go up 2 levels from this file)
+# Repo root
 ROOT = Path(__file__).resolve().parents[2]
 
 IN_DIR = ROOT / "outputs" / "experiment_1_prompt_engineering" / "experiment1_errant_inputs"
 OUT_DIR = ROOT / "outputs" / "experiment_1_prompt_engineering" / "experiment1_errant_outputs"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# Use currently active virtual environment python
 VENV_PY = Path(sys.executable)
 
-# Optional Windows console scripts (if installed)
 VENV_DIR = ROOT / ".venv"
 ERRANT_PARALLEL = VENV_DIR / "Scripts" / "errant_parallel.exe"
 ERRANT_COMPARE = VENV_DIR / "Scripts" / "errant_compare.exe"

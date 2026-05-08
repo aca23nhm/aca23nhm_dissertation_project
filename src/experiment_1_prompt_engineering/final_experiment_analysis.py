@@ -47,8 +47,8 @@ def parse_condition(condition):
     """
     Return prompt_type and version.
     Example:
-        fewshot_v1 -> ("fewshot", 1)
-        baseline -> ("baseline", None)
+        fewshot_v1 = ("fewshot", 1)
+        baseline = ("baseline", None)
     """
     if "_v" not in condition:
         return condition, None
@@ -155,11 +155,11 @@ def main():
         print(f"  Improvement: +{improvement:.2f}")
 
     print("\nKEY FINDINGS:")
-    print("- Baseline provides the reference point for prompt engineering improvements")
-    print("- Fewshot prompts show the strongest improvement with version escalation")
-    print("- Instruction and role prompts reach peak performance at later versions")
-    print("- Over-correction (OCI) is generally low across all variants")
-    print("- The best performing variant achieves the highest F0.5 while maintaining controlled over-correction")
+    print("- Baseline is used as the comparison point for the prompt variants")
+    print("- Few-shot prompts improve most across the tested versions")
+    print("- Instruction and role prompts perform best in their later versions")
+    print("- OCI remains low across the main variants")
+    print("- The top variant has the highest F0.5 without a large increase in OCI")
 
 
 if __name__ == "__main__":

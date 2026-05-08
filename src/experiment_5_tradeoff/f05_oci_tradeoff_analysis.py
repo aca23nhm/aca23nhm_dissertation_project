@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-# Column name mappings (adjust if needed)
+# Map analysis names to the corresponding ERRANT columns.
 COLUMN_MAPPINGS = {
     'precision': 'precision',
     'recall': 'recall',

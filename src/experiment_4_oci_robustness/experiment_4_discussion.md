@@ -2,7 +2,7 @@
 
 ## 5.4.1 Purpose
 
-To validate the stability and reliability of the Over-Correction Index (OCI) metric under different weighting configurations. This analysis tests whether prompt rankings remain consistent when OCI component weights are varied, ensuring the metric provides robust and reliable comparisons across different prompting strategies.
+This experiment checks whether OCI rankings change when the component weights are varied. The aim is to see whether the same prompt patterns hold under several reasonable weighting choices.
 
 ## 5.4.2 Implementation
 
@@ -58,20 +58,20 @@ To validate the stability and reliability of the Over-Correction Index (OCI) met
 ### Insights
 
 #### OCI Reliability as a Composite Metric
-- **High stability**: Rankings remain largely consistent across diverse weighting schemes
-- **Robust differentiation**: The metric reliably distinguishes between prompt quality levels
-- **Minimal sensitivity**: Only extreme weighting changes (like edit-heavy) cause ranking shifts
-- **Validated composite approach**: The weighted combination of multiple style dimensions provides stable, meaningful comparisons
+- **High stability**: Rankings remain largely consistent across the tested weighting schemes
+- **Clear separation**: OCI separates the baseline from the structured prompts in every scheme
+- **Limited sensitivity**: The main ranking change appears when similarity receives the highest weight
+- **Composite measure**: Combining several style dimensions gives a more useful signal than relying on one component alone
 
 #### Practical Implications
-- **Default weighting recommended**: The A_Default scheme provides balanced, stable rankings
+- **Default weighting recommended**: The A_Default scheme gives rankings that match the general pattern across schemes
 - **Conservative interpretation**: Minor ranking changes between instruction and role prompts are not practically significant
 - **Baseline clearly inferior**: All schemes consistently identify baseline as the worst performer
-- **Few-shot as middle ground**: Consistent 3rd ranking validates its balanced performance
+- **Few-shot as middle ground**: Its consistent 3rd ranking places it between the role/instruction prompts and the baseline
 
 #### Future Considerations
-- **Weight optimization**: The analysis supports the current default weights as appropriate
+- **Weight optimization**: The current default weights are reasonable for the present experiments
 - **Additional schemes**: Extreme weighting scenarios could be explored but may not be practically relevant
 - **Component importance**: Similarity measures (inverted_cosine) appear most influential in distinguishing prompt quality
 
-This robustness analysis confirms that the OCI metric provides stable and reliable prompt comparisons across different weighting configurations, supporting its use as a comprehensive evaluation tool for grammatical error correction prompting strategies.
+Overall, the ranking pattern is mostly stable across the weighting schemes. This gives some support for using OCI as a comparative measure, while still treating the exact weights as a methodological choice.

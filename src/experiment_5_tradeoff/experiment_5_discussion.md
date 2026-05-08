@@ -36,18 +36,18 @@ The goal of Experiment 5 is to analyse the relationship between grammatical corr
 
 #### Cluster Interpretation
 
-- **Aggressive**: `fewshot` achieves the highest F0.5, but also has above-median OCI. This suggests strong correction performance at the cost of more unnecessary edits.
-- **Balanced / Desirable**: `role` achieves high F0.5 while keeping OCI below the median, making it the strongest trade-off candidate.
-- **Weak / Inefficient**: `baseline` has low F0.5 and above-median OCI, indicating poor correction quality combined with unnecessary editing.
+- **Aggressive**: `fewshot` has the highest F0.5, but its OCI is also above the median, so the extra accuracy comes with more editing.
+- **Balanced / Desirable**: `role` has high F0.5 while keeping OCI below the median, giving the best trade-off in this table.
+- **Weak / Inefficient**: `baseline` has low F0.5 and above-median OCI, so it corrects less successfully while still making extra edits.
 - **Conservative**: `instruction` keeps OCI below the median, with slightly lower F0.5 than `role`.
 
 #### Discussion
 
-- The scatter plot clearly demonstrates the trade-off between correction performance and unnecessary edits.
-- `role` is the strongest balanced option: it delivers high F0.5 while maintaining lower OCI.
+- The scatter plot shows the trade-off between correction performance and unnecessary edits.
+- `role` gives the clearest balance here: high F0.5 with lower OCI.
 - `fewshot` is most aggressive, delivering the highest F0.5 but with more unnecessary edits.
-- `baseline` is the weakest prompt: it offers the lowest F0.5 and the highest OCI, making it the least desirable choice.
+- `baseline` performs worst on this comparison, with the lowest F0.5 and the highest OCI.
 
 ### Insight
 
-This analysis demonstrates a clear trade-off between ERRANT F0.5 and OCI. It supports the main research contribution by showing that prompt selection should consider both correction quality and over-correction risk, and that balanced prompts like `instruction` and `role` provide better overall performance.
+The results show that ERRANT F0.5 and OCI need to be considered together. A prompt can improve correction quality while also increasing the risk of unnecessary edits, so prompt choice should account for both measures.

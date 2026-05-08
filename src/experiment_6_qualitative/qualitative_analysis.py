@@ -1,10 +1,10 @@
 """
 Experiment 6: Qualitative Analysis of Model Behaviour
 
-This script performs qualitative example selection using existing experiment outputs only.
-It does NOT call any LLM APIs or regenerate any model outputs.
+This script selects qualitative examples from the saved experiment outputs.
+It does not call any LLM APIs or regenerate model outputs.
 
-Purpose: Show how unnecessary editing appears in practice by comparing baseline and best-prompt outputs.
+Purpose: compare baseline and best-prompt outputs in examples where edit behaviour differs.
 """
 
 import json
@@ -15,16 +15,16 @@ from difflib import SequenceMatcher
 import numpy as np
 import pandas as pd
 
-# Input data
+# Saved inputs from earlier experiments
 EXPERIMENT_2_JSONL = Path('outputs/experiment_2_compare_prompts/experiment2_outputs.jsonl')
 TRADEOFF_TABLE = Path('outputs/experiment_5_tradeoff/f05_oci_tradeoff_table.csv')
 
-# Output files
+# Files written by this analysis
 OUTPUT_DIR = Path('outputs/experiment_6_qualitative')
 CSV_PATH = OUTPUT_DIR / 'qualitative_examples.csv'
 MD_PATH = OUTPUT_DIR / 'qualitative_examples.md'
 
-# Number of selected examples
+# Keep the qualitative section short enough to inspect manually.
 MAX_EXAMPLES = 8
 
 
@@ -84,7 +84,7 @@ def choose_best_prompt():
     """Choose the best prompt condition from the trade-off table."""
     if TRADEOFF_TABLE.exists():
         df = pd.read_csv(TRADEOFF_TABLE)
-        # Use the prompt with the highest F0.5 and below-median OCI when possible
+        # Prefer a high-F0.5 prompt whose OCI is not above the median.
         median_oci = df['mean_oci'].median()
         balanced = df[df['mean_oci'] <= median_oci]
         oci_map = df.set_index('condition')['mean_oci'].to_dict()
@@ -97,7 +97,7 @@ def choose_best_prompt():
 
 
 def select_examples(df, baseline_condition, best_condition, oci_map):
-    """Select qualitative examples where baseline and best prompt differ significantly."""
+    """Select examples where the baseline edits more than the selected prompt."""
     grouped = df[df['condition'].isin([baseline_condition, best_condition])].groupby('sentence_id')
     rows = []
 
@@ -147,7 +147,7 @@ def select_examples(df, baseline_condition, best_condition, oci_map):
 
 
 def explain_example(example, baseline_condition, best_condition):
-    """Generate a short explanation for why the example is interesting."""
+    """Write a short note explaining the difference between the two outputs."""
     changes = []
     if example['baseline_edit_distance'] > example['best_prompt_edit_distance']:
         changes.append('baseline edits the sentence more aggressively')
@@ -157,9 +157,9 @@ def explain_example(example, baseline_condition, best_condition):
         changes.append('baseline and best prompt outputs differ in structure or wording')
 
     if not changes:
-        return 'The baseline and best prompt outputs differ, showing the baseline is less conservative.'
+        return 'The two outputs differ, with the baseline making the less conservative edit.'
 
-    return f"The baseline {', and the baseline '.join(changes)}. This suggests that the baseline introduces unnecessary edits while the best prompt preserves the sentence more closely."
+    return f"The baseline {', and the baseline '.join(changes)}. In this example, the selected prompt stays closer to the original sentence."
 
 
 def write_markdown(examples, baseline_condition, best_condition):

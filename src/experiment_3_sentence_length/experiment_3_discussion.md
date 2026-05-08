@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This experiment investigates how sentence length influences the performance of different prompting strategies in grammatical error correction. By analyzing sentences categorized as short (≤10 words), medium (11-20 words), and long (>20 words), we aim to understand whether prompt effectiveness varies with sentence complexity and identify optimal prompting approaches for different sentence lengths.
+This experiment examines whether sentence length affects grammatical error correction performance. Sentences are grouped as short (≤10 words), medium (11-20 words), and long (>20 words) so that prompt performance can be compared across different levels of sentence complexity.
 
 ## Implementation
 
@@ -51,7 +51,7 @@ This experiment investigates how sentence length influences the performance of d
   - Instruction: 52.50 (medium) > 48.55 (short) > 43.13 (long)
   - Baseline: 46.18 (medium) > 42.11 (short) > 37.11 (long)
 
-- **Long sentences consistently perform worst**: F0.5 scores drop significantly for sentences >20 words, suggesting that increased complexity reduces correction effectiveness.
+- **Long sentences consistently perform worst**: F0.5 scores drop for sentences >20 words, which indicates that longer inputs are harder to correct accurately.
 
 - **Short sentences show moderate performance**: While not the best, short sentences maintain reasonable correction quality across all prompts.
 
@@ -89,13 +89,13 @@ This experiment investigates how sentence length influences the performance of d
 ### Insights and Implications
 
 #### Complexity-Performance Relationship
-- **Medium sentences represent the "sweet spot"** for grammatical error correction, achieving the highest accuracy with moderate over-correction risk.
+- **Medium sentences perform best** for grammatical error correction, with the highest accuracy and moderate over-correction risk.
 - **Long sentence correction remains challenging** for all prompting strategies, suggesting the need for specialized approaches for complex sentences.
 - **Short sentences benefit from conservative editing**, as aggressive corrections may introduce unnecessary changes.
 
 #### Prompt Strategy Recommendations
 - **For medium-length sentences**: Use few-shot or role-based prompting for maximum accuracy.
-- **For short sentences**: Any optimized prompt performs well; instruction prompting offers good balance.
+- **For short sentences**: The optimized prompts perform similarly well; instruction prompting gives a good balance.
 - **For long sentences**: Consider hybrid approaches or additional context provision, as all current strategies show reduced effectiveness.
 
 #### Future Research Directions
@@ -103,4 +103,4 @@ This experiment investigates how sentence length influences the performance of d
 - Develop length-adaptive prompting strategies that adjust correction aggressiveness based on sentence characteristics.
 - Explore multi-stage correction pipelines for long sentences, breaking them into manageable segments.
 
-This experiment demonstrates that sentence length significantly moderates prompt effectiveness, with medium-length sentences showing optimal correction performance across all evaluated strategies. The findings highlight the importance of considering text complexity when designing grammatical error correction systems.
+These results show that sentence length affects prompt performance. Medium-length sentences are corrected most successfully in this setup, while long sentences remain more difficult and show higher OCI.

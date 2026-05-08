@@ -3,7 +3,7 @@
 ## 5.2 Experiment 2: Comparison of Prompting Strategies
 
 ### 5.2.1 Purpose
-Compare four prompt strategies using their optimal configurations:
+Compare four prompt strategies using the selected configuration for each one:
 - `baseline`
 - `instruction`
 - `role`
@@ -42,7 +42,7 @@ Data sources:
   - Useful when both accuracy and edit conservatism matter.
 
 #### Core insight: Trade-off between accuracy vs unnecessary edits
-- The baseline prompt is the weakest performer: lower F0.5 and higher OCI than all optimized prompts.
+- The baseline prompt performs worst here, with lower F0.5 and higher OCI than the structured prompts.
 - Prompt optimization improved correction accuracy while reducing unnecessary edits.
 - Among the optimized strategies, higher accuracy is associated with slightly higher OCI.
 - This confirms the expected trade-off: a more aggressive correction strategy can gain accuracy at the cost of more unnecessary edits, while a more controlled strategy keeps OCI lower.

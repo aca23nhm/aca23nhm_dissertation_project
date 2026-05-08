@@ -1,10 +1,10 @@
 """
 Experiment 4: OCI Robustness and Sensitivity Analysis
 
-This script performs a robustness analysis of OCI using existing Experiment 2 outputs.
-It does NOT generate new LLM outputs - it only analyzes the existing style metrics from Experiment 2.
+This script checks how OCI changes when the component weights are varied.
+It uses existing Experiment 2 style metrics and does not call the model again.
 
-Purpose: Test whether OCI prompt rankings remain stable under alternative weighting schemes.
+Purpose: check whether prompt rankings change under alternative OCI weighting schemes.
 
 Data Source: Experiment 2 style metrics (outputs/experiment_2_compare_prompts/style_eval/per_sentence_style_metrics.csv)
 - Uses only the final selected prompts from Experiment 2: baseline, fewshot, instruction, role
@@ -26,7 +26,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
-# Column name mappings (adjust if needed)
+# Map OCI component names to the corresponding CSV columns.
 COLUMN_MAPPINGS = {
     'edit_distance': 'word_levenshtein',
     'edit_density': 'edit_density',
@@ -244,7 +244,7 @@ def main():
         print("Ranking varies - best prompt changes with weighting scheme")
         print(f"  Unique best prompts: {', '.join(unique_best)}")
 
-    print("\nAnalysis complete. This robustness check confirms whether OCI rankings are sensitive to weighting choices.")
+    print("\nAnalysis complete. The results show how much the OCI rankings depend on the weighting choices.")
 
 if __name__ == "__main__":
     main()

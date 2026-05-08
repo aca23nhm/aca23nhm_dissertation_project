@@ -17,7 +17,7 @@ def extract_f05_from_report(report_path: Path) -> float:
     with report_path.open("r", encoding="utf-8") as f:
         content = f.read()
 
-    # Look for F0.5 in the span-based correction section
+    # ERRANT reports F0.5 in the span-based correction table.
     match = re.search(r"F0\.5\s+(\d+\.\d+)", content)
     if not match:
         raise ValueError(f"Could not find F0.5 score in {report_path}")
@@ -42,7 +42,7 @@ def load_f05_scores():
     """Load F0.5 scores from ERRANT reports."""
     scores = {}
     for report_file in ERRANT_DIR.glob("*.report.txt"):
-        stem = report_file.stem  # e.g., baseline_short
+        stem = report_file.stem  # Example: baseline_short
         parts = stem.split("_")
         if len(parts) == 2:
             condition, length_cat = parts
@@ -55,7 +55,7 @@ def main():
     oci_scores = load_oci_scores()
     f05_scores = load_f05_scores()
 
-    # Collect all unique conditions and length categories
+    # Build the set of prompt and length combinations found in the outputs.
     all_keys = set(oci_scores.keys()) | set(f05_scores.keys())
     conditions = sorted(set(k[0] for k in all_keys))
     length_cats = ["short", "medium", "long"]
@@ -103,7 +103,7 @@ def main():
         if not length_data:
             print("  - No data available")
             continue
-        length_data.sort(key=lambda x: x[1], reverse=True)  # Sort by F0.5
+        length_data.sort(key=lambda x: x[1], reverse=True)  # Highest F0.5 first.
 
         best_f05 = length_data[0][1]
         worst_f05 = length_data[-1][1]
@@ -116,16 +116,16 @@ def main():
 
     # Trends
     print("#### Trends Observed")
-    print("- **Longer sentences tend to have lower F0.5 scores**: This suggests that correction performance decreases with sentence complexity.")
+    print("- **Longer sentences tend to have lower F0.5 scores**: Correction performance drops as sentences become more complex.")
     print("- **OCI generally increases with sentence length**: Longer sentences show higher over-correction, indicating more unnecessary edits.")
-    print("- **Prompt robustness varies**: Some prompts maintain better performance across lengths than others.")
+    print("- **Prompt robustness varies**: Some prompts lose less performance across length groups than others.")
 
     # Insights
     print("#### Insights")
     print("- Prompt effectiveness is not uniform across sentence lengths.")
     print("- For short sentences, all prompts perform relatively well, with minimal OCI.")
     print("- For long sentences, the gap between best and worst prompts widens, and OCI increases significantly.")
-    print("- This suggests that prompt design should consider input complexity for optimal performance.")
+    print("- The results support considering sentence complexity when choosing or designing prompts.")
 
 
 if __name__ == "__main__":

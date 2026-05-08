@@ -3,7 +3,7 @@
 ## 5.1 Experiment 1: Prompt Engineering Refinement
 
 ### 5.1.1 Purpose
-The goal of Experiment 1 was to refine prompt design and identify optimal prompt variants for grammatical correction. The comparison included different prompt families:
+The goal of Experiment 1 was to compare prompt variants and select the strongest version from each prompt family. The comparison included:
 - Baseline prompt
 - Instruction prompts (v1–v4)
 - Role-based prompts (v1–v4)
@@ -49,4 +49,4 @@ Evaluation used two metrics:
 ### Practical recommendations
 - **Use `fewshot_v4`** when maximizing correction quality is the priority.
 - **Use `role_v4`** when a balanced strategy is needed, especially if both accuracy and edit restraint matter.
-- **Use `instruction_v2`** when controlled correction with minimal unnecessary edits is desirable.
+- **Use `instruction_v2`** when the priority is to keep unnecessary edits low.

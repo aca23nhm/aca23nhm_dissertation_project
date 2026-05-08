@@ -69,7 +69,6 @@ def render_prompt(template: str, sentence: str, enforce_strict_rule: bool = True
         )
 
     if enforce_strict_rule:
-        # If the strict rule isn't already included, append it once.
         if STRICT_OUTPUT_RULE.lower() not in rendered.lower():
             rendered = rendered.rstrip() + "\n\n" + STRICT_OUTPUT_RULE
 

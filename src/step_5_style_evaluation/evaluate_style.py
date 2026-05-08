@@ -18,8 +18,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 PER_SENTENCE_CSV = OUT_DIR / "per_sentence_style_metrics.csv"
 AGG_CSV = OUT_DIR / "aggregate_style_metrics.csv"
 
-# Load spaCy model
-# This is likely already available because ERRANT uses spaCy.
+# Load the spaCy model used for POS-based style features.
 try:
     NLP = spacy.load("en_core_web_sm", disable=["ner"])
 except OSError:
