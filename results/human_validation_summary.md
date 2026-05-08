@@ -15,31 +15,31 @@ Figure: `C:/Users/Swift 3/aca23nhm_dissertation_project/results/human_validation
 
 | Human label | n | Mean OCI | Median OCI | Min OCI | Max OCI |
 |---|---:|---:|---:|---:|---:|
-| minimal_correct_correction | 22 | 0.006062 | 0.004301 | 0.002312 | 0.027157 |
-| acceptable_useful_rewrite | 9 | 0.015376 | 0.007422 | 0.003388 | 0.035538 |
-| under_correction_or_error | 25 | 0.016508 | 0.008270 | 0.002313 | 0.050318 |
-| over_correction | 3 | 0.005556 | 0.005174 | 0.004897 | 0.006597 |
-| meaning_change | 1 | 0.005435 | 0.005435 | 0.005435 | 0.005435 |
+| minimal_correct_correction | 17 | 0.003213 | 0.003388 | 0.002312 | 0.004405 |
+| acceptable_useful_rewrite | 16 | 0.005736 | 0.005496 | 0.003476 | 0.008270 |
+| under_correction_or_error | 7 | 0.009404 | 0.005425 | 0.004897 | 0.033010 |
+| over_correction | 15 | 0.026889 | 0.026026 | 0.006419 | 0.050318 |
+| meaning_change | 5 | 0.018200 | 0.013732 | 0.012618 | 0.027157 |
 
 ## OCI and Ordinal Risk Score
 
 Ordinal risk scores: minimal correct = 0; acceptable useful rewrite = 1; under-correction/error = 1; over-correction = 2; meaning change = 2.
-- Spearman rho: 0.368
-- p-value: 0.004
+- Spearman rho: 0.899
+- p-value: < .001
 
 ## High-Risk Labels
 
 `over_correction` and `meaning_change` are treated as high-risk labels.
-- High-risk examples: 4
+- High-risk examples: 20
 
 ## Threshold Analysis
 
 | Threshold | OCI cut-off | TP | FP | TN | FN | Precision | Recall | F1 | Accuracy |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| median_oci | 0.005515 | 1 | 29 | 27 | 3 | 0.033 | 0.250 | 0.059 | 0.467 |
-| upper_tertile_oci | 0.008873 | 0 | 20 | 36 | 4 | 0.000 | 0.000 | 0.000 | 0.600 |
-| upper_quartile_oci | 0.013536 | 0 | 15 | 41 | 4 | 0.000 | 0.000 | 0.000 | 0.683 |
-| sample_high_oci_band_min | 0.010080 | 0 | 20 | 36 | 4 | 0.000 | 0.000 | 0.000 | 0.600 |
+| median_oci | 0.005515 | 20 | 10 | 30 | 0 | 0.667 | 1.000 | 0.800 | 0.833 |
+| upper_tertile_oci | 0.008873 | 19 | 1 | 39 | 1 | 0.950 | 0.950 | 0.950 | 0.967 |
+| upper_quartile_oci | 0.013536 | 14 | 1 | 39 | 6 | 0.933 | 0.700 | 0.800 | 0.883 |
+| sample_high_oci_band_min | 0.010080 | 19 | 1 | 39 | 1 | 0.950 | 0.950 | 0.950 | 0.967 |
 
 ## Interpretation Note
 
