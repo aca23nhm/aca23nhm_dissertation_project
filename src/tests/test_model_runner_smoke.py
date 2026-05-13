@@ -1,21 +1,16 @@
-from src.step_3_call_llms.model_runner import load_model_config, ModelRunner
+import pytest
 
-def test_model_runner_smoke():
-    cfg = load_model_config("configs/model.yaml")
-    runner = ModelRunner(cfg)
+from src.step_3_call_llms.model_runner import ModelConfig, ModelRunner
 
-    rendered_prompt = (
-        "Correct the grammatical errors in the following sentence:\n"
-        "She go to university every day.\n"
-        "Return only the corrected sentence. No explanation."
+
+def test_model_runner_requires_api_key(monkeypatch):
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    cfg = ModelConfig(
+        provider="openai",
+        model="gpt-4o",
+        temperature=0.0,
+        max_tokens=128,
     )
 
-    rec = runner.run_one(
-        sentence_id="demo-1",
-        prompt_id="baseline",
-        rendered_prompt=rendered_prompt,
-    )
-
-    assert "raw_output_text" in rec
-    assert "clean_output_text" in rec
-    assert rec["clean_output_text"] != ""
+    with pytest.raises(EnvironmentError, match="OPENAI_API_KEY"):
+        ModelRunner(cfg)

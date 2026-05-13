@@ -1,20 +1,15 @@
-from src.step_3_call_llms.model_runner import ModelRunner, ModelConfig, RetryPolicy
+from src.step_3_call_llms.model_runner import clean_model_output, load_model_config
 
-def main():
-    """runner = ModelRunner(backend="openai")"""
-    runner = ModelRunner(backend="dummy")
 
-    config = ModelConfig(
-        model_name="gpt-4.1-mini",
-        temperature=0.0,
-        max_tokens=128,
-        top_p=1.0,
-        seed=42,
-        retry=RetryPolicy(max_retries=3, base_delay_s=1.0, backoff_factor=2.0),
-    )
+def test_clean_model_output_removes_labels_and_extra_lines():
+    raw = "Corrected sentence: 'She goes to university every day.'\nExplanation: fixed verb agreement."
 
-    out = runner.generate("Correct this: I has a pen.", config)
-    print(out)
+    assert clean_model_output(raw) == "She goes to university every day."
 
-if __name__ == "__main__":
-    main()
+
+def test_load_model_config_reads_yaml():
+    cfg = load_model_config("configs/model.yaml")
+
+    assert cfg.provider == "openai"
+    assert cfg.temperature == 0.0
+    assert cfg.max_tokens == 128

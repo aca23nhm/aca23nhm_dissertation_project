@@ -60,6 +60,9 @@ def clean_model_output(text: Optional[str]) -> str:
             t = t[len(pref):].strip()
             break
 
+    if (t.startswith('"') and t.endswith('"')) or (t.startswith("'") and t.endswith("'")):
+        t = t[1:-1].strip()
+
     # Collapse multiple spaces/tabs into one
     t = re.sub(r"\s+", " ", t).strip()
 
@@ -121,7 +124,7 @@ class ModelRunner:
         if not api_key:
             raise EnvironmentError(
                 "OPENAI_API_KEY is not set. In PowerShell you can set it for this session with:\n"
-                '$env:OPENAI_API_KEY="sk-..."'
+                '$env:OPENAI_API_KEY="<your-api-key>"'
             )
 
         self.client = OpenAI(api_key=api_key)
